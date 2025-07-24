@@ -1,0 +1,102 @@
+[
+    {
+        "WORD": "Foundation model",
+        "SYNONYMS AND NEAR SYNONYMS": "Base model, Pre-trained model, General-purpose model, Large-scale model, Core model, Backbone model, Universal model, Multi-task model, Generalist model, Master model"
+    },
+    {
+        "WORD": "Artificial Intelligence System",
+        "SYNONYMS AND NEAR SYNONYMS": "Artificial Intelligence, AI, model, Machine learning system, Intelligent system, Automated system, Cognitive system, AI-based system, Smart system, Learning system, Adaptive system, Autonomous system, Rule-based system, Expert system, Decision support system, DSS, Neural network-based system, Deep learning system, Reinforcement learning system, Generative AI system, Computer vision system, Natural language processing, NLP, system, Speech recognition system, Robotic system, Autonomous agent, Multi-agent system, Predictive analytics system"
+    },
+    {
+        "WORD": "General Data Collection & Dataset Creation",
+        "SYNONYMS AND NEAR SYNONYMS": "Data gathering, Data aggregation, Data acquisition, Data sourcing, Dataset compilation, Dataset assembly, Dataset construction, Dataset generation, Dataset development, Data harvesting, Data scraping, web scraping, automated collection, Data mining, extracting patterns from raw data, Data extraction, Data ingestion, Data procurement"
+    },
+    {
+        "WORD": "Data Curation & Processing",
+        "SYNONYMS AND NEAR SYNONYMS": "Data cleaning, Data preprocessing, Data wrangling, Data normalization, Data annotation, labeling, tagging, Data labeling, Data enrichment, Data augmentation, synthetic data expansion, Data validation, Data quality control, Data deduplication, Data filtering, Data sampling, Data stratification, balanced subsets, Data harmonization, standardizing formats"
+    },
+    {
+        "WORD": "Data Collection Methods",
+        "SYNONYMS AND NEAR SYNONYMS": "Crowdsourcing, Web crawling, Sensor data collection, User-generated data, Public dataset repositories, APIs for data collection, Simulated data generation, Active learning, Federated data collection"
+    },
+    {
+        "WORD": "Machine Learning",
+        "SYNONYMS AND NEAR SYNONYMS": "Statistical learning, Predictive modeling, Data-driven learning, Algorithmic learning, Automated learning, Pattern recognition, Supervised learning, labeled data, Unsupervised learning, unlabeled data, Semi-supervised learning, mixed labeled/unlabeled, Self-supervised learning, auto-generated labels, Reinforcement learning, RL, reward-based, Online learning, continuous updates, Transfer learning, knowledge reuse, Meta-learning, \"learning to learn\", Few-shot learning, minimal examples, Zero-shot learning, no training examples, Active learning, human-in-the-loop, Explainable AI, XAI, interpretable ML, Federated learning, decentralized training, Ensemble learning, multiple models combined"
+    },
+    {
+        "WORD": "Deep Learning",
+        "SYNONYMS AND NEAR SYNONYMS": "Neural networks, NNs, Artificial neural networks, ANNs, Deep neural networks, DNNs, Convolutional neural networks, CNNs, for vision, Recurrent neural networks, RNNs, for sequences, Long short-term memory, LSTM, sequential data, Transformers, self-attention models, Graph neural networks, GNNs, relational data, Autoencoders, unsupervised representation learning, Generative adversarial networks, GANs, synthetic data, Variational autoencoders, VAEs, probabilistic generation, Diffusion models, generative AI, Sparse neural networks, efficiency-focused, Quantized models, low-precision computation, Neural architecture search, NAS, automated DL design"
+    },
+    {
+        "WORD": "Multimodal Models & Learning",
+        "SYNONYMS AND NEAR SYNONYMS": "Cross-modal learning, Multisensory AI, vision, audio, text, Vision-language models, VLMs, Audio-visual models, Text-to-image models, Image-to-text models, Video-text models, Multimodal transformers, Joint embedding models, Multimodal fusion"
+    },
+    {
+        "WORD": "Applications & Domains",
+        "SYNONYMS AND NEAR SYNONYMS": "Computer vision, Natural language processing, NLP, Speech recognition, Autonomous systems, Recommender systems, Healthcare diagnostics, Healthcare, Medicine, Medical Care, Robotics, Generative AI, Time-series forecasting, Anomaly detection"
+    },
+    {
+        "WORD": "Rights & Data Protection Frameworks",
+        "SYNONYMS AND NEAR SYNONYMS": "Right to be informed, Informed consent, Explicit consent, Opt-in/Opt-out, Revocable consent, Right to delete, Data purging, Forgetting mechanisms, Right to delete, Data purging, Forgetting mechanisms, Data control, Data sovereignty, User-managed data, Legal Frameworks, Data subject rights, Right to access, Right to rectification, Right to portability, Right to object, Data protection, Privacy by design, Pseudonymization"
+    },
+    {
+        "WORD": "Humanitarian & Crisis Response",
+        "SYNONYMS AND NEAR SYNONYMS": "Disaster relief, Emergency response, Humanitarian aid, Humanitarian assistance, Crisis intervention, Disaster management, Humanitarian action, Emergency aid, Humanitarian protection, First response, Post-disaster recovery, Humanitarian logistics, Disaster risk reduction, DRR, Humanitarian coordination, Refugee support, Conflict response, Humanitarian operations, Mass casualty response, Humanitarian access, Humanitarian principles, neutrality, impartiality, independence, Vulnerable Populations"
+    },
+    {
+        "WORD": "Core Humanitarian Principles",
+        "SYNONYMS AND NEAR SYNONYMS": "Humanitarian imperative, Do no harm, ethical obligation, Humanity, alleviating suffering, Dignity preservation, Principle of neutrality, Principle of impartiality, Principle of independence, Principle of non-discrimination"
+    },
+    {
+        "WORD": "Neutrality",
+        "SYNONYMS AND NEAR SYNONYMS": "Non-partisanship, Political neutrality, Conflict neutrality, Non-alignment, Avoiding perceived bias, Refusal to take sides, Humanitarian space, Trust-building with all parties, Mediation role"
+    },
+    {
+        "WORD": "Impartiality",
+        "SYNONYMS AND NEAR SYNONYMS": "Needs-based assistance, Proportional response, Equitable aid distribution, Non-preferential treatment, Prioritization by vulnerability, Unbiased humanitarian action, Fair access to aid, Inclusivity in aid delivery"
+    },
+    {
+        "WORD": "Independence",
+        "SYNONYMS AND NEAR SYNONYMS": "Autonomy from political agendas, Financial independence, Operational self-sufficiency, Freedom from external control, Non-governmental mandate, Donor neutrality, Avoiding co-optation, Unconstrained humanitarian access"
+    },
+    {
+        "WORD": "Social Good & Impact",
+        "SYNONYMS AND NEAR SYNONYMS": "Social impact, Public good, Collective benefit, Community welfare, Pro bono initiatives, Philanthropy, Social justice, Equity initiatives, Grassroots activism, Nonprofit work, Corporate social responsibility, CSR, Social entrepreneurship, Civic engagement, Altruistic efforts, Global development, Sustainable development, Inclusive growth, Human-centered design, Ethical innovation, Community resilience"
+    },
+    {
+        "WORD": "Vulnerable Populations",
+        "SYNONYMS AND NEAR SYNONYMS": "Marginalized groups, At-risk communities, Displaced persons, IDPs, refugees, Underserved populations, High-need groups, Socially excluded individuals, Economically disadvantaged, Minority groups, Persons with disabilities, PWDs, Elderly, Elderly in crisis, Children in emergencies, Indigenous communities, Stateless persons, Survivors of violence, Homeless populations, Low-income households, Gender-based violence survivors, Human trafficking victims, Persons with chronic illnesses, Food-insecure populations"
+    },
+    {
+        "WORD": "Low-Resource Settings",
+        "SYNONYMS AND NEAR SYNONYMS": "Resource-constrained environments, Underdeveloped regions, Hard-to-reach areas, Fragile states, humanitarian deserts, areas with minimal aid, Remote communities, Informal settlements, slums, camps, Post-conflict zones, Areas of extreme poverty, Off-grid locations, Low-infrastructure settings, Humanitarian \"last-mile\" delivery, Crisis-affected regions, Disaster-prone areas, Medical deserts, lack of healthcare access."
+    },
+    {
+        "WORD": "Human Rights & Advocacy",
+        "SYNONYMS AND NEAR SYNONYMS": "Human rights protection, Civil liberties, Dignity preservation, Right to life and security, Freedom from discrimination, Gender equality, Child rights, Indigenous rights, Refugee rights, Right to education, Right to healthcare, Labor rights, Anti-slavery efforts, Justice and accountability, Truth and reconciliation, Human rights violations, Advocacy campaigns, Legal empowerment, Human rights defenders, Ethical humanitarianism"
+    },
+    {
+        "WORD": "Organizations & Frameworks",
+        "SYNONYMS AND NEAR SYNONYMS": "UN agencies, UNHCR, UNICEF, OCHA, International NGOs, Red Cross, MSF, Save the Children, Community-based organizations, CBOs, Humanitarian clusters, sectoral coordination, Sphere Standards, humanitarian benchmarks, Sustainable Development Goals, SDGs, International humanitarian law, IHL, Universal Declaration of Human Rights, UDHR"
+    },
+    {
+        "WORD": "Key Actions & Interventions",
+        "SYNONYMS AND NEAR SYNONYMS": "Needs assessment, Rapid deployment, Cash-based interventions, Psychosocial support, Emergency shelter provision, Food security programs, WASH initiatives, Water, Sanitation, Hygiene, Protection monitoring, Advocacy and lobbying, Capacity building, local training, Data collection for vulnerable groups, Crisis mapping"
+    },
+    {
+        "WORD": "Environmental & Equity Concerns",
+        "SYNONYMS AND NEAR SYNONYMS": "Environmental impact, E-waste from hardware, Resource depletion, Carbon footprint, CO emissions, Greenhouse gas , GHG, accounting, Compute inequality, Global AI divide, Centralized compute access, Energy cost, Megawatt-hour , MWh, usage, Renewable energy offsets, AI sustainability, Green AI, Low-power AI, Efficient architectures, sparse models,green AI, carbon-aware AI, lifecycle emissions, low-energy model"
+    },
+    {
+        "WORD": "Mitigation Strategies",
+        "SYNONYMS AND NEAR SYNONYMS": "Model compression, quantization, pruning, Federated learning , reduce centralized compute, Carbon-aware training, scheduling for renewable energy, Hardware efficiency, neuromorphic chips"
+    },
+    {
+        "WORD": "Post-Deployment Monitoring & Redress",
+        "SYNONYMS AND NEAR SYNONYMS": "Deployment & Testing, Deployment, Model serving, API integration, Real-world testing, Field trials, A/B testing, Data use, Inference-time data, Continuous data ingestion, Monitoring & Accountability, Post-deployment audit, Bias audits, Fairness metrics, Impact assessment, Social impact evaluation, Human rights impact assessment, Model monitoring, Drift detection , data/model drift, , Performance decay alerts, Grievance mechanism, User appeal process, Redress pipeline, User feedback, Human-in-the-loop, Participatory oversight, Sustainable AI Deployment, Lifecycle assessment, Carbon transparency tools, Ethical Post-Deployment, Harm logging, Third-party oversight NGOs, watchdogs, participatory design, user-centric feedback, task alignment"
+    },
+     {
+        "WORD": "AI Development & Deployment Guide",
+        "SYNONYMS AND NEAR SYNONYMS": "offline AI, edge AI, field deployment, fail-safes, fallback strategies, informational self-determination, explanation rights, justifiability, risk-based qualification, contextual performance evaluation, organizational change, skill erosion, institutional drift, neutral inference, independent fine-tuning, non-aligned benchmarks"
+    }
+]
