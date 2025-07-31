@@ -1,0 +1,51 @@
+{
+  "paper_title": "WanJuan-CC: A Safe and High-Quality Open-sourced English Webtext Dataset",
+  "summary": "This paper presents WanJuan-CC, a large-scale, open-sourced English webtext dataset derived from Common Crawl, with a focus on safety and data quality. The authors introduce a comprehensive, multi-stage process for filtering, deduplication, content safety screening (including PII masking), and rigorous data quality assessment. Empirical evaluation compares WanJuan-CC to other major webtext datasets, showing improvements in both content safety (toxicity, explicitness, PII) and downstream model performance.",
+  "publication_quality": {
+    "is_top_tier_venue": false,
+    "published_2020_or_later": true,
+    "sufficient_citations": true,
+    "full_text_english": true,
+    "passes_phase1": true
+  },
+  "technical_scope": {
+    "addresses_llm_data_collection": true,
+    "addresses_text_corpus_creation": true,
+    "addresses_web_scraping_nlp": true,
+    "addresses_multilingual_compilation": false,
+    "passes_technical_scope": true
+  },
+  "ethical_knockout": {
+    "focuses_only_on_performance": false,
+    "disregards_ethical_principles": false,
+    "missing_ethical_approval": false,
+    "violates_humanitarian_principles": false,
+    "humanitarian_score": 11,
+    "fails_phase2": false
+  },
+  "methodology_contribution": {
+    "novel_methodology": true,
+    "systematic_evaluation": true,
+    "reproducible_implementation": true,
+    "has_high_value_methodology": true
+  },
+  "ethical_analysis": {
+    "explicit_framework": false,
+    "empirical_bias_analysis": true,
+    "harm_mitigation_strategies": true,
+    "policy_recommendations": false,
+    "acknowledges_tensions": true,
+    "has_high_value_ethics": true
+  },
+  "priority_level": "high",
+  "recommendation": "This paper should be given HIGH PRIORITY for LLM data collection projects. The comprehensive and transparent methodology for data cleaning, deduplication, and especially safety filtering (toxic content, pornography, and PII masking) sets a new bar for open-source webtext dataset construction. The empirical evaluation of bias/harm reduction and candid discussion of trade-off choices (e.g., aggressive deduplication) further strengthens its ethical profile. Although an explicit, formal ethical framework is not provided, the practical implementations, evaluations, and transparency around safety measures represent best practices. Researchers should consider both using this dataset and adopting elements of its pipeline.",
+  "key_insights": [
+    "Aggressive, multi-stage deduplication (MinHash-LSH with priority on recent data) markedly improves dataset quality.",
+    "Model-based filtering for toxic and pornographic content, combined with large domain/keyword blocklists, results in lower safety risks (confirmed with external Perspective API).",
+    "Systematic PII masking using regex for IP, contact info, etc., is operationally described and evaluated.",
+    "Heuristic and model-based quality checks (e.g., fluency, advertisement detection) remove low-value and artifact-laden content.",
+    "The pipeline demonstrates that large-scale webtext can be substantially improved for safety and utility compared to prior datasets (Redpajama, RefinedWeb, Dolma, etc.).",
+    "Empirical downstream model evaluations confirm that precision-cleaned data can enhance performance on core NLP tasks, not just reduce risk.",
+    "The authors provide transparent removal rates and open their data, promoting reproducibility and field-wide progress."
+  ]
+}

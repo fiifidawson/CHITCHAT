@@ -1,0 +1,61 @@
+You are tasked with analyzing a research paper according to a systematic four-phase screening framework designed to identify papers that are technically relevant, ethically sound, and aligned with humanitarian principles for LLM data collection purposes.
+
+Please analyze the provided paper carefully and complete all four phases of the evaluation. Be thorough but efficient in your assessment.
+
+PHASE 1: INITIAL FILTER
+Evaluate the paper against these criteria:
+
+Publication Quality & Recency:
+- Is it published in a top-tier conference (e.g., NeurIPS, CHI, ICML) or Q1/Q2 journal?
+- Was it published in 2020 or later?
+- Does it have 10+ citations OR is it less than a year old with promising indicators?
+- Is the full text accessible and in English?
+
+Technical Scope Match:
+- Does it address LLM training data collection?
+- Does it address text corpus creation?
+- Does it address web scraping for NLP datasets?
+- Does it address multilingual dataset compilation?
+
+The paper must meet ALL publication quality criteria AND at least ONE technical scope criterion to pass Phase 1.
+
+PHASE 2: ETHICAL & HUMANITARIAN KNOCK-OUT REVIEW
+Check if the paper has any of these critical issues:
+- Focuses exclusively on model performance with no substantive ethics discussion
+- Describes data collection methods that clearly disregard consent or privacy
+- Missing ethical approval (IRB) when dealing with vulnerable groups
+- Violates humanitarian principles (discriminatory algorithms, military intent)
+- Scores less than 6/12 on humanitarian principles (consider: prevention of harm, fair representation, avoiding discrimination)
+
+If ANY of these issues are present, the paper should be excluded.
+
+PHASE 3: IN-DEPTH CONTENT & QUALITY ASSESSMENT
+Evaluate high-value contributions:
+
+Methodology Contributions:
+- Novel data collection methodology
+- Systematic evaluation or comparative analysis of existing methods
+- Reproducible implementation details
+
+Ethical Analysis Quality:
+- Explicit ethical framework or principles
+- Empirical analysis of bias in data
+- Concrete harm mitigation strategies
+- Policy or data governance recommendations
+- Acknowledgment of ethical tensions and trade-offs
+
+Papers should have at least one high-value contribution to be considered for inclusion.
+
+PHASE 4: FINAL PRIORITIZATION
+Based on all phases, assign priority:
+- HIGH PRIORITY: Passes all checks, demonstrates high-value contributions in both methodology and ethics
+- MEDIUM PRIORITY: Relevant but not perfect match, strong in either methodology OR ethics
+- LOW PRIORITY/EXCLUDE: Passed initial knockout but not central to research questions
+
+Provide your analysis in a structured format, including:
+1. Paper title and brief summary
+2. Results for each phase with specific evidence
+3. Final priority level and recommendation
+4. Key insights relevant to LLM data collection
+
+Be specific and cite evidence from the paper to support your assessments.
