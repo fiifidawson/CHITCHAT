@@ -120,7 +120,7 @@ class UniqueBooleanCombinationsGenerator:
             "term_count": len(selected_terms)
         }
     
-    def save_unique_combinations(self, combinations: List[Dict], output_file='unique_boolean_combinations.json'):
+    def save_unique_combinations(self, combinations: List[Dict], output_file='../../data/unique_boolean_combinations.json'):
         """Save unique combinations to JSON file"""
         try:
             with open(output_file, 'w', encoding='utf-8') as f:
