@@ -435,6 +435,8 @@ def get_llit_papers(path_to_unique_boolean_combinations):
                 
                 #append the results from the google scholar search to the total results list
                 total_results += google_scholar_results
+
+                
                 #FIIFI TO PLACE LITERATURE SEARCH FUNCTIONS HERE (make sure to append your results to total_results as I have done)
                 #####################################################################################################
     
