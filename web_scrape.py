@@ -2,7 +2,14 @@ import time
 import random
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import quote_plus, urljoin
+from urllib.parse import quote_plus, urljoin, urlparse
+import json
+import requests
+import fitz  # PyMuPDF
+import tempfile
+import os
+from PyPDF2 import PdfReader
+import re
 
 # --- Selenium Imports ---
 from selenium import webdriver
@@ -61,13 +68,13 @@ def _handle_cookie_banner(driver):
     return False
 
 
-def search_repository(query: str, repo: str, max_pages: int = 2):
+def search_repository(query: str, repo: str, max_pages: int = 1, pub_year: int = 2020, num_citations: int = 1):
     """
     Search across multiple pages for a boolean query on a given repository.
     """
     repo = repo.lower()
     if repo == 'google_scholar':
-        return _search_google_scholar_scholarly(query, max_pages * 10)
+        return _search_google_scholar_scholarly(query, max_pages * 10, pub_year, num_citations)
 
     search_map = {
         'iscram': _search_iscram,
@@ -82,21 +89,137 @@ def search_repository(query: str, repo: str, max_pages: int = 2):
     print(f"🚀 Searching {repo.upper()} for '{query}'...")
     return _paginate_with_selenium(search_map[repo], query, max_pages)
 
-def _search_google_scholar_scholarly(query: str, max_results: int):
+
+import os
+import requests
+from urllib.parse import urljoin, urlparse
+from bs4 import BeautifulSoup
+
+def download_research_paper(url, save_dir="research_paper_downloads"):
+    """
+    Downloads a research paper from the given URL.
+    Works generically for many publishers by checking for PDF links in HTML.
+    
+    Args:
+        url (str): URL to the research paper page or PDF.
+        save_dir (str): Directory to save the paper.
+        
+    Returns:
+        str: Path to the downloaded file or error message.
+    """
+    try:
+        os.makedirs(save_dir, exist_ok=True)
+        headers = {"User-Agent": "Mozilla/5.0"}
+        
+        # 1. Try direct download first
+        resp = requests.get(url, headers=headers, stream=True)
+        resp.raise_for_status()
+        content_type = resp.headers.get('Content-Type', '').lower()
+        
+        if 'pdf' in content_type or url.lower().endswith(".pdf"):
+            print(f'found the pdf link in the content type and initiating download process ... {url}')
+            # Direct PDF
+            filename = os.path.basename(urlparse(url).path)
+            if not filename.endswith(".pdf"):
+                filename += ".pdf"
+            file_path = os.path.join(save_dir, filename)
+            with open(file_path, "wb") as f:
+                for chunk in resp.iter_content(chunk_size=8192):
+                    f.write(chunk)
+            return f"Downloaded PDF to: {file_path}"
+        
+        # 2. Not a direct PDF → parse HTML to find a PDF link
+        html = resp.text
+        soup = BeautifulSoup(html, "html.parser")
+        pdf_link = None
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
+            if href.lower().endswith(".pdf") or "/pdf" in href.lower() or "/epdf" in href.lower():
+                print(f'found pdf link using beautifulsoup and now proceeding to download the paper...{url}')
+                pdf_link = urljoin(url, href)
+                break
+        
+        if not pdf_link:
+            print(f'No PDF link found on this page...{url}')
+            return "No PDF link found on this page."
+        
+        # 3. Download the found PDF link
+        pdf_resp = requests.get(pdf_link, headers=headers, stream=True)
+        pdf_resp.raise_for_status()
+        
+        filename = os.path.basename(urlparse(pdf_link).path)
+        if not filename.endswith(".pdf"):
+            filename += ".pdf"
+        file_path = os.path.join(save_dir, filename)
+        
+        with open(file_path, "wb") as f:
+            for chunk in pdf_resp.iter_content(chunk_size=8192):
+                f.write(chunk)
+        
+        return file_path
+    
+    except requests.exceptions.RequestException as e:
+        return f"Error: {e}"
+    
+
+def _extract_paper_text(research_paper_path):
+    '''
+    Extracts and returns all of the text in the provided research paper.
+
+    Params:
+        research_paper_path (str): Path to the downloaded research paper.
+
+    Returns:
+        extracted_text (str): Extracted text from the research paper.
+    '''
+    text = []
+    #check to see if the provided path exists
+    if not os.path.exists(research_paper_path):
+        raise FileNotFoundError(f'the research paper in path {research_paper_path} does not exist.')
+    
+    #open the file and extract the text from the pdf
+    with open(research_paper_path, 'rb') as f:
+        reader = PdfReader(f)
+        for page in reader.pages:
+            page_text = page.extract_text()
+            if page_text:
+                text.append(page_text)
+    
+    extracted_text = "\n".join(text)
+    return extracted_text
+    
+
+
+def _search_google_scholar_scholarly(query: str, max_results: int, pub_year: int, num_citations: int):
     """Uses scholarly library for Google Scholar."""
     print(f"🚀 Searching Google Scholar for '{query}'...")
-    results = []
     try:
         search_gen = scholarly.search_pubs(query)
+        results = []
         for i, paper in enumerate(search_gen):
             if i >= max_results:
                 break
+
             bib = paper.get('bib', {})
-            results.append({
-                'title': bib.get('title', 'N/A'),
-                'authors': ", ".join(bib.get('author', [])),
-                'url': paper.get('pub_url', 'N/A')
-            })
+            #check that the pub year of paper >= pub_year and num_citations >= 1
+            paper_pub_year = int(bib.get('pub_year', 0))
+            paper_citations = int(paper.get('num_citations', 0))
+            downloaded_paper_file_path = download_research_paper(paper.get('pub_url', 'N/A'))
+
+
+            if 'Error' not in downloaded_paper_file_path:
+                paper_text = _extract_paper_text(downloaded_paper_file_path)
+                if paper_pub_year >= pub_year and paper_citations >= num_citations:
+                    results.append({
+                        'title': bib.get('title', 'N/A'),
+                        'authors': ", ".join(bib.get('author', [])),
+                        'url': paper.get('pub_url', 'N/A'),
+                        'abstract': bib.get('abstract', 'N/A'),
+                        'year': paper_pub_year,
+                        'extracted_text': paper_text
+                    })
+            else:
+                continue            
     except Exception as e:
         print(f"An error occurred with scholarly: {e}")
     return results
@@ -286,47 +409,42 @@ def _search_icrc(driver, query: str, page: int = 1):
         })
     return results
 
+def get_llit_papers(path_to_unique_boolean_combinations):
+    '''
+    Searches research paper repositories for the relevant papers using the provided
+    boolean search term combinations.
 
-if __name__ == '__main__':
-    # --- Example Usage ---
-    google_scholar_results = search_repository("Humanitarian AND AI", "google_scholar")
-    print("\n--- GOOGLE SCHOLAR RESULTS ---")
-    if google_scholar_results:
-        for paper in google_scholar_results:
-            print(f"Title: {paper['title']}\nAuthors: {paper['authors']}\nURL: {paper['url']}\n")
-        
+    Params:
+        path_to_unique_boolean_combinations (str): Path to file containing the unique boolean
+                                                    combinations.
+    Output:
+        path_to_obtained_lit_json (str): Path to the json file containing the found literature.
+    '''
+    total_results = []
+    output_json_filename = 'obtained_lit.json'
+
+    #iterate through the unique combinations in each topic section and call a search
+    #using these combinations
+    with open(path_to_unique_boolean_combinations, 'r') as input_json:
+        json_contents = json.load(input_json)
+        for topic_section in json_contents:
+            unique_combinations = topic_section['unique_combinations']
+            for unique_combination in unique_combinations:
+                ###############place calls to specialized functions written for literature search here###############
+                google_scholar_results = search_repository(unique_combinations, "google_scholar")
+                
+                #append the results from the google scholar search to the total results list
+                total_results += google_scholar_results
+                #FIIFI TO PLACE LITERATURE SEARCH FUNCTIONS HERE (make sure to append your results to total_results as I have done)
+                #####################################################################################################
     
-    '''
-    # 1. Search JAMA
-    jama_results = search_repository("cardiovascular health", "jama", max_pages=1)
-    print("\n--- JAMA Results ---")
-    if jama_results:
-        for paper in jama_results:
-            print(f"Title: {paper['title']}\nAuthors: {paper['authors']}\nURL: {paper['url']}\n")
-    else:
-        print("No results found for JAMA.")
+    #write the results to the output json file
+    with open(output_json_filename, 'w') as output_json:
+        json.dump(total_results, output_json, indent=4)
+        
+    return output_json_filename
 
-    print("\n" + "="*50 + "\n")
 
-    # 2. Search UN
-    un_results = search_repository("epidemic AND modeling", "un", max_pages=1)
-    print("\n--- UN Results ---")
-    if un_results:
-        for paper in un_results:
-            print(f"Title: {paper['title']}\nURL: {paper['url']}\n")
-    else:
-        print("No results found for UN.")
 
-    print("\n" + "="*50 + "\n")
 
-    # 3. Search WHO
-    who_results = search_repository("zika virus AND prevention", "who", max_pages=1)
-    print("\n--- WHO Results ---")
-    if who_results:
-        for paper in who_results:
-            print(f"Title: {paper['title']}\nAuthors: {paper['authors']}\nURL: {paper['url']}\n")
-    else:
-        print("No results found for WHO.")
-
-    '''
     
