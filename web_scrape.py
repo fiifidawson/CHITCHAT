@@ -2,98 +2,22 @@ import time
 import random
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import quote_plus, urljoin, urlparse
+from urllib.parse import quote_plus, urljoin, urlparse, urlencode
+from scholarly import scholarly
 import json
 import requests
 import fitz  # PyMuPDF
 import tempfile
 import os
+import io
 from PyPDF2 import PdfReader
+from PyPDF2.errors import PdfReadError
 import re
-
-# --- Selenium Imports ---
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException, NoSuchElementException
-
-# Scholarly integration for Google Scholar
-try:
-    from scholarly import scholarly
-except ImportError:
-    raise ImportError("Please install the scholarly package: pip install scholarly")
-
-# --- WebDriver Setup for Safari ---
-def get_selenium_driver():
-    """
-    Initializes and returns a Selenium WebDriver for Safari.
-    
-    IMPORTANT: Before running, you must enable remote automation in Safari.
-    1. Open Safari.
-    2. Go to Safari > Settings > Advanced.
-    3. Check the box for "Show features for web developers".
-    4. A new "Develop" menu will appear in the menu bar.
-    5. Click "Develop" and ensure "Allow Remote Automation" is checked.
-    """
-    driver = webdriver.Safari()
-    return driver
-
-# --- Helper function to handle cookie banners ---
-def _handle_cookie_banner(driver):
-    """
-    Tries to find and click common cookie consent buttons, including modal close buttons.
-    """
-    selectors = [
-        "//button[@aria-label='Close']",
-        "//a[@aria-label='Close']",
-        "//button[contains(@class, 'close')]",
-        "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'accept')]",
-        "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'agree')]",
-        "//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'i understand')]",
-        "//button[@id='CybotCookiebotDialogBodyLevelButtonLevelOptinAllowAll']"
-    ]
-    
-    for selector in selectors:
-        try:
-            wait = WebDriverWait(driver, 5)
-            button = wait.until(EC.element_to_be_clickable((By.XPATH, selector)))
-            button.click()
-            print(f"   - Handled banner with selector: {selector}")
-            # The more robust wait will happen in the specific scraper function
-            return True # Indicate that a banner was handled
-        except (TimeoutException, NoSuchElementException):
-            continue
-    print("   - No cookie banner found or handled.")
-    return False
-
-
-def search_repository(query: str, repo: str, max_pages: int = 1, pub_year: int = 2020, num_citations: int = 1):
-    """
-    Search across multiple pages for a boolean query on a given repository.
-    """
-    repo = repo.lower()
-    if repo == 'google_scholar':
-        return _search_google_scholar_scholarly(query, max_pages * 10, pub_year, num_citations)
-
-    search_map = {
-        'iscram': _search_iscram,
-        'icrc': _search_icrc,
-        'jama': _search_jama,
-        'un': _search_un,
-        'who': _search_who
-    }
-    if repo not in search_map:
-        raise ValueError(f"Unsupported repository: {repo}")
-    
-    print(f"🚀 Searching {repo.upper()} for '{query}'...")
-    return _paginate_with_selenium(search_map[repo], query, max_pages)
-
-
-import os
 import requests
-from urllib.parse import urljoin, urlparse
-from bs4 import BeautifulSoup
+import time
+
+
+
 
 def download_research_paper(url, save_dir="research_paper_downloads"):
     """
@@ -126,7 +50,8 @@ def download_research_paper(url, save_dir="research_paper_downloads"):
             with open(file_path, "wb") as f:
                 for chunk in resp.iter_content(chunk_size=8192):
                     f.write(chunk)
-            return f"Downloaded PDF to: {file_path}"
+            print(f"successfully downloaded research paper from the following {url}")
+            return file_path
         
         # 2. Not a direct PDF → parse HTML to find a PDF link
         html = resp.text
@@ -141,7 +66,7 @@ def download_research_paper(url, save_dir="research_paper_downloads"):
         
         if not pdf_link:
             print(f'No PDF link found on this page...{url}')
-            return "No PDF link found on this page."
+            return None
         
         # 3. Download the found PDF link
         pdf_resp = requests.get(pdf_link, headers=headers, stream=True)
@@ -158,12 +83,241 @@ def download_research_paper(url, save_dir="research_paper_downloads"):
         
         return file_path
     
-    except requests.exceptions.RequestException as e:
-        return f"Error: {e}"
+    except Exception as e:
+        return None
     
 
-def _extract_paper_text(research_paper_path):
-    '''
+def _rebuild_abstract(inv_index: dict[str, list[int]]) -> str:
+    # 1. Find total number of tokens
+    max_pos = max(pos for positions in inv_index.values() for pos in positions)
+    tokens = [''] * (max_pos + 1)
+
+    # 2. Fill in each token at its recorded positions
+    for token, positions in inv_index.items():
+        for pos in positions:
+            tokens[pos] = token
+
+    # 3. Join back into a string (this gives a space-separated approximation)
+    return ' '.join(tokens)
+
+def search_openalex(
+    query: str,
+    per_page: int = 200,
+    max_pages: int | None = None,
+    sleep_between: float = 1.0
+) -> list[dict]:
+    """
+    Perform a Boolean-style search on OpenAlex and return all matching works.
+
+    Parameters:
+        query (str): A free-text Boolean query (e.g. "heart AND attack NOT stroke").
+        per_page (int): Number of results per request (max 200).
+        max_pages (int|None): Stop after this many pages; None = no limit.
+        sleep_between (float): Seconds to pause between requests.
+
+    Returns:
+        List[dict]: Each dict is one work record from OpenAlex's /works endpoint.
+    """
+    base_url = "https://api.openalex.org/works"
+    cursor = "*"
+    all_works = []
+    page_count = 0
+
+    while True:
+        params = {
+            "search": query,
+            "per_page": per_page,
+            "cursor": cursor,
+        }
+        resp = requests.get(base_url, params=params)
+        resp.raise_for_status()
+        payload = resp.json()
+
+        works = payload.get("results", [])
+        all_works.extend(works)
+
+        page_count += 1
+        # Stop if we've hit the user-defined page limit
+        if max_pages is not None and page_count >= max_pages:
+            break
+
+        # Grab next cursor for pagination
+        next_cursor = payload.get("meta", {}).get("next_cursor")
+        if not next_cursor:
+            break
+
+        cursor = next_cursor
+        time.sleep(sleep_between)
+    
+
+    #extract all of the needed information from the obtained works
+    processed_works = []
+    for work_item in all_works:
+        #get the paper title
+        paper_title = work_item['title']
+
+        #get the authors in a comma separated fashion
+        author_info = work_item['authorships']
+        authorship_list = []
+        for author_item in author_info:
+            authorship_list.append(author_item['author']['display_name'])
+        authors = ','.join(authorship_list)
+
+        #get the best open access location url
+        url = work_item['primary_location']['landing_page_url']
+        pdf_url = work_item['primary_location']['pdf_url']
+
+        #get the publication year
+        year = work_item['publication_year']
+
+        if pdf_url is not None:
+            #extract the text from the pdf of the paper
+            downloaded_paper_path = download_research_paper(pdf_url)
+            if downloaded_paper_path is not None:
+                try:
+                    paper_text = extract_paper_text(downloaded_paper_path)
+                except Exception as e:
+                    print(f"Could not extract the text from {pdf_url} even though it was downloaded. It is probably behind a paywall.")
+                    paper_text = None
+            else:
+                paper_text = None
+        else:
+            paper_text = None
+        
+        #check to see if abstract_inverted_index is not None
+        if work_item['abstract_inverted_index'] is not None:
+            abstract = _rebuild_abstract(work_item['abstract_inverted_index'])
+        else:
+            abstract = None
+        
+        #append all of the extracted items to processed_works
+        processed_works.append({
+                                    'title':paper_title,
+                                    'authors': authors,
+                                    'url': url,
+                                    'abstract': abstract,
+                                    'year': year,
+                                    'extracted_text': paper_text
+                                })
+    return processed_works
+
+
+
+def search_europepmc(
+    query: str,
+    result_type: str = 'core',
+    page_size: int = 1000,
+    max_pages: int | None = None,
+    pause: float = 1.0
+) -> list[dict]:
+    """
+    Perform a Boolean-style search on Europe PMC and return all matching records.
+
+    Parameters:
+        query (str): Boolean query string (e.g. "stroke AND (trevo OR solitaire)").
+        result_type (str): Level of detail ('lite' or 'core'); 'core' returns abstracts.  
+        page_size (int): Number of records per page (max 1000).  
+        max_pages (Optional[int]): Maximum number of pages to fetch; None = no limit.  
+        pause (float): Seconds to wait between requests to avoid rate limits.  
+
+    Returns:
+        List[Dict]: List of JSON objects, each representing one Europe PMC record.
+    """
+    base_url = 'https://www.ebi.ac.uk/europepmc/webservices/rest/search'
+    cursor = '*'
+    all_records: list[dict] = []
+    page_count = 0
+
+    while True:
+        params = {
+            'query': query,
+            'resultType': result_type,
+            'cursorMark': cursor,
+            'pageSize': page_size,
+            'format': 'json'
+        }
+        resp = requests.get(base_url, params=params)
+        resp.raise_for_status()
+        payload = resp.json()
+
+        # Extract result list
+        results = payload.get('resultList', {}).get('result', [])
+        all_records.extend(results)
+
+        page_count += 1
+        # Respect max_pages
+        if max_pages is not None and page_count >= max_pages:
+            break
+
+        # Get next cursor; break if absent or unchanged
+        next_cursor = payload.get('nextCursorMark')
+        if not next_cursor or next_cursor == cursor:
+            break
+        cursor = next_cursor
+
+        time.sleep(pause)
+    
+
+    #extract the information from the obtained records and then pre-process it to re-arrange the structure
+    #title, authors, url, abstract, year and extracted text
+    processed_records = []
+    for record in all_records:
+        #extract the title of the current record
+        title = record['title']
+
+        #extract the authors of the current record
+        author_list = record['authorString']
+
+        #extract the url for the paper
+        url = record['fullTextUrlList']['fullTextUrl'][0]['url']
+
+        #extract the abstract
+        try:
+            abstract = record['abstractText']
+        except Exception as e:
+            print(f"Abstract information does not exist for the following paper {url}")
+            abstract = None
+       
+        try:
+            #extract the publication year
+            record_keys = record.keys()
+            if 'journalInfo' in record_keys:
+                year = record['journalInfo']['yearOfPublication']
+            else:
+                year = record['bookOrReportDetails']['yearOfPublication']
+        except Exception as e:
+            year = None
+
+
+        #extract the text of the paper
+        if url is not None:
+            downloaded_paper_path = download_research_paper(url)
+            if downloaded_paper_path is not None:
+                try:
+                    extracted_text = extract_paper_text(downloaded_paper_path)
+                except Exception as e:
+                    print(f"Could not extract the text from {url} even though it was downloaded. It is probably behind a paywall.")
+                    extracted_text = None
+            else:
+                extracted_text = None
+        else:
+            extracted_text = None
+        
+
+        processed_records.append({
+                                    'title':title,
+                                    'authors':author_list,
+                                    'url':url,
+                                    'abstract':abstract,
+                                    'year':year,
+                                    'extracted_text':extracted_text
+                                })
+                
+    return processed_records
+
+
+def extract_paper_text(research_paper_path: str) -> str:
+    """
     Extracts and returns all of the text in the provided research paper.
 
     Params:
@@ -171,26 +325,42 @@ def _extract_paper_text(research_paper_path):
 
     Returns:
         extracted_text (str): Extracted text from the research paper.
-    '''
-    text = []
-    #check to see if the provided path exists
+    """
     if not os.path.exists(research_paper_path):
-        raise FileNotFoundError(f'the research paper in path {research_paper_path} does not exist.')
-    
-    #open the file and extract the text from the pdf
-    with open(research_paper_path, 'rb') as f:
-        reader = PdfReader(f)
-        for page in reader.pages:
-            page_text = page.extract_text()
-            if page_text:
-                text.append(page_text)
-    
-    extracted_text = "\n".join(text)
-    return extracted_text
-    
+        raise FileNotFoundError(f"File not found: {research_paper_path}")
+
+    # Read raw bytes
+    with open(research_paper_path, "rb") as f:
+        data = f.read()
+
+    # Quick sanity check: must start with "%PDF-"
+    if not data.startswith(b"%PDF-"):
+        raise ValueError(f"Not a valid PDF (missing %PDF- header): {research_paper_path}")
+
+    # Pad EOF marker if missing
+    if b"%%EOF" not in data[-20:]:
+        data += b"\n%%EOF\n"
+
+    # Wrap in BytesIO so we can pass strict=False
+    buf = io.BytesIO(data)
+
+    try:
+        reader = PdfReader(buf, strict=False)
+    except PdfReadError as e:
+        raise RuntimeError(f"Failed to parse PDF: {e}") from e
+
+    # Extract text
+    pages = []
+    for page in reader.pages:
+        text = page.extract_text()
+        if text:
+            pages.append(text)
+
+    return "\n".join(pages)
 
 
-def _search_google_scholar_scholarly(query: str, max_results: int, pub_year: int, num_citations: int):
+
+def search_google_scholar_scholarly(query: str, max_results: int, pub_year: int, num_citations: int):
     """Uses scholarly library for Google Scholar."""
     print(f"🚀 Searching Google Scholar for '{query}'...")
     try:
@@ -207,8 +377,8 @@ def _search_google_scholar_scholarly(query: str, max_results: int, pub_year: int
             downloaded_paper_file_path = download_research_paper(paper.get('pub_url', 'N/A'))
 
 
-            if 'Error' not in downloaded_paper_file_path:
-                paper_text = _extract_paper_text(downloaded_paper_file_path)
+            if downloaded_paper_file_path is not None:
+                paper_text = extract_paper_text(downloaded_paper_file_path)
                 if paper_pub_year >= pub_year and paper_citations >= num_citations:
                     results.append({
                         'title': bib.get('title', 'N/A'),
@@ -224,190 +394,24 @@ def _search_google_scholar_scholarly(query: str, max_results: int, pub_year: int
         print(f"An error occurred with scholarly: {e}")
     return results
 
-def _paginate_with_selenium(search_fn, query: str, max_pages: int):
+
+
+def search_repository(query: str, repo: str, max_pages: int = 1, pub_year: int = 2020, num_citations: int = 1):
     """
-    Pagination handler that uses a single Selenium driver instance.
+    Search across multiple pages for a boolean query on a given repository.
     """
-    driver = get_selenium_driver()
-    all_results = []
-    try:
-        for page in range(1, max_pages + 1):
-            print(f"   - Scraping page {page}...")
-            try:
-                page_results = search_fn(driver, query, page)
-                if not page_results:
-                    print("   - No more results found on this page. Stopping.")
-                    break
-                all_results.extend(page_results)
-                
-                if page < max_pages:
-                    time.sleep(random.uniform(5, 10)) 
-                    
-            except TimeoutException as e:
-                # Provide a more detailed error message
-                print(f"   - Loading timed out on page {page}. The specific element was not found in time. This could be due to a slow network, a change in the website's layout, or an intermittent issue.")
-                print(f"   - Error details: {e}")
-                break
-            except Exception as e:
-                print(f"   - An error occurred on page {page}: {e}. Stopping.")
-                break
-    finally:
-        driver.quit()
-    return all_results
+    repo = repo.lower()
+    if repo == 'google_scholar':
+        return search_google_scholar_scholarly(query, max_pages * 10, pub_year, num_citations)
 
-# --- Scraper Functions ---
-
-# --- UPDATED: _search_jama with smarter waiting ---
-def _search_jama(driver, query: str, page: int = 1):
-    """Uses Selenium with robust cookie handling and explicit waits."""
-    base_url = 'https://jamanetwork.com/searchresults'
-    params = {'q': query, 'page': page}
-    url = f"{base_url}?{requests.compat.urlencode(params)}"
-    driver.get(url)
+    elif repo == 'openalex':
+        return search_openalex(query)
     
-    # Try to handle the banner
-    banner_was_handled = _handle_cookie_banner(driver)
-    
-    # Explicitly wait for the banner modal to disappear if it was clicked
-    if banner_was_handled:
-        try:
-            modal_selector = (By.CLASS_NAME, "modal-content")
-            wait = WebDriverWait(driver, 10)
-            wait.until(EC.invisibility_of_element_located(modal_selector))
-            print("   - Confirmed cookie modal is gone.")
-        except TimeoutException:
-            print("   - Cookie modal did not disappear in time. Continuing anyway.")
+    else:
+        return search_europepmc(query)
 
-    # --- FIX: Wait for the main search results CONTAINER to be visible ---
-    # This is more reliable than waiting for a single item.
-    wait = WebDriverWait(driver, 30)
-    try:
-        wait.until(EC.visibility_of_element_located((By.ID, "searchResults")))
-        print("   - Search results container is visible.")
-    except TimeoutException:
-        # If the container itself doesn't appear, we can't proceed.
-        print("   - The main search results container did not load. The page may have changed or returned no results.")
-        return [] # Return empty list
 
-    # A small, final pause to ensure all JS rendering within the container is complete.
-    time.sleep(2)
-    
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    results = []
-    # Now that we know the container is loaded, we can safely look for the items.
-    for item in soup.select('div.search-results-item'):
-        tag = item.select_one('h3.meta-title a')
-        authors_tag = item.select_one('div.meta-author')
-        if not tag: continue
-        results.append({
-            'title': tag.get_text(strip=True),
-            'authors': authors_tag.get_text(strip=True) if authors_tag else 'N/A',
-            'url': urljoin(base_url, tag['href'])
-        })
-    
-    if not results:
-        print("   - Container was found, but no 'search-results-item' elements were located within it.")
-        
-    return results
 
-def _search_un(driver, query: str, page: int = 1):
-    """Uses Selenium with cookie handling."""
-    base_url = 'https://digitallibrary.un.org/search'
-    params = {'ln': 'en', 'q': query, 'page': page}
-    url = f"{base_url}?{requests.compat.urlencode(params)}"
-    driver.get(url)
-
-    _handle_cookie_banner(driver)
-
-    wait = WebDriverWait(driver, 30)
-    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "result-body")))
-
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    results = []
-    for item in soup.select('div.result-body'):
-        title_tag = item.select_one('a.title-link')
-        if not title_tag: continue
-        author_tag = item.select_one('div.authors')
-        results.append({
-            'title': title_tag.get_text(strip=True),
-            'authors': author_tag.get_text(strip=True).strip() if author_tag else 'N/A',
-            'url': urljoin(base_url, title_tag['href'])
-        })
-    return results
-
-def _search_who(driver, query: str, page: int = 1):
-    """Uses Selenium with cookie handling."""
-    base_url = 'https://iris.who.int/search'
-    params = {'query': query, 'page': page - 1}
-    url = f"{base_url}?{requests.compat.urlencode(params)}"
-    driver.get(url)
-    
-    _handle_cookie_banner(driver)
-    
-    wait = WebDriverWait(driver, 30)
-    wait.until(EC.visibility_of_element_located((By.TAG_NAME, "ds-artifact-browser-list-item")))
-
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    results = []
-    for item in soup.select('ds-artifact-browser-list-item'):
-        tag = item.select_one('h4 a')
-        authors_tag = item.select_one('p.authors')
-        if not tag: continue
-        results.append({
-            'title': tag.get_text(strip=True), 
-            'authors': authors_tag.get_text(strip=True) if authors_tag else 'N/A',
-            'url': urljoin(base_url, tag['href'])
-        })
-    return results
-
-def _search_iscram(driver, query: str, page: int = 1):
-    """Uses Selenium with cookie handling."""
-    base_url = "https://www.iscram.org/"
-    url = f"https://www.iscram.org/search/node/{quote_plus(query)}"
-    params = {'page': page - 1}
-    full_url = f"{url}?{requests.compat.urlencode(params)}"
-    driver.get(full_url)
-
-    _handle_cookie_banner(driver)
-
-    wait = WebDriverWait(driver, 30)
-    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "search-result")))
-
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    results = []
-    for item in soup.select('li.search-result'):
-        tag = item.select_one('h3.title a')
-        if not tag: continue
-        results.append({
-            'title': tag.get_text(strip=True),
-            'authors': 'N/A on search page',
-            'url': urljoin(base_url, tag['href'])
-        })
-    return results
-
-def _search_icrc(driver, query: str, page: int = 1):
-    """Uses Selenium with cookie handling."""
-    base_url = 'https://www.icrc.org/en/search/site'
-    params = {'keys': query, 'page': page - 1}
-    url = f"{base_url}?{requests.compat.urlencode(params)}"
-    driver.get(url)
-
-    _handle_cookie_banner(driver)
-
-    wait = WebDriverWait(driver, 30)
-    wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "search-result-item")))
-    
-    soup = BeautifulSoup(driver.page_source, 'html.parser')
-    results = []
-    for item in soup.select('div.search-result-item'):
-        tag = item.select_one('h3 a')
-        if not tag: continue
-        results.append({
-            'title': tag.get_text(strip=True), 
-            'authors': 'N/A on search page', 
-            'url': urljoin(base_url, tag['href'])
-        })
-    return results
 
 def get_llit_papers(path_to_unique_boolean_combinations):
     '''
@@ -432,11 +436,15 @@ def get_llit_papers(path_to_unique_boolean_combinations):
             for unique_combination in unique_combinations:
                 ###############place calls to specialized functions written for literature search here###############
                 google_scholar_results = search_repository(unique_combinations, "google_scholar")
+                openalex_results = search_repository(unique_combinations, "openalex")
+                europepmc_results = search_repository(unique_combinations, "europepmc")
                 
                 #append the results from the google scholar search to the total results list
                 total_results += google_scholar_results
+                total_results += openalex_results
+                total_results += europepmc_results
 
-                
+
                 #FIIFI TO PLACE LITERATURE SEARCH FUNCTIONS HERE (make sure to append your results to total_results as I have done)
                 #####################################################################################################
     
@@ -445,8 +453,3 @@ def get_llit_papers(path_to_unique_boolean_combinations):
         json.dump(total_results, output_json, indent=4)
         
     return output_json_filename
-
-
-
-
-    
