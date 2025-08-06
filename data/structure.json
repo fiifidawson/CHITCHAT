@@ -28,10 +28,6 @@
         "SYNONYMS AND NEAR SYNONYMS": "Neural networks, NNs, Artificial neural networks, ANNs, Deep neural networks, DNNs, Convolutional neural networks, CNNs, for vision, Recurrent neural networks, RNNs, for sequences, Long short-term memory, LSTM, sequential data, Transformers, self-attention models, Graph neural networks, GNNs, relational data, Autoencoders, unsupervised representation learning, Generative adversarial networks, GANs, synthetic data, Variational autoencoders, VAEs, probabilistic generation, Diffusion models, generative AI, Sparse neural networks, efficiency-focused, Quantized models, low-precision computation, Neural architecture search, NAS, automated DL design"
     },
     {
-        "WORD": "Multimodal Models & Learning",
-        "SYNONYMS AND NEAR SYNONYMS": "Cross-modal learning, Multisensory AI, vision, audio, text, Vision-language models, VLMs, Audio-visual models, Text-to-image models, Image-to-text models, Video-text models, Multimodal transformers, Joint embedding models, Multimodal fusion"
-    },
-    {
         "WORD": "Applications & Domains",
         "SYNONYMS AND NEAR SYNONYMS": "Computer vision, Natural language processing, NLP, Speech recognition, Autonomous systems, Recommender systems, Healthcare diagnostics, Healthcare, Medicine, Medical Care, Robotics, Generative AI, Time-series forecasting, Anomaly detection"
     },
@@ -90,10 +86,6 @@
     {
         "WORD": "Mitigation Strategies",
         "SYNONYMS AND NEAR SYNONYMS": "Model compression, quantization, pruning, Federated learning , reduce centralized compute, Carbon-aware training, scheduling for renewable energy, Hardware efficiency, neuromorphic chips"
-    },
-    {
-        "WORD": "Post-Deployment Monitoring & Redress",
-        "SYNONYMS AND NEAR SYNONYMS": "Deployment & Testing, Deployment, Model serving, API integration, Real-world testing, Field trials, A/B testing, Data use, Inference-time data, Continuous data ingestion, Monitoring & Accountability, Post-deployment audit, Bias audits, Fairness metrics, Impact assessment, Social impact evaluation, Human rights impact assessment, Model monitoring, Drift detection , data/model drift, , Performance decay alerts, Grievance mechanism, User appeal process, Redress pipeline, User feedback, Human-in-the-loop, Participatory oversight, Sustainable AI Deployment, Lifecycle assessment, Carbon transparency tools, Ethical Post-Deployment, Harm logging, Third-party oversight NGOs, watchdogs, participatory design, user-centric feedback, task alignment"
     },
      {
         "WORD": "AI Development & Deployment Guide",

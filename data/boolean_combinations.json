@@ -28,10 +28,6 @@
         "boolean_combination": "(\"Deep Learning\" OR \"Neural networks\" OR \"NNs\" OR \"Artificial neural networks\" OR \"ANNs\" OR \"Deep neural networks\" OR \"DNNs\" OR \"Convolutional neural networks\" OR \"CNNs\" OR \"for vision\" OR \"Recurrent neural networks\" OR \"RNNs\" OR \"for sequences\" OR \"Long short-term memory\" OR \"LSTM\" OR \"sequential data\" OR \"Transformers\" OR \"self-attention models\" OR \"Graph neural networks\" OR \"GNNs\" OR \"relational data\" OR \"Autoencoders\" OR \"unsupervised representation learning\" OR \"Generative adversarial networks\" OR \"GANs\" OR \"synthetic data\" OR \"Variational autoencoders\" OR \"VAEs\" OR \"probabilistic generation\" OR \"Diffusion models\" OR \"generative AI\" OR \"Sparse neural networks\" OR \"efficiency-focused\" OR \"Quantized models\" OR \"low-precision computation\" OR \"Neural architecture search\" OR \"NAS\" OR \"automated DL design\")"
     },
     {
-        "WORD": "Multimodal Models & Learning",
-        "boolean_combination": "(\"Multimodal Models & Learning\" OR \"Cross-modal learning\" OR \"Multisensory AI\" OR \"vision\" OR \"audio\" OR \"text\" OR \"Vision-language models\" OR \"VLMs\" OR \"Audio-visual models\" OR \"Text-to-image models\" OR \"Image-to-text models\" OR \"Video-text models\" OR \"Multimodal transformers\" OR \"Joint embedding models\" OR \"Multimodal fusion\")"
-    },
-    {
         "WORD": "Applications & Domains",
         "boolean_combination": "(\"Applications & Domains\" OR \"Computer vision\" OR \"Natural language processing\" OR \"NLP\" OR \"Speech recognition\" OR \"Autonomous systems\" OR \"Recommender systems\" OR \"Healthcare diagnostics\" OR \"Healthcare\" OR \"Medicine\" OR \"Medical Care\" OR \"Robotics\" OR \"Generative AI\" OR \"Time-series forecasting\" OR \"Anomaly detection\")"
     },
@@ -90,10 +86,6 @@
     {
         "WORD": "Mitigation Strategies",
         "boolean_combination": "(\"Mitigation Strategies\" OR \"Model compression\" OR \"quantization\" OR \"pruning\" OR \"Federated learning\" OR \"reduce centralized compute\" OR \"Carbon-aware training\" OR \"scheduling for renewable energy\" OR \"Hardware efficiency\" OR \"neuromorphic chips\")"
-    },
-    {
-        "WORD": "Post-Deployment Monitoring & Redress",
-        "boolean_combination": "(\"Post-Deployment Monitoring & Redress\" OR \"Deployment & Testing\" OR \"Deployment\" OR \"Model serving\" OR \"API integration\" OR \"Real-world testing\" OR \"Field trials\" OR \"A/B testing\" OR \"Data use\" OR \"Inference-time data\" OR \"Continuous data ingestion\" OR \"Monitoring & Accountability\" OR \"Post-deployment audit\" OR \"Bias audits\" OR \"Fairness metrics\" OR \"Impact assessment\" OR \"Social impact evaluation\" OR \"Human rights impact assessment\" OR \"Model monitoring\" OR \"Drift detection\" OR \"data/model drift\" OR \"Performance decay alerts\" OR \"Grievance mechanism\" OR \"User appeal process\" OR \"Redress pipeline\" OR \"User feedback\" OR \"Human-in-the-loop\" OR \"Participatory oversight\" OR \"Sustainable AI Deployment\" OR \"Lifecycle assessment\" OR \"Carbon transparency tools\" OR \"Ethical Post-Deployment\" OR \"Harm logging\" OR \"Third-party oversight NGOs\" OR \"watchdogs\" OR \"participatory design\" OR \"user-centric feedback\" OR \"task alignment\")"
     },
     {
         "WORD": "AI Development & Deployment Guide",
