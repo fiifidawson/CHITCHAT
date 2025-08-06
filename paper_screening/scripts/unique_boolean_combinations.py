@@ -17,69 +17,82 @@ class UniqueBooleanCombinationsGenerator:
         self.predefined_combinations = {
             "Broad Foundational Search": [
                 "Foundation model",
-                "Data Curation & Processing", 
-                "Data Collection Methods",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Artificial Intelligence System",
+                "Machine Learning", 
+                "Deep Learning",
+                "Applications & Domains",
+                "General Data Collection & Dataset Creation",
+                "Data Curation & Processing",
+                "Data Collection Methods"
             ],
             
             "Humanitarian & Social Impact Search": [
                 "Humanitarian & Crisis Response",
-                "Foundation model",
-                "Bias",
-                "Fairness",
-                "Social Impact Assessment"
+                "Core Humanitarian Principles",
+                "Neutrality",
+                "Impartiality",
+                "Independence",
+                "Social Good & Impact",
+                "Vulnerable Populations",
+                "Low-Resource Settings",
+                "Human Rights & Advocacy",
+                "Key Actions & Interventions",
+                "Applications & Domains"
             ],
             
             "Inclusion & Representation Search": [
+                "Vulnerable Populations",
+                "Low-Resource Settings",
+                "Human Rights & Advocacy", 
+                "Social Good & Impact",
+                "Data Collection Methods",
+                "General Data Collection & Dataset Creation",
+                "Rights & Data Protection Frameworks",
+                "Organizations & Frameworks"
+            ],
+
+            "Transparency & Accountability Search": [
+                "Artificial Intelligence System",
                 "Foundation model",
-                "Bias",
-                "Fairness", 
-                "Inclusion & Diversity",
-                "Representation",
-                "Cultural Sensitivity"
+                "Data Curation & Processing",
+                "Applications & Domains",
+                "Rights & Data Protection Frameworks",
+                "AI Development & Deployment Guide",
+                "Organizations & Frameworks"
             ],
             
             "Harm Reduction & Safety Search": [
-                "Foundation model",
-                "Harm Mitigation",
-                "Safety Measures",
-                "Risk Assessment",
-                "Bias",
-                "Fairness"
+                "AI Development & Deployment Guide",
+                "Mitigation Strategies",
+                "Environmental & Equity Concerns",
+                "Rights & Data Protection Frameworks",
+                "Applications & Domains",
             ],
             
             "Control, Consent & Personal Data Rights": [
-                "Foundation model",
                 "Rights & Data Protection Frameworks",
-                "Data Control",
-                "Consent Mechanisms",
+                "Data Collection Methods",
+                "General Data Collection & Dataset Creation",
+                "Artificial Intelligence System",
                 "Privacy Protection"
             ],
             
             "Consent, Agency & Participatory AI": [
-                "Foundation model", 
-                "Consent Mechanisms",
-                "User Agency",
-                "Participatory Design",
-                "Human-AI Interaction"
+                "Human Rights & Advocacy", 
+                "Organizations & Frameworks",
+                "Key Actions & Interventions",
+                "Social Good & Impact",
             ],
             
             "Environmental & Infrastructural Cost": [
+                "Environmental & Equity Concerns",
+                "Mitigation Strategies",
+                "AI Development & Deployment Guide",
+                "Applications & Domains",
                 "Foundation model",
-                "Environmental Impact",
-                "Computational Resources",
-                "Energy Consumption",
-                "Sustainability"
+                "Machine Learning",
+                "Deep Learning"
             ],
-            
-            "Post-Deployment Monitoring & Redress": [
-                "Foundation model",
-                "Monitoring Systems",
-                "Performance Evaluation",
-                "Redress Mechanisms",
-                "Accountability"
-            ]
         }
     
     def _load_boolean_combinations(self) -> Optional[List[Dict]]:
