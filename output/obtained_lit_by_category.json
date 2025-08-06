@@ -1,5 +1,5 @@
 {
-    "Broad Foundational Search": [
+    "Inclusion & Representation Search": [
         {
             "Title": "Mudjacking: Patching Backdoor Vulnerabilities in Foundation Models",
             "Year": "2024",
@@ -8,14 +8,12 @@
             "Extracted text without bib and appendix": "Foundation model has become the backbone of the AI ecosystem. In particular, a foundation model can be used as a general-purpose feature extractor to build various downstream classifiers. However, foundation models are vulnerable to backdoor attacks and a backdoored foundation model is a single-point-of-failure of the AI ecosystem, e.g., multiple downstream classifiers inherit the backdoor vulnerabilities simultaneously. In this work, we propose Mudjacking, the first method to patch foundation models to remove backdoors. Specifically, given a misclassified trigger-embedded input detected after a backdoored foundation model is deployed, Mudjacking adjusts the parameters of the foundation model to remove the backdoor. We formulate patching a foundation model as an optimization problem and propose a gradient descent based method to solve it. We evaluate Mudjacking on both vision and language foundation models, eleven benchmark datasets, five existing backdoor attacks, and thirteen adaptive backdoor attacks. Our results show that Mudjacking can remove backdoor from a foundation model while maintaining its utility.",
             "ArXiv_ID": "2402.14977v1",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -26,14 +24,12 @@
             "Extracted text without bib and appendix": "The release of ChatGPT, Gemini, and other large language model has drawn huge interests on foundations models. There is a broad consensus that foundations models will be the fundamental building blocks for future AI systems. However, there is a lack of systematic guidance on the architecture design. Particularly, the the rapidly growing capabilities of foundations models can eventually absorb other components of AI systems, posing challenges of moving boundary and interface evolution in architecture design. Furthermore, incorporating foundations models into AI systems raises significant concerns about responsible and safe AI due to their opaque nature and rapidly advancing intelligence. To address these challenges, the paper first presents an architecture evolution of AI systems in the era of foundation models, transitioning from \"foundation-model-as-a-connector\" to \"foundation-model-as-a-monolithic architecture\". The paper then identifies key design decisions and proposes a pattern-oriented reference architecture for designing responsible foundation-model-based systems. The patterns can enable the potential of foundation models while ensuring associated risks.",
             "ArXiv_ID": "2304.11090v5",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -44,14 +40,12 @@
             "Extracted text without bib and appendix": "Large pre-trained models, or foundation models, have shown impressive performance when adapted to a variety of downstream tasks, often out-performing specialized models. Hypernetworks, neural networks that generate some or all of the parameters of another neural network, have become an increasingly important technique for conditioning and generalizing implicit neural representations (INRs), which represent signals or objects such as audio or 3D shapes using a neural network. However, despite the potential benefits of incorporating foundation models in hypernetwork methods, this research direction has not been investigated, likely due to the dissimilarity of the weight generation task with other visual tasks. To address this gap, we (1) show how foundation models can improve hypernetworks with Transformer-based architectures, (2) provide an empirical analysis of the benefits of foundation models for hypernetworks through the lens of the generalizable INR task, showing that leveraging foundation models improves performance, generalizability, and data efficiency across a variety of algorithms and modalities. We also provide further analysis in examining the design space of foundation model-based hypernetworks, including examining the choice of foundation models, algorithms, and the effect of scaling foundation models.",
             "ArXiv_ID": "2503.00838v1",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -62,14 +56,12 @@
             "Extracted text without bib and appendix": "The recent release of large language model (LLM) based chatbots, such as ChatGPT, has attracted huge interest in foundation models. It is widely believed that foundation models will serve as the fundamental building blocks for future AI systems. As foundation models are in their early stages, the design of foundation model based systems has not yet been systematically explored. There is limited understanding about the impact of introducing foundation models in software architecture. Therefore, in this paper, we propose a taxonomy of foundation model based systems, which classifies and compares the characteristics of foundation models and design options of foundation model based systems. Our taxonomy comprises three categories: the pretraining and adaptation of foundation models, the architecture design of foundation model based systems, and responsible-AI-by-design. This taxonomy can serve as concrete guidance for making major architectural design decisions when designing foundation model based systems and highlights trade-offs arising from design decisions.",
             "ArXiv_ID": "2305.05352v6",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -80,14 +72,12 @@
             "Extracted text without bib and appendix": "Visual foundation models like CLIP excel in learning feature representations from extensive datasets through self-supervised methods, demonstrating remarkable transfer learning and generalization capabilities. A growing number of applications based on visual foundation models are emerging, including innovative solutions such as BLIP-2. These applications employ pre-trained CLIP models as upstream feature extractors and train various downstream modules to accomplish diverse tasks. In situations involving system upgrades that require updating the upstream foundation model, it becomes essential to re-train all downstream modules to adapt to the new foundation model, which is inflexible and inefficient. In this paper, we introduce a parameter-efficient and task-agnostic adapter, dubbed TaCA, that facilitates compatibility across distinct foundation models while ensuring enhanced performance for the new models. TaCA allows downstream applications to seamlessly integrate better-performing foundation models without necessitating retraining. We conduct extensive experimental validation of TaCA using different scales of models with up to one billion parameters on various tasks such as video-text retrieval, video recognition, and visual question answering. The results consistently demonstrate the emergent ability of TaCA on hot-plugging upgrades for visual foundation models. Codes and models will be available at https://github.com/TencentARC/TaCA.",
             "ArXiv_ID": "2306.12642v1",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -98,14 +88,12 @@
             "Extracted text without bib and appendix": "In recent years we have seen substantial advances in foundation models for artificial intelligence, including language, vision, and multimodal models. Recent studies have highlighted the potential of using foundation models in geospatial artificial intelligence, known as GeoAI Foundation Models, for geographic question answering, remote sensing image understanding, map generation, and location-based services, among others. However, the development and application of GeoAI foundation models can pose serious privacy and security risks, which have not been fully discussed or addressed to date. This paper introduces the potential privacy and security risks throughout the lifecycle of GeoAI foundation models and proposes a comprehensive blueprint for research directions and preventative and control strategies. Through this vision paper, we hope to draw the attention of researchers and policymakers in geospatial domains to these privacy and security risks inherent in GeoAI foundation models and advocate for the development of privacy-preserving and secure GeoAI foundation models.",
             "ArXiv_ID": "2309.17319v2",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -116,14 +104,12 @@
             "Extracted text without bib and appendix": "When we are primarily interested in solving several problems jointly with a given prescribed high performance accuracy for each target application, then Foundation Models should for most cases be used rather than problem-specific models. We focus on the specific Computer Vision application of Foundation Models for Earth Observation (EO) and geospatial AI. These models can solve important problems we are tackling, including for example land cover classification, crop type mapping, flood segmentation, building density estimation, and road regression segmentation. In this paper, we show that for a limited number of labelled data, Foundation Models achieve improved performance compared to problem-specific models. In this work, we also present our proposed evaluation benchmark for Foundation Models for EO. Benchmarking the generalization performance of Foundation Models is important as it has become difficult to standardize a fair comparison across the many different models that have been proposed recently. We present the results using our evaluation benchmark for EO Foundation Models and show that Foundation Models are label efficient in the downstream tasks and help us solve problems we are tackling in EO and remote sensing.",
             "ArXiv_ID": "2406.18295v1",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -134,320 +120,268 @@
             "Extracted text without bib and appendix": "As foundation models have accumulated hundreds of millions of users, developers have begun to take steps to prevent harmful types of uses. One salient intervention that foundation model developers adopt is acceptable use policies: legally binding policies that prohibit users from using a model for specific purposes. This paper identifies acceptable use policies from 30 foundation model developers, analyzes the use restrictions they contain, and argues that acceptable use policies are an important lens for understanding the regulation of foundation models. Taken together, developers' acceptable use policies include 127 distinct use restrictions; the wide variety in the number and type of use restrictions may create fragmentation across the AI supply chain. Developers also employ acceptable use policies to prevent competitors or specific industries from making use of their models. Developers alone decide what constitutes acceptable use, and rarely provide transparency about how they enforce their policies. In practice, acceptable use policies are difficult to enforce, and scrupulous enforcement can act as a barrier to researcher access and limit beneficial uses of foundation models. Nevertheless, acceptable use policies for foundation models are an early example of self-regulation that have a significant impact on the market for foundation models and the overall AI ecosystem.",
             "ArXiv_ID": "2409.09041v1",
             "Search_Query": "all:\"Foundation model\"",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Improving Company Valuations with Automated Knowledge Discovery, Extraction and Fusion",
-            "Year": "2020",
-            "Authors": "Albert Weichselbraun, Philipp Kuntschik, Sandro Hörler",
-            "Extracted abstract": "Performing company valuations within the domain of biotechnology, pharmacy and medical technology is a challenging task, especially when considering the unique set of risks biotech start-ups face when entering new markets. Companies specialized in global valuation services, therefore, combine valuation models and past experience with heterogeneous metrics and indicators that provide insights into a company's performance. This paper illustrates how automated knowledge discovery, extraction and data fusion can be used to (i) obtain additional indicators that provide insights into the success of a company's product development efforts, and (ii) support labor-intensive data curation processes. We apply deep web knowledge acquisition methods to identify and harvest data on clinical trials that is hidden behind proprietary search interfaces and integrate the extracted data into the industry partner's company valuation ontology. In addition, focused Web crawls and shallow semantic parsing yield information on the company's key personnel and respective contact data, notifying domain experts of relevant changes that get then incorporated into the industry partner's company data.",
-            "Extracted text without bib and appendix": "Performing company valuations within the domain of biotechnology, pharmacy and medical technology is a challenging task, especially when considering the unique set of risks biotech start-ups face when entering new markets. Companies specialized in global valuation services, therefore, combine valuation models and past experience with heterogeneous metrics and indicators that provide insights into a company's performance. This paper illustrates how automated knowledge discovery, extraction and data fusion can be used to (i) obtain additional indicators that provide insights into the success of a company's product development efforts, and (ii) support labor-intensive data curation processes. We apply deep web knowledge acquisition methods to identify and harvest data on clinical trials that is hidden behind proprietary search interfaces and integrate the extracted data into the industry partner's company valuation ontology. In addition, focused Web crawls and shallow semantic parsing yield information on the company's key personnel and respective contact data, notifying domain experts of relevant changes that get then incorporated into the industry partner's company data.",
-            "ArXiv_ID": "2010.09249v1",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
+            "Title": "Angle-Independent Nongyrotropic Metasurfaces",
+            "Year": "2019",
+            "Authors": "Guillaume Lavigne, Christophe Caloz",
+            "Extracted abstract": "We derive a general condition for angle-independent bianisotropic nongyrotropic metasurfaces and present two applications corresponding to particular cases: an angle-independent absorber/amplifier and an angle-independent spatial gyrator.",
+            "Extracted text without bib and appendix": "We derive a general condition for angle-independent bianisotropic nongyrotropic metasurfaces and present two applications corresponding to particular cases: an angle-independent absorber/amplifier and an angle-independent spatial gyrator.",
+            "ArXiv_ID": "1903.11956v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Automated Metadata Harmonization Using Entity Resolution & Contextual Embedding",
-            "Year": "2020",
-            "Authors": "Kunal Sawarkar, Meenkakshi Kodati",
-            "Extracted abstract": "ML Data Curation process typically consist of heterogeneous & federated source systems with varied schema structures; requiring curation process to standardize metadata from different schemas to an inter-operable schema. This manual process of Metadata Harmonization & cataloging slows efficiency of ML-Ops lifecycle. We demonstrate automation of this step with the help of entity resolution methods & also by using Cogntive Database's Db2Vec embedding approach to capture hidden inter-column & intra-column relationships which detect similarity of metadata and then predict metadata columns from source schemas to any standardized schemas. Apart from matching schemas, we demonstrate that it can also infer the correct ontological structure of the target data model.",
-            "Extracted text without bib and appendix": "ML Data Curation process typically consist of heterogeneous & federated source systems with varied schema structures; requiring curation process to standardize metadata from different schemas to an inter-operable schema. This manual process of Metadata Harmonization & cataloging slows efficiency of ML-Ops lifecycle. We demonstrate automation of this step with the help of entity resolution methods & also by using Cogntive Database's Db2Vec embedding approach to capture hidden inter-column & intra-column relationships which detect similarity of metadata and then predict metadata columns from source schemas to any standardized schemas. Apart from matching schemas, we demonstrate that it can also infer the correct ontological structure of the target data model.",
-            "ArXiv_ID": "2010.11827v2",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "HQ-50K: A Large-scale, High-quality Dataset for Image Restoration",
-            "Year": "2023",
-            "Authors": "Qinhong Yang, Dongdong Chen, Zhentao Tan, Qiankun Liu, Qi Chu, Jianmin Bao, Lu Yuan, Gang Hua, Nenghai Yu",
-            "Extracted abstract": "This paper introduces a new large-scale image restoration dataset, called HQ-50K, which contains 50,000 high-quality images with rich texture details and semantic diversity. We analyze existing image restoration datasets from five different perspectives, including data scale, resolution, compression rates, texture details, and semantic coverage. However, we find that all of these datasets are deficient in some aspects. In contrast, HQ-50K considers all of these five aspects during the data curation process and meets all requirements. We also present a new Degradation-Aware Mixture of Expert (DAMoE) model, which enables a single model to handle multiple corruption types and unknown levels. Our extensive experiments demonstrate that HQ-50K consistently improves the performance on various image restoration tasks, such as super-resolution, denoising, dejpeg, and deraining. Furthermore, our proposed DAMoE, trained on our \\dataset, outperforms existing state-of-the-art unified models designed for multiple restoration tasks and levels. The dataset and code are available at \\url{https://github.com/littleYaang/HQ-50K}.",
-            "Extracted text without bib and appendix": "This paper introduces a new large-scale image restoration dataset, called HQ-50K, which contains 50,000 high-quality images with rich texture details and semantic diversity. We analyze existing image restoration datasets from five different perspectives, including data scale, resolution, compression rates, texture details, and semantic coverage. However, we find that all of these datasets are deficient in some aspects. In contrast, HQ-50K considers all of these five aspects during the data curation process and meets all requirements. We also present a new Degradation-Aware Mixture of Expert (DAMoE) model, which enables a single model to handle multiple corruption types and unknown levels. Our extensive experiments demonstrate that HQ-50K consistently improves the performance on various image restoration tasks, such as super-resolution, denoising, dejpeg, and deraining. Furthermore, our proposed DAMoE, trained on our \\dataset, outperforms existing state-of-the-art unified models designed for multiple restoration tasks and levels. The dataset and code are available at \\url{https://github.com/littleYaang/HQ-50K}.",
-            "ArXiv_ID": "2306.05390v1",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "World Model on Million-Length Video And Language With Blockwise RingAttention",
+            "Title": "On statistical independence and density independence",
             "Year": "2024",
-            "Authors": "Hao Liu, Wilson Yan, Matei Zaharia, Pieter Abbeel",
-            "Extracted abstract": "Enabling long-context understanding remains a key challenge in scaling existing sequence models -- a crucial component in developing generally intelligent models that can process and operate over long temporal horizons that potentially consist of millions of tokens. In this paper, we aim to address these challenges by providing a comprehensive exploration of the full development process for producing 1M context language models and video-language models, setting new benchmarks in language retrieval and new capabilities in long video understanding. We detail our long context data curation process, progressive context extension from 4K to 1M tokens, and present an efficient open-source implementation for scalable training on long sequences. Additionally, we open-source a family of 7B parameter models capable of processing long text documents and videos exceeding 1M tokens.",
-            "Extracted text without bib and appendix": "Enabling long-context understanding remains a key challenge in scaling existing sequence models -- a crucial component in developing generally intelligent models that can process and operate over long temporal horizons that potentially consist of millions of tokens. In this paper, we aim to address these challenges by providing a comprehensive exploration of the full development process for producing 1M context language models and video-language models, setting new benchmarks in language retrieval and new capabilities in long video understanding. We detail our long context data curation process, progressive context extension from 4K to 1M tokens, and present an efficient open-source implementation for scalable training on long sequences. Additionally, we open-source a family of 7B parameter models capable of processing long text documents and videos exceeding 1M tokens.",
-            "ArXiv_ID": "2402.08268v4",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
+            "Authors": "Milan Pasteka",
+            "Extracted abstract": "The object of observation in present paper is statistical independence of real sequences and its description as independence with re spect to certain class of densities.",
+            "Extracted text without bib and appendix": "The object of observation in present paper is statistical independence of real sequences and its description as independence with re spect to certain class of densities.",
+            "ArXiv_ID": "2411.02357v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Wikibench: Community-Driven Data Curation for AI Evaluation on Wikipedia",
-            "Year": "2024",
-            "Authors": "Tzu-Sheng Kuo, Aaron Halfaker, Zirui Cheng, Jiwoo Kim, Meng-Hsin Wu, Tongshuang Wu, Kenneth Holstein, Haiyi Zhu",
-            "Extracted abstract": "AI tools are increasingly deployed in community contexts. However, datasets used to evaluate AI are typically created by developers and annotators outside a given community, which can yield misleading conclusions about AI performance. How might we empower communities to drive the intentional design and curation of evaluation datasets for AI that impacts them? We investigate this question on Wikipedia, an online community with multiple AI-based content moderation tools deployed. We introduce Wikibench, a system that enables communities to collaboratively curate AI evaluation datasets, while navigating ambiguities and differences in perspective through discussion. A field study on Wikipedia shows that datasets curated using Wikibench can effectively capture community consensus, disagreement, and uncertainty. Furthermore, study participants used Wikibench to shape the overall data curation process, including refining label definitions, determining data inclusion criteria, and authoring data statements. Based on our findings, we propose future directions for systems that support community-driven data curation.",
-            "Extracted text without bib and appendix": "AI tools are increasingly deployed in community contexts. However, datasets used to evaluate AI are typically created by developers and annotators outside a given community, which can yield misleading conclusions about AI performance. How might we empower communities to drive the intentional design and curation of evaluation datasets for AI that impacts them? We investigate this question on Wikipedia, an online community with multiple AI-based content moderation tools deployed. We introduce Wikibench, a system that enables communities to collaboratively curate AI evaluation datasets, while navigating ambiguities and differences in perspective through discussion. A field study on Wikipedia shows that datasets curated using Wikibench can effectively capture community consensus, disagreement, and uncertainty. Furthermore, study participants used Wikibench to shape the overall data curation process, including refining label definitions, determining data inclusion criteria, and authoring data statements. Based on our findings, we propose future directions for systems that support community-driven data curation.",
-            "ArXiv_ID": "2402.14147v1",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
+            "Title": "Complete independence of an axiom system for central translations",
+            "Year": "2013",
+            "Authors": "Jesse Alama",
+            "Extracted abstract": "A recently proposed axiom system for Andr\\'e's central translation structures is improved upon. First, one of its axioms turns out to be dependent (derivable from the other axioms). Without this axiom, the axiom system is indeed independent. Second, whereas most of the original independence models were infinite, finite independence models are available. Moreover, the independence proof for one of the axioms employed proof-theoretic techniques rather than independence models; for this axiom, too, a finite independence model exists. For every axiom, then, there is a finite independence model. Finally, the axiom system (without its single dependent axiom) is not only independent, but completely independent.",
+            "Extracted text without bib and appendix": "A recently proposed axiom system for Andr\\'e's central translation structures is improved upon. First, one of its axioms turns out to be dependent (derivable from the other axioms). Without this axiom, the axiom system is indeed independent. Second, whereas most of the original independence models were infinite, finite independence models are available. Moreover, the independence proof for one of the axioms employed proof-theoretic techniques rather than independence models; for this axiom, too, a finite independence model exists. For every axiom, then, there is a finite independence model. Finally, the axiom system (without its single dependent axiom) is not only independent, but completely independent.",
+            "ArXiv_ID": "1311.1912v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Public Computer Vision Datasets for Precision Livestock Farming: A Systematic Survey",
-            "Year": "2024",
-            "Authors": "Anil Bhujel, Yibin Wang, Yuzhen Lu, Daniel Morris, Mukesh Dangol",
-            "Extracted abstract": "Technology-driven precision livestock farming (PLF) empowers practitioners to monitor and analyze animal growth and health conditions for improved productivity and welfare. Computer vision (CV) is indispensable in PLF by using cameras and computer algorithms to supplement or supersede manual efforts for livestock data acquisition. Data availability is crucial for developing innovative monitoring and analysis systems through artificial intelligence-based techniques. However, data curation processes are tedious, time-consuming, and resource intensive. This study presents the first systematic survey of publicly available livestock CV datasets (https://github.com/Anil-Bhujel/Public-Computer-Vision-Dataset-A-Systematic-Survey). Among 58 public datasets identified and analyzed, encompassing different species of livestock, almost half of them are for cattle, followed by swine, poultry, and other animals. Individual animal detection and color imaging are the dominant application and imaging modality for livestock. The characteristics and baseline applications of the datasets are discussed, emphasizing the implications for animal welfare advocates. Challenges and opportunities are also discussed to inspire further efforts in developing livestock CV datasets. This study highlights that the limited quantity of high-quality annotated datasets collected from diverse environments, animals, and applications, the absence of contextual metadata, are a real bottleneck in PLF.",
-            "Extracted text without bib and appendix": "Technology-driven precision livestock farming (PLF) empowers practitioners to monitor and analyze animal growth and health conditions for improved productivity and welfare. Computer vision (CV) is indispensable in PLF by using cameras and computer algorithms to supplement or supersede manual efforts for livestock data acquisition. Data availability is crucial for developing innovative monitoring and analysis systems through artificial intelligence-based techniques. However, data curation processes are tedious, time-consuming, and resource intensive. This study presents the first systematic survey of publicly available livestock CV datasets (https://github.com/Anil-Bhujel/Public-Computer-Vision-Dataset-A-Systematic-Survey). Among 58 public datasets identified and analyzed, encompassing different species of livestock, almost half of them are for cattle, followed by swine, poultry, and other animals. Individual animal detection and color imaging are the dominant application and imaging modality for livestock. The characteristics and baseline applications of the datasets are discussed, emphasizing the implications for animal welfare advocates. Challenges and opportunities are also discussed to inspire further efforts in developing livestock CV datasets. This study highlights that the limited quantity of high-quality annotated datasets collected from diverse environments, animals, and applications, the absence of contextual metadata, are a real bottleneck in PLF.",
-            "ArXiv_ID": "2406.10628v1",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
+            "Title": "On the Stability of Independence Polynomials",
+            "Year": "2018",
+            "Authors": "Jason Brown, Ben Cameron",
+            "Extracted abstract": "The independence polynomial of a graph is the generating polynomial for the number of independent sets of each size, and its roots are called {\\em independence roots}. We investigate the stability of such polynomials, that is, conditions under which the roots lie in the left half-plane (all of the real roots of independence polynomial are negative and hence lie in this half-plane). We show stability for all independence polynomials of graphs with independence number at most three, but for larger independence number we show that the independence polynomials can have roots arbitrarily far to the right. We provide families of graphs whose independence polynomials are stable and ones that are not, utilizing various graph operations.",
+            "Extracted text without bib and appendix": "The independence polynomial of a graph is the generating polynomial for the number of independent sets of each size, and its roots are called {\\em independence roots}. We investigate the stability of such polynomials, that is, conditions under which the roots lie in the left half-plane (all of the real roots of independence polynomial are negative and hence lie in this half-plane). We show stability for all independence polynomials of graphs with independence number at most three, but for larger independence number we show that the independence polynomials can have roots arbitrarily far to the right. We provide families of graphs whose independence polynomials are stable and ones that are not, utilizing various graph operations.",
+            "ArXiv_ID": "1802.02478v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Learning Video Representations without Natural Videos",
-            "Year": "2024",
-            "Authors": "Xueyang Yu, Xinlei Chen, Yossi Gandelsman",
-            "Extracted abstract": "We show that useful video representations can be learned from synthetic videos and natural images, without incorporating natural videos in the training. We propose a progression of video datasets synthesized by simple generative processes, that model a growing set of natural video properties (e.g., motion, acceleration, and shape transformations). The downstream performance of video models pre-trained on these generated datasets gradually increases with the dataset progression. A VideoMAE model pre-trained on our synthetic videos closes 97.2\\% of the performance gap on UCF101 action classification between training from scratch and self-supervised pre-training from natural videos, and outperforms the pre-trained model on HMDB51. Introducing crops of static images to the pre-training stage results in similar performance to UCF101 pre-training and outperforms the UCF101 pre-trained model on 11 out of 14 out-of-distribution datasets of UCF101-P. Analyzing the low-level properties of the datasets, we identify correlations between frame diversity, frame similarity to natural data, and downstream performance. Our approach provides a more controllable and transparent alternative to video data curation processes for pre-training.",
-            "Extracted text without bib and appendix": "We show that useful video representations can be learned from synthetic videos and natural images, without incorporating natural videos in the training. We propose a progression of video datasets synthesized by simple generative processes, that model a growing set of natural video properties (e.g., motion, acceleration, and shape transformations). The downstream performance of video models pre-trained on these generated datasets gradually increases with the dataset progression. A VideoMAE model pre-trained on our synthetic videos closes 97.2\\% of the performance gap on UCF101 action classification between training from scratch and self-supervised pre-training from natural videos, and outperforms the pre-trained model on HMDB51. Introducing crops of static images to the pre-training stage results in similar performance to UCF101 pre-training and outperforms the UCF101 pre-trained model on 11 out of 14 out-of-distribution datasets of UCF101-P. Analyzing the low-level properties of the datasets, we identify correlations between frame diversity, frame similarity to natural data, and downstream performance. Our approach provides a more controllable and transparent alternative to video data curation processes for pre-training.",
-            "ArXiv_ID": "2410.24213v2",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "OpenCSG Chinese Corpus: A Series of High-quality Chinese Datasets for LLM Training",
+            "Title": "Marcinkiewicz-type laws of large numbers for pseudo-independent random variables under sublinear expectations",
             "Year": "2025",
-            "Authors": "Yijiong Yu, Ziyun Dai, Zekun Wang, Wei Wang, Ran Chen, Ji Pei",
-            "Extracted abstract": "Large language models (LLMs) have demonstrated remarkable capabilities, but their success heavily relies on the quality of pretraining corpora. For Chinese LLMs, the scarcity of high-quality Chinese datasets presents a significant challenge, often limiting their performance. To address this issue, we propose the OpenCSG Chinese Corpus, a series of high-quality datasets specifically designed for LLM pretraining, post-training, and fine-tuning. This corpus includes Fineweb-edu-chinese, Fineweb-edu-chinese-v2, Cosmopedia-chinese, and Smoltalk-chinese, each with distinct characteristics: Fineweb-edu datasets focus on filtered, high-quality content derived from diverse Chinese web sources; Cosmopedia-chinese provides synthetic, textbook-style data for knowledge-intensive training; and Smoltalk-chinese emphasizes stylistic and diverse chat-format data. The OpenCSG Chinese Corpus is characterized by its high-quality text, diverse coverage across domains, and scalable, reproducible data curation processes. Additionally, we conducted extensive experimental analyses, including evaluations on smaller parameter models, which demonstrated significant performance improvements in tasks such as C-Eval, showcasing the effectiveness of the corpus for training Chinese LLMs.",
-            "Extracted text without bib and appendix": "Large language models (LLMs) have demonstrated remarkable capabilities, but their success heavily relies on the quality of pretraining corpora. For Chinese LLMs, the scarcity of high-quality Chinese datasets presents a significant challenge, often limiting their performance. To address this issue, we propose the OpenCSG Chinese Corpus, a series of high-quality datasets specifically designed for LLM pretraining, post-training, and fine-tuning. This corpus includes Fineweb-edu-chinese, Fineweb-edu-chinese-v2, Cosmopedia-chinese, and Smoltalk-chinese, each with distinct characteristics: Fineweb-edu datasets focus on filtered, high-quality content derived from diverse Chinese web sources; Cosmopedia-chinese provides synthetic, textbook-style data for knowledge-intensive training; and Smoltalk-chinese emphasizes stylistic and diverse chat-format data. The OpenCSG Chinese Corpus is characterized by its high-quality text, diverse coverage across domains, and scalable, reproducible data curation processes. Additionally, we conducted extensive experimental analyses, including evaluations on smaller parameter models, which demonstrated significant performance improvements in tasks such as C-Eval, showcasing the effectiveness of the corpus for training Chinese LLMs.",
-            "ArXiv_ID": "2501.08197v1",
-            "Search_Query": "all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
+            "Authors": "Jialiang Fu",
+            "Extracted abstract": "As a kind of independence of random variables under sublinear expectations, pseudo-independence is weaker than Peng's independence. We shall give Marcinkiewicz-type weak and strong laws of large numbers for pseudo-independent random variables under the framework of sublinear expectations.",
+            "Extracted text without bib and appendix": "As a kind of independence of random variables under sublinear expectations, pseudo-independence is weaker than Peng's independence. We shall give Marcinkiewicz-type weak and strong laws of large numbers for pseudo-independent random variables under the framework of sublinear expectations.",
+            "ArXiv_ID": "2504.21576v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Surgical task-space optimisation of the CYCLOPS robotic system",
-            "Year": "2017",
-            "Authors": "T. J. C. Oude Vrielink, Y. W. Pang, M. Zhao, S. -L. Lee, A. Darzi, G. P. Mylonas",
-            "Extracted abstract": "The CYCLOPS is a cable-driven parallel mechanism used for minimally invasive applications, with the ability to be customised to different surgical needs; allowing it to be made procedure- and patient-specific. For adequate optimisation, however, appropriate data on clinical constraints and task-space is required. Whereas the former can be provided through preoperative planning and imaging, the latter remains a problem, primarily for highly dexterous MIS systems. The current work focuses on the development of a task-space optimisation method for the CYCLOPS system and the development of a data collection method in a simulation environment for minimally invasive task-spaces. The same data collection method can be used for the development of other minimally invasive platforms. A case-study is used to illustrate the developed method for Endoscopic Submucosal Dissection (ESD). This paper shows that using this method, the system can be succesfully optimised for this application.",
-            "Extracted text without bib and appendix": "The CYCLOPS is a cable-driven parallel mechanism used for minimally invasive applications, with the ability to be customised to different surgical needs; allowing it to be made procedure- and patient-specific. For adequate optimisation, however, appropriate data on clinical constraints and task-space is required. Whereas the former can be provided through preoperative planning and imaging, the latter remains a problem, primarily for highly dexterous MIS systems. The current work focuses on the development of a task-space optimisation method for the CYCLOPS system and the development of a data collection method in a simulation environment for minimally invasive task-spaces. The same data collection method can be used for the development of other minimally invasive platforms. A case-study is used to illustrate the developed method for Endoscopic Submucosal Dissection (ESD). This paper shows that using this method, the system can be succesfully optimised for this application.",
-            "ArXiv_ID": "1712.03720v1",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
+            "Title": "The Critical Independence Number and an Independence Decomposition",
+            "Year": "2009",
+            "Authors": "Craig Eric Larson",
+            "Extracted abstract": "An independent set $I_c$ is a \\textit{critical independent set} if $|I_c| - |N(I_c)| \\geq |J| - |N(J)|$, for any independent set $J$. The \\textit{critical independence number} of a graph is the cardinality of a maximum critical independent set. This number is a lower bound for the independence number and can be computed in polynomial-time. Any graph can be decomposed into two subgraphs where the independence number of one subgraph equals its critical independence number, where the critical independence number of the other subgraph is zero, and where the sum of the independence numbers of the subgraphs is the independence number of the graph. A proof of a conjecture of Graffiti.pc yields a new characterization of K\\\"{o}nig-Egervary graphs: these are exactly the graphs whose independence and critical independence numbers are equal.",
+            "Extracted text without bib and appendix": "An independent set $I_c$ is a \\textit{critical independent set} if $|I_c| - |N(I_c)| \\geq |J| - |N(J)|$, for any independent set $J$. The \\textit{critical independence number} of a graph is the cardinality of a maximum critical independent set. This number is a lower bound for the independence number and can be computed in polynomial-time. Any graph can be decomposed into two subgraphs where the independence number of one subgraph equals its critical independence number, where the critical independence number of the other subgraph is zero, and where the sum of the independence numbers of the subgraphs is the independence number of the graph. A proof of a conjecture of Graffiti.pc yields a new characterization of K\\\"{o}nig-Egervary graphs: these are exactly the graphs whose independence and critical independence numbers are equal.",
+            "ArXiv_ID": "0912.2260v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "The group administered interactive questionnaire: An alternative to individual interviews",
+            "Title": "Representing Independence Models with Elementary Triplets",
             "Year": "2016",
-            "Authors": "Edit Yerushalmi, Charles R. Henderson, William Mamudi, Chandralekha Singh, Shih-Yin Lin",
-            "Extracted abstract": "Individual interviews are often considered to be the gold standard for researchers to understand how people think about phenomena. However, conducting and analyzing interviews is very time consuming. This paper presents the Group Administered Interactive Questionnaire (GAIQ) as an alternative to individual interviews and discusses the pros and cons of each data collection method. Use of GAIQ will be discussed in the context of a study that seeks to understand teaching assistants' reasons for the design of problem solutions for introductory physics.",
-            "Extracted text without bib and appendix": "Individual interviews are often considered to be the gold standard for researchers to understand how people think about phenomena. However, conducting and analyzing interviews is very time consuming. This paper presents the Group Administered Interactive Questionnaire (GAIQ) as an alternative to individual interviews and discusses the pros and cons of each data collection method. Use of GAIQ will be discussed in the context of a study that seeks to understand teaching assistants' reasons for the design of problem solutions for introductory physics.",
-            "ArXiv_ID": "1602.06391v1",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
+            "Authors": "Jose M. Peña",
+            "Extracted abstract": "In an independence model, the triplets that represent conditional independences between singletons are called elementary. It is known that the elementary triplets represent the independence model unambiguously under some conditions. In this paper, we show how this representation helps performing some operations with independence models, such as finding the dominant triplets or a minimal independence map of an independence model, or computing the union or intersection of a pair of independence models, or performing causal reasoning. For the latter, we rephrase in terms of conditional independences some of Pearl's results for computing causal effects.",
+            "Extracted text without bib and appendix": "In an independence model, the triplets that represent conditional independences between singletons are called elementary. It is known that the elementary triplets represent the independence model unambiguously under some conditions. In this paper, we show how this representation helps performing some operations with independence models, such as finding the dominant triplets or a minimal independence map of an independence model, or computing the union or intersection of a pair of independence models, or performing causal reasoning. For the latter, we rephrase in terms of conditional independences some of Pearl's results for computing causal effects.",
+            "ArXiv_ID": "1612.01095v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Sniffer deployment in urban area for human trajectory reconstruction and contact tracing",
-            "Year": "2022",
-            "Authors": "Antoine Huchet, Jean-Loup Guillaume, Yacine Ghamri-Doudane",
-            "Extracted abstract": "To study the propagation of information from individual to individual, we need mobility datasets. Existing datasets are not satisfactory because they are too small, inaccurate or target a homogeneous subset of population. To draw valid conclusions, we need sufficiently large and heterogeneous datasets. Thus we aim for a passive non-intrusive data collection method, based on sniffers that are to be deployed at some well-chosen street intersections. To this end, we need optimization techniques for efficient placement of sniffers. We introduce a heuristic, based on graph theory notions like the vertex cover problem along with graph centrality measures.",
-            "Extracted text without bib and appendix": "To study the propagation of information from individual to individual, we need mobility datasets. Existing datasets are not satisfactory because they are too small, inaccurate or target a homogeneous subset of population. To draw valid conclusions, we need sufficiently large and heterogeneous datasets. Thus we aim for a passive non-intrusive data collection method, based on sniffers that are to be deployed at some well-chosen street intersections. To this end, we need optimization techniques for efficient placement of sniffers. We introduce a heuristic, based on graph theory notions like the vertex cover problem along with graph centrality measures.",
-            "ArXiv_ID": "2208.01743v1",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "Lagrangian formulation for mixed traffic flow including two-wheelers",
-            "Year": "2018",
-            "Authors": "Sosina Gashaw, Jérôme Härri, Paola Goatin",
-            "Extracted abstract": "Lagrangian formulation of kinematic wave provides a more accurate representation than the most commonly used Eulerian formulation. Furthermore, Lagrangian representation offers a flexibility to study certain traffic phenomena (e.g. capacity drop, traffic delay, trajectory). The natural resemblance of Lagrangian representation to road traffic data collection methods (probe vehicles) also renders it suitable for applications such as traffic motoring. This paper presents a multi-class Lagrangian representation for a traffic flow consisting of cars and two-wheelers. A numerical method for solving the continuity equation is presented. We compare the results obtained with Eulerian and Lagrangian formulations.",
-            "Extracted text without bib and appendix": "Lagrangian formulation of kinematic wave provides a more accurate representation than the most commonly used Eulerian formulation. Furthermore, Lagrangian representation offers a flexibility to study certain traffic phenomena (e.g. capacity drop, traffic delay, trajectory). The natural resemblance of Lagrangian representation to road traffic data collection methods (probe vehicles) also renders it suitable for applications such as traffic motoring. This paper presents a multi-class Lagrangian representation for a traffic flow consisting of cars and two-wheelers. A numerical method for solving the continuity equation is presented. We compare the results obtained with Eulerian and Lagrangian formulations.",
-            "ArXiv_ID": "1804.09176v1",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "Audio Spectrogram Factorization for Classification of Telephony Signals below the Auditory Threshold",
-            "Year": "2018",
-            "Authors": "Iroro Orife, Shane Walker, Jason Flaks",
-            "Extracted abstract": "Traffic Pumping attacks are a form of high-volume SPAM that target telephone networks, defraud customers and squander telephony resources. One type of call in these attacks is characterized by very low-amplitude signal levels, notably below the auditory threshold. We propose a technique to classify so-called \"dead air\" or \"silent\" SPAM calls based on features derived from factorizing the caller audio spectrogram. We describe the algorithms for feature extraction and classification as well as our data collection methods and production performance on millions of calls per week.",
-            "Extracted text without bib and appendix": "Traffic Pumping attacks are a form of high-volume SPAM that target telephone networks, defraud customers and squander telephony resources. One type of call in these attacks is characterized by very low-amplitude signal levels, notably below the auditory threshold. We propose a technique to classify so-called \"dead air\" or \"silent\" SPAM calls based on features derived from factorizing the caller audio spectrogram. We describe the algorithms for feature extraction and classification as well as our data collection methods and production performance on millions of calls per week.",
-            "ArXiv_ID": "1811.04139v1",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "Annotation Sensitivity: Training Data Collection Methods Affect Model Performance",
+            "Title": "Subalgebra Independence",
             "Year": "2023",
-            "Authors": "Christoph Kern, Stephanie Eckman, Jacob Beck, Rob Chew, Bolei Ma, Frauke Kreuter",
-            "Extracted abstract": "When training data are collected from human annotators, the design of the annotation instrument, the instructions given to annotators, the characteristics of the annotators, and their interactions can impact training data. This study demonstrates that design choices made when creating an annotation instrument also impact the models trained on the resulting annotations. We introduce the term annotation sensitivity to refer to the impact of annotation data collection methods on the annotations themselves and on downstream model performance and predictions. We collect annotations of hate speech and offensive language in five experimental conditions of an annotation instrument, randomly assigning annotators to conditions. We then fine-tune BERT models on each of the five resulting datasets and evaluate model performance on a holdout portion of each condition. We find considerable differences between the conditions for 1) the share of hate speech/offensive language annotations, 2) model performance, 3) model predictions, and 4) model learning curves. Our results emphasize the crucial role played by the annotation instrument which has received little attention in the machine learning literature. We call for additional research into how and why the instrument impacts the annotations to inform the development of best practices in instrument design.",
-            "Extracted text without bib and appendix": "When training data are collected from human annotators, the design of the annotation instrument, the instructions given to annotators, the characteristics of the annotators, and their interactions can impact training data. This study demonstrates that design choices made when creating an annotation instrument also impact the models trained on the resulting annotations. We introduce the term annotation sensitivity to refer to the impact of annotation data collection methods on the annotations themselves and on downstream model performance and predictions. We collect annotations of hate speech and offensive language in five experimental conditions of an annotation instrument, randomly assigning annotators to conditions. We then fine-tune BERT models on each of the five resulting datasets and evaluate model performance on a holdout portion of each condition. We find considerable differences between the conditions for 1) the share of hate speech/offensive language annotations, 2) model performance, 3) model predictions, and 4) model learning curves. Our results emphasize the crucial role played by the annotation instrument which has received little attention in the machine learning literature. We call for additional research into how and why the instrument impacts the annotations to inform the development of best practices in instrument design.",
-            "ArXiv_ID": "2311.14212v3",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
+            "Authors": "Zalán Gyenis, Alexa Gopaulsingh, Övge Öztürk",
+            "Extracted abstract": "Subobject independence as morphism co-possibility has recently been defined in [2] and studied in the context of algebraic quantum field theory. This notion of independence is handy when it comes to systems coming from physics, but when directly applied to classical algebras, subobject independence is not entirely satisfactory. The sole purpose of this note is to introduce the notion of subalgebra independence, which is a slight variation of subobject independence, yet this modification enables us to connect subalgebra independence to more traditional notions of independence. Apart from drawing connections between subalgebra independence and coproducts and congruences, we mainly illustrate the notion by discussing examples.",
+            "Extracted text without bib and appendix": "Subobject independence as morphism co-possibility has recently been defined in [2] and studied in the context of algebraic quantum field theory. This notion of independence is handy when it comes to systems coming from physics, but when directly applied to classical algebras, subobject independence is not entirely satisfactory. The sole purpose of this note is to introduce the notion of subalgebra independence, which is a slight variation of subobject independence, yet this modification enables us to connect subalgebra independence to more traditional notions of independence. Apart from drawing connections between subalgebra independence and coproducts and congruences, we mainly illustrate the notion by discussing examples.",
+            "ArXiv_ID": "2306.11659v1",
+            "Search_Query": "all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Redefining Data Pairing for Motion Retargeting Leveraging a Human Body Prior",
+            "Title": "Benchmarking foundation models as feature extractors for weakly-supervised computational pathology",
             "Year": "2024",
-            "Authors": "Xiyana Figuera, Soogeun Park, Hyemin Ahn",
-            "Extracted abstract": "We propose MR HuBo(Motion Retargeting leveraging a HUman BOdy prior), a cost-effective and convenient method to collect high-quality upper body paired <robot, human> pose data, which is essential for data-driven motion retargeting methods. Unlike existing approaches which collect <robot, human> pose data by converting human MoCap poses into robot poses, our method goes in reverse. We first sample diverse random robot poses, and then convert them into human poses. However, since random robot poses can result in extreme and infeasible human poses, we propose an additional technique to sort out extreme poses by exploiting a human body prior trained from a large amount of human pose data. Our data collection method can be used for any humanoid robots, if one designs or optimizes the system's hyperparameters which include a size scale factor and the joint angle ranges for sampling. In addition to this data collection method, we also present a two-stage motion retargeting neural network that can be trained via supervised learning on a large amount of paired data. Compared to other learning-based methods trained via unsupervised learning, we found that our deep neural network trained with ample high-quality paired data achieved notable performance. Our experiments also show that our data filtering method yields better retargeting results than training the model with raw and noisy data. Our code and video results are available on https://sites.google.com/view/mr-hubo/",
-            "Extracted text without bib and appendix": "We propose MR HuBo(Motion Retargeting leveraging a HUman BOdy prior), a cost-effective and convenient method to collect high-quality upper body paired <robot, human> pose data, which is essential for data-driven motion retargeting methods. Unlike existing approaches which collect <robot, human> pose data by converting human MoCap poses into robot poses, our method goes in reverse. We first sample diverse random robot poses, and then convert them into human poses. However, since random robot poses can result in extreme and infeasible human poses, we propose an additional technique to sort out extreme poses by exploiting a human body prior trained from a large amount of human pose data. Our data collection method can be used for any humanoid robots, if one designs or optimizes the system's hyperparameters which include a size scale factor and the joint angle ranges for sampling. In addition to this data collection method, we also present a two-stage motion retargeting neural network that can be trained via supervised learning on a large amount of paired data. Compared to other learning-based methods trained via unsupervised learning, we found that our deep neural network trained with ample high-quality paired data achieved notable performance. Our experiments also show that our data filtering method yields better retargeting results than training the model with raw and noisy data. Our code and video results are available on https://sites.google.com/view/mr-hubo/",
-            "ArXiv_ID": "2409.13208v3",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
+            "Authors": "Peter Neidlinger, Omar S. M. El Nahhas, Hannah Sophie Muti, Tim Lenz, Michael Hoffmeister, Hermann Brenner, Marko van Treeck, Rupert Langer, Bastian Dislich, Hans Michael Behrens, Christoph Röcken, Sebastian Foersch, Daniel Truhn, Antonio Marra, Oliver Lester Saldanha, Jakob Nikolas Kather",
+            "Extracted abstract": "Advancements in artificial intelligence have driven the development of numerous pathology foundation models capable of extracting clinically relevant information. However, there is currently limited literature independently evaluating these foundation models on truly external cohorts and clinically-relevant tasks to uncover adjustments for future improvements. In this study, we benchmarked 19 histopathology foundation models on 13 patient cohorts with 6,818 patients and 9,528 slides from lung, colorectal, gastric, and breast cancers. The models were evaluated on weakly-supervised tasks related to biomarkers, morphological properties, and prognostic outcomes. We show that a vision-language foundation model, CONCH, yielded the highest performance when compared to vision-only foundation models, with Virchow2 as close second. The experiments reveal that foundation models trained on distinct cohorts learn complementary features to predict the same label, and can be fused to outperform the current state of the art. An ensemble combining CONCH and Virchow2 predictions outperformed individual models in 55% of tasks, leveraging their complementary strengths in classification scenarios. Moreover, our findings suggest that data diversity outweighs data volume for foundation models. Our work highlights actionable adjustments to improve pathology foundation models.",
+            "Extracted text without bib and appendix": "Advancements in artificial intelligence have driven the development of numerous pathology foundation models capable of extracting clinically relevant information. However, there is currently limited literature independently evaluating these foundation models on truly external cohorts and clinically-relevant tasks to uncover adjustments for future improvements. In this study, we benchmarked 19 histopathology foundation models on 13 patient cohorts with 6,818 patients and 9,528 slides from lung, colorectal, gastric, and breast cancers. The models were evaluated on weakly-supervised tasks related to biomarkers, morphological properties, and prognostic outcomes. We show that a vision-language foundation model, CONCH, yielded the highest performance when compared to vision-only foundation models, with Virchow2 as close second. The experiments reveal that foundation models trained on distinct cohorts learn complementary features to predict the same label, and can be fused to outperform the current state of the art. An ensemble combining CONCH and Virchow2 predictions outperformed individual models in 55% of tasks, leveraging their complementary strengths in classification scenarios. Moreover, our findings suggest that data diversity outweighs data volume for foundation models. Our work highlights actionable adjustments to improve pathology foundation models.",
+            "ArXiv_ID": "2408.15823v2",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Durghotona GPT: A Web Scraping and Large Language Model Based Framework to Generate Road Accident Dataset Automatically in Bangladesh",
+            "Title": "A Complex-valued SAR Foundation Model Based on Physically Inspired Representation Learning",
             "Year": "2025",
-            "Authors": "MD Thamed Bin Zaman Chowdhury, Moazzem Hossain, Md. Ridwanul Islam",
-            "Extracted abstract": "Road accidents pose significant concerns globally. They lead to large financial losses, injuries, disabilities, and societal challenges. Accurate and timely accident data is essential for predicting and mitigating these events. This paper presents a novel framework named 'Durghotona GPT' that integrates web scraping and Large Language Models (LLMs) to automate the generation of comprehensive accident datasets from prominent national dailies in Bangladesh. The authors collected accident reports from three major newspapers: Prothom Alo, Dhaka Tribune, and The Daily Star. The collected news was then processed using the newest available LLMs: GPT-4, GPT-3.5, and Llama-3. The framework efficiently extracts relevant information, categorizes reports, and compiles detailed datasets. Thus, this framework overcomes limitations of manual data collection methods such as delays, errors, and communication gaps. The authors' evaluation demonstrates that Llama-3, an open-source model, performs comparably to GPT-4. It achieved 89% accuracy in the authors' evaluation. Therefore, it can be considered a cost-effective alternative for similar tasks. The results suggest that the framework developed by the authors can drastically enhance the quality and availability of accident data. As a result, it can support critical applications in traffic safety analysis, urban planning, and public health. The authors also developed an interface for 'Durghotona GPT' for ease of use as part of this paper. Future work will focus on expanding data collection methods and refining LLMs to further increase dataset accuracy and applicability.",
-            "Extracted text without bib and appendix": "Road accidents pose significant concerns globally. They lead to large financial losses, injuries, disabilities, and societal challenges. Accurate and timely accident data is essential for predicting and mitigating these events. This paper presents a novel framework named 'Durghotona GPT' that integrates web scraping and Large Language Models (LLMs) to automate the generation of comprehensive accident datasets from prominent national dailies in Bangladesh. The authors collected accident reports from three major newspapers: Prothom Alo, Dhaka Tribune, and The Daily Star. The collected news was then processed using the newest available LLMs: GPT-4, GPT-3.5, and Llama-3. The framework efficiently extracts relevant information, categorizes reports, and compiles detailed datasets. Thus, this framework overcomes limitations of manual data collection methods such as delays, errors, and communication gaps. The authors' evaluation demonstrates that Llama-3, an open-source model, performs comparably to GPT-4. It achieved 89% accuracy in the authors' evaluation. Therefore, it can be considered a cost-effective alternative for similar tasks. The results suggest that the framework developed by the authors can drastically enhance the quality and availability of accident data. As a result, it can support critical applications in traffic safety analysis, urban planning, and public health. The authors also developed an interface for 'Durghotona GPT' for ease of use as part of this paper. Future work will focus on expanding data collection methods and refining LLMs to further increase dataset accuracy and applicability.",
-            "ArXiv_ID": "2504.21025v1",
-            "Search_Query": "all:\"Data Collection Methods\"",
-            "search_category": "Broad Foundational Search",
+            "Authors": "Mengyu Wang, Hanbo Bi, Yingchao Feng, Linlin Xin, Shuo Gong, Tianqi Wang, Zhiyuan Yan, Peijin Wang, Wenhui Diao, Xian Sun",
+            "Extracted abstract": "Vision foundation models in remote sensing have been extensively studied due to their superior generalization on various downstream tasks. Synthetic Aperture Radar (SAR) offers all-day, all-weather imaging capabilities, providing significant advantages for Earth observation. However, establishing a foundation model for SAR image interpretation inevitably encounters the challenges of insufficient information utilization and poor interpretability. In this paper, we propose a remote sensing foundation model based on complex-valued SAR data, which simulates the polarimetric decomposition process for pre-training, i.e., characterizing pixel scattering intensity as a weighted combination of scattering bases and scattering coefficients, thereby endowing the foundation model with physical interpretability. Specifically, we construct a series of scattering queries, each representing an independent and meaningful scattering basis, which interact with SAR features in the scattering query decoder and output the corresponding scattering coefficient. To guide the pre-training process, polarimetric decomposition loss and power self-supervision loss are constructed. The former aligns the predicted coefficients with Yamaguchi coefficients, while the latter reconstructs power from the predicted coefficients and compares it to the input image's power. The performance of our foundation model is validated on six typical downstream tasks, achieving state-of-the-art results. Notably, the foundation model can extract stable feature representations and exhibits strong generalization, even in data-scarce conditions.",
+            "Extracted text without bib and appendix": "Vision foundation models in remote sensing have been extensively studied due to their superior generalization on various downstream tasks. Synthetic Aperture Radar (SAR) offers all-day, all-weather imaging capabilities, providing significant advantages for Earth observation. However, establishing a foundation model for SAR image interpretation inevitably encounters the challenges of insufficient information utilization and poor interpretability. In this paper, we propose a remote sensing foundation model based on complex-valued SAR data, which simulates the polarimetric decomposition process for pre-training, i.e., characterizing pixel scattering intensity as a weighted combination of scattering bases and scattering coefficients, thereby endowing the foundation model with physical interpretability. Specifically, we construct a series of scattering queries, each representing an independent and meaningful scattering basis, which interact with SAR features in the scattering query decoder and output the corresponding scattering coefficient. To guide the pre-training process, polarimetric decomposition loss and power self-supervision loss are constructed. The former aligns the predicted coefficients with Yamaguchi coefficients, while the latter reconstructs power from the predicted coefficients and compares it to the input image's power. The performance of our foundation model is validated on six typical downstream tasks, achieving state-of-the-art results. Notably, the foundation model can extract stable feature representations and exhibits strong generalization, even in data-scarce conditions.",
+            "ArXiv_ID": "2504.11999v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
-            "Title": "Lingshu: A Generalist Foundation Model for Unified Multimodal Medical Understanding and Reasoning",
-            "Year": "2025",
-            "Authors": " LASA Team, Weiwen Xu, Hou Pong Chan, Long Li, Mahani Aljunied, Ruifeng Yuan, Jianyu Wang, Chenghao Xiao, Guizhen Chen, Chaoqun Liu, Zhaodonghui Li, Yu Sun, Junao Shen, Chaojun Wang, Jie Tan, Deli Zhao, Tingyang Xu, Hao Zhang, Yu Rong",
-            "Extracted abstract": "Multimodal Large Language Models (MLLMs) have demonstrated impressive capabilities in understanding common visual elements, largely due to their large-scale datasets and advanced training strategies. However, their effectiveness in medical applications remains limited due to the inherent discrepancies between data and tasks in medical scenarios and those in the general domain. Concretely, existing medical MLLMs face the following critical limitations: (1) limited coverage of medical knowledge beyond imaging, (2) heightened susceptibility to hallucinations due to suboptimal data curation processes, (3) lack of reasoning capabilities tailored for complex medical scenarios. To address these challenges, we first propose a comprehensive data curation procedure that (1) efficiently acquires rich medical knowledge data not only from medical imaging but also from extensive medical texts and general-domain data; and (2) synthesizes accurate medical captions, visual question answering (VQA), and reasoning samples. As a result, we build a multimodal dataset enriched with extensive medical knowledge. Building on the curated data, we introduce our medical-specialized MLLM: Lingshu. Lingshu undergoes multi-stage training to embed medical expertise and enhance its task-solving capabilities progressively. Besides, we preliminarily explore the potential of applying reinforcement learning with verifiable rewards paradigm to enhance Lingshu's medical reasoning ability. Additionally, we develop MedEvalKit, a unified evaluation framework that consolidates leading multimodal and textual medical benchmarks for standardized, fair, and efficient model assessment. We evaluate the performance of Lingshu on three fundamental medical tasks, multimodal QA, text-based QA, and medical report generation. The results show that Lingshu consistently outperforms the existing open-source multimodal models on most tasks ...",
-            "Extracted text without bib and appendix": "Multimodal Large Language Models (MLLMs) have demonstrated impressive capabilities in understanding common visual elements, largely due to their large-scale datasets and advanced training strategies. However, their effectiveness in medical applications remains limited due to the inherent discrepancies between data and tasks in medical scenarios and those in the general domain. Concretely, existing medical MLLMs face the following critical limitations: (1) limited coverage of medical knowledge beyond imaging, (2) heightened susceptibility to hallucinations due to suboptimal data curation processes, (3) lack of reasoning capabilities tailored for complex medical scenarios. To address these challenges, we first propose a comprehensive data curation procedure that (1) efficiently acquires rich medical knowledge data not only from medical imaging but also from extensive medical texts and general-domain data; and (2) synthesizes accurate medical captions, visual question answering (VQA), and reasoning samples. As a result, we build a multimodal dataset enriched with extensive medical knowledge. Building on the curated data, we introduce our medical-specialized MLLM: Lingshu. Lingshu undergoes multi-stage training to embed medical expertise and enhance its task-solving capabilities progressively. Besides, we preliminarily explore the potential of applying reinforcement learning with verifiable rewards paradigm to enhance Lingshu's medical reasoning ability. Additionally, we develop MedEvalKit, a unified evaluation framework that consolidates leading multimodal and textual medical benchmarks for standardized, fair, and efficient model assessment. We evaluate the performance of Lingshu on three fundamental medical tasks, multimodal QA, text-based QA, and medical report generation. The results show that Lingshu consistently outperforms the existing open-source multimodal models on most tasks ...",
-            "ArXiv_ID": "2506.07044v4",
-            "Search_Query": "all:\"Foundation model\" AND all:\"Data Curation  Processing\"",
-            "search_category": "Broad Foundational Search",
+            "Title": "Foundation Models for Semantic Novelty in Reinforcement Learning",
+            "Year": "2022",
+            "Authors": "Tarun Gupta, Peter Karkus, Tong Che, Danfei Xu, Marco Pavone",
+            "Extracted abstract": "Effectively exploring the environment is a key challenge in reinforcement learning (RL). We address this challenge by defining a novel intrinsic reward based on a foundation model, such as contrastive language image pretraining (CLIP), which can encode a wealth of domain-independent semantic visual-language knowledge about the world. Specifically, our intrinsic reward is defined based on pre-trained CLIP embeddings without any fine-tuning or learning on the target RL task. We demonstrate that CLIP-based intrinsic rewards can drive exploration towards semantically meaningful states and outperform state-of-the-art methods in challenging sparse-reward procedurally-generated environments.",
+            "Extracted text without bib and appendix": "Effectively exploring the environment is a key challenge in reinforcement learning (RL). We address this challenge by defining a novel intrinsic reward based on a foundation model, such as contrastive language image pretraining (CLIP), which can encode a wealth of domain-independent semantic visual-language knowledge about the world. Specifically, our intrinsic reward is defined based on pre-trained CLIP embeddings without any fine-tuning or learning on the target RL task. We demonstrate that CLIP-based intrinsic rewards can drive exploration towards semantically meaningful states and outperform state-of-the-art methods in challenging sparse-reward procedurally-generated environments.",
+            "ArXiv_ID": "2211.04878v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
+            ]
+        },
+        {
+            "Title": "Parameter-Efficient Transfer Learning for Music Foundation Models",
+            "Year": "2024",
+            "Authors": "Yiwei Ding, Alexander Lerch",
+            "Extracted abstract": "More music foundation models are recently being released, promising a general, mostly task independent encoding of musical information. Common ways of adapting music foundation models to downstream tasks are probing and fine-tuning. These common transfer learning approaches, however, face challenges. Probing might lead to suboptimal performance because the pre-trained weights are frozen, while fine-tuning is computationally expensive and is prone to overfitting. Our work investigates the use of parameter-efficient transfer learning (PETL) for music foundation models which integrates the advantage of probing and fine-tuning. We introduce three types of PETL methods: adapter-based methods, prompt-based methods, and reparameterization-based methods. These methods train only a small number of parameters, and therefore do not require significant computational resources. Results show that PETL methods outperform both probing and fine-tuning on music auto-tagging. On key detection and tempo estimation, they achieve similar results as fine-tuning with significantly less training cost. However, the usefulness of the current generation of foundation model on key and tempo tasks is questioned by the similar results achieved by training a small model from scratch. Code available at https://github.com/suncerock/peft-music/",
+            "Extracted text without bib and appendix": "More music foundation models are recently being released, promising a general, mostly task independent encoding of musical information. Common ways of adapting music foundation models to downstream tasks are probing and fine-tuning. These common transfer learning approaches, however, face challenges. Probing might lead to suboptimal performance because the pre-trained weights are frozen, while fine-tuning is computationally expensive and is prone to overfitting. Our work investigates the use of parameter-efficient transfer learning (PETL) for music foundation models which integrates the advantage of probing and fine-tuning. We introduce three types of PETL methods: adapter-based methods, prompt-based methods, and reparameterization-based methods. These methods train only a small number of parameters, and therefore do not require significant computational resources. Results show that PETL methods outperform both probing and fine-tuning on music auto-tagging. On key detection and tempo estimation, they achieve similar results as fine-tuning with significantly less training cost. However, the usefulness of the current generation of foundation model on key and tempo tasks is questioned by the similar results achieved by training a small model from scratch. Code available at https://github.com/suncerock/peft-music/",
+            "ArXiv_ID": "2411.19371v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
+            "selected_terms": [
+                "Foundation model",
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
+            ]
+        },
+        {
+            "Title": "PRISM: A Design Framework for Open-Source Foundation Model Safety",
+            "Year": "2024",
+            "Authors": "Terrence Neumann, Bryan Jones",
+            "Extracted abstract": "The rapid advancement of open-source foundation models has brought transparency and accessibility to this groundbreaking technology. However, this openness has also enabled the development of highly-capable, unsafe models, as exemplified by recent instances such as WormGPT and FraudGPT, which are specifically designed to facilitate criminal activity. As the capabilities of open foundation models continue to grow, potentially outpacing those of closed-source models, the risk of misuse by bad actors poses an increasingly serious threat to society. This paper addresses the critical question of how open foundation model developers should approach model safety in light of these challenges. Our analysis reveals that open-source foundation model companies often provide less restrictive acceptable use policies (AUPs) compared to their closed-source counterparts, likely due to the inherent difficulties in enforcing such policies once the models are released. To tackle this issue, we introduce PRISM, a design framework for open-source foundation model safety that emphasizes Private, Robust, Independent Safety measures, at Minimal marginal cost of compute. The PRISM framework proposes the use of modular functions that moderate prompts and outputs independently of the core language model, offering a more adaptable and resilient approach to safety compared to the brittle reinforcement learning methods currently used for value alignment. By focusing on identifying AUP violations and engaging the developer community in establishing consensus around safety design decisions, PRISM aims to create a safer open-source ecosystem that maximizes the potential of these powerful technologies while minimizing the risks to individuals and society as a whole.",
+            "Extracted text without bib and appendix": "The rapid advancement of open-source foundation models has brought transparency and accessibility to this groundbreaking technology. However, this openness has also enabled the development of highly-capable, unsafe models, as exemplified by recent instances such as WormGPT and FraudGPT, which are specifically designed to facilitate criminal activity. As the capabilities of open foundation models continue to grow, potentially outpacing those of closed-source models, the risk of misuse by bad actors poses an increasingly serious threat to society. This paper addresses the critical question of how open foundation model developers should approach model safety in light of these challenges. Our analysis reveals that open-source foundation model companies often provide less restrictive acceptable use policies (AUPs) compared to their closed-source counterparts, likely due to the inherent difficulties in enforcing such policies once the models are released. To tackle this issue, we introduce PRISM, a design framework for open-source foundation model safety that emphasizes Private, Robust, Independent Safety measures, at Minimal marginal cost of compute. The PRISM framework proposes the use of modular functions that moderate prompts and outputs independently of the core language model, offering a more adaptable and resilient approach to safety compared to the brittle reinforcement learning methods currently used for value alignment. By focusing on identifying AUP violations and engaging the developer community in establishing consensus around safety design decisions, PRISM aims to create a safer open-source ecosystem that maximizes the potential of these powerful technologies while minimizing the risks to individuals and society as a whole.",
+            "ArXiv_ID": "2406.10415v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
+            "selected_terms": [
+                "Foundation model",
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
+            ]
+        },
+        {
+            "Title": "Assessing Foundation Models' Transferability to Physiological Signals in Precision Medicine",
+            "Year": "2024",
+            "Authors": "Matthias Christenson, Cove Geary, Brian Locke, Pranav Koirala, Warren Woodrich Pettine",
+            "Extracted abstract": "The success of precision medicine requires computational models that can effectively process and interpret diverse physiological signals across heterogeneous patient populations. While foundation models have demonstrated remarkable transfer capabilities across various domains, their effectiveness in handling individual-specific physiological signals - crucial for precision medicine - remains largely unexplored. This work introduces a systematic pipeline for rapidly and efficiently evaluating foundation models' transfer capabilities in medical contexts. Our pipeline employs a three-stage approach. First, it leverages physiological simulation software to generate diverse, clinically relevant scenarios, particularly focusing on data-scarce medical conditions. This simulation-based approach enables both targeted capability assessment and subsequent model fine-tuning. Second, the pipeline projects these simulated signals through the foundation model to obtain embeddings, which are then evaluated using linear methods. This evaluation quantifies the model's ability to capture three critical aspects: physiological feature independence, temporal dynamics preservation, and medical scenario differentiation. Finally, the pipeline validates these representations through specific downstream medical tasks. Initial testing of our pipeline on the Moirai time series foundation model revealed significant limitations in physiological signal processing, including feature entanglement, temporal dynamics distortion, and reduced scenario discrimination. These findings suggest that current foundation models may require substantial architectural modifications or targeted fine-tuning before deployment in clinical settings.",
+            "Extracted text without bib and appendix": "The success of precision medicine requires computational models that can effectively process and interpret diverse physiological signals across heterogeneous patient populations. While foundation models have demonstrated remarkable transfer capabilities across various domains, their effectiveness in handling individual-specific physiological signals - crucial for precision medicine - remains largely unexplored. This work introduces a systematic pipeline for rapidly and efficiently evaluating foundation models' transfer capabilities in medical contexts. Our pipeline employs a three-stage approach. First, it leverages physiological simulation software to generate diverse, clinically relevant scenarios, particularly focusing on data-scarce medical conditions. This simulation-based approach enables both targeted capability assessment and subsequent model fine-tuning. Second, the pipeline projects these simulated signals through the foundation model to obtain embeddings, which are then evaluated using linear methods. This evaluation quantifies the model's ability to capture three critical aspects: physiological feature independence, temporal dynamics preservation, and medical scenario differentiation. Finally, the pipeline validates these representations through specific downstream medical tasks. Initial testing of our pipeline on the Moirai time series foundation model revealed significant limitations in physiological signal processing, including feature entanglement, temporal dynamics distortion, and reduced scenario discrimination. These findings suggest that current foundation models may require substantial architectural modifications or targeted fine-tuning before deployment in clinical settings.",
+            "ArXiv_ID": "2412.03427v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
+            "selected_terms": [
+                "Foundation model",
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
+            ]
+        },
+        {
+            "Title": "Unlocking Multi-Task Electric Energy System Intelligence: Data Scaling Laws and Performance with Limited Fine-Tuning",
+            "Year": "2025",
+            "Authors": "Shaohuai Liu, Lin Dong, Chao Tian, Le Xie",
+            "Extracted abstract": "Data scaling has revolutionized research fields like natural language processing, computer vision, and robotics control, providing foundation models with remarkable multi-task and generalization capabilities. In this paper, we investigate whether similar data scaling laws exist in developing foundation models for power systems, and whether appropriate data scaling can yield multi-task, cross-timescales capabilities that can be deployed in \\textit{unseen} operational scenarios. To this end, we conducted a comprehensive empirical study on data scaling by fine-tuning open-source foundation models using labeled data collected from diverse operational tasks and scenarios. We study how a foundation model's scenario generalization performance evolves with the number of training tasks, scenarios, and demonstrations. Our study involved collecting more than 450k demonstrations and implementing independent tests under a rigorous evaluation framework. Our findings reveal several key insights: First, the generalization performance of a fine-tuned foundation model follows an approximate power-law relationship with the number of demonstrations and scenarios. Second, the fine-tuned model also demonstrates impressive multi-task capabilities, where multi-task training shares similar performance improvements with single-task training as the number of demonstrations increases, without interference among tasks. Lastly, models with small parameter sizes could have strong performance as well. Model performance does not scale significantly with parameter size. These findings underscore the feasibility of developing multi-task foundation models tailored for power systems, demonstrating that while larger datasets and models generally improve performance, extreme scaling is unnecessary to achieve satisfactory outcomes.",
+            "Extracted text without bib and appendix": "Data scaling has revolutionized research fields like natural language processing, computer vision, and robotics control, providing foundation models with remarkable multi-task and generalization capabilities. In this paper, we investigate whether similar data scaling laws exist in developing foundation models for power systems, and whether appropriate data scaling can yield multi-task, cross-timescales capabilities that can be deployed in \\textit{unseen} operational scenarios. To this end, we conducted a comprehensive empirical study on data scaling by fine-tuning open-source foundation models using labeled data collected from diverse operational tasks and scenarios. We study how a foundation model's scenario generalization performance evolves with the number of training tasks, scenarios, and demonstrations. Our study involved collecting more than 450k demonstrations and implementing independent tests under a rigorous evaluation framework. Our findings reveal several key insights: First, the generalization performance of a fine-tuned foundation model follows an approximate power-law relationship with the number of demonstrations and scenarios. Second, the fine-tuned model also demonstrates impressive multi-task capabilities, where multi-task training shares similar performance improvements with single-task training as the number of demonstrations increases, without interference among tasks. Lastly, models with small parameter sizes could have strong performance as well. Model performance does not scale significantly with parameter size. These findings underscore the feasibility of developing multi-task foundation models tailored for power systems, demonstrating that while larger datasets and models generally improve performance, extreme scaling is unnecessary to achieve satisfactory outcomes.",
+            "ArXiv_ID": "2503.20040v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
+            "selected_terms": [
+                "Foundation model",
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
+            ]
+        },
+        {
+            "Title": "Where to Begin? From Random to Foundation Model Instructed Initialization in Federated Learning for Medical Image Segmentation",
+            "Year": "2023",
+            "Authors": "Ming Li, Guang Yang",
+            "Extracted abstract": "In medical image analysis, Federated Learning (FL) stands out as a key technology that enables privacy-preserved, decentralized data processing, crucial for handling sensitive medical data. Currently, most FL models employ random initialization, which has been proven effective in various instances. However, given the unique challenges posed by non-IID (independently and identically distributed) data in FL, we propose a novel perspective: exploring the impact of using the foundation model with enormous pre-trained knowledge, such as the Segment Anything Model (SAM), as an instructive teacher for FL model initialization in medical image segmentation task. This work for the first time attempts to utilize the foundation model as an instructive teacher for initialization in FL, assessing its impact on the performance of FL models, especially in non-IID data scenarios. Our empirical evaluation on chest x-ray lung segmentation showcases that FL with foundation model instructed initialization not only achieves faster convergence but also improves performance in complex data contexts. These findings offer a new perspective for model initialization in FL.",
+            "Extracted text without bib and appendix": "In medical image analysis, Federated Learning (FL) stands out as a key technology that enables privacy-preserved, decentralized data processing, crucial for handling sensitive medical data. Currently, most FL models employ random initialization, which has been proven effective in various instances. However, given the unique challenges posed by non-IID (independently and identically distributed) data in FL, we propose a novel perspective: exploring the impact of using the foundation model with enormous pre-trained knowledge, such as the Segment Anything Model (SAM), as an instructive teacher for FL model initialization in medical image segmentation task. This work for the first time attempts to utilize the foundation model as an instructive teacher for initialization in FL, assessing its impact on the performance of FL models, especially in non-IID data scenarios. Our empirical evaluation on chest x-ray lung segmentation showcases that FL with foundation model instructed initialization not only achieves faster convergence but also improves performance in complex data contexts. These findings offer a new perspective for model initialization in FL.",
+            "ArXiv_ID": "2311.15463v1",
+            "Search_Query": "all:\"Foundation model\" AND all:\"Independence\"",
+            "search_category": "Inclusion & Representation Search",
+            "selected_terms": [
+                "Foundation model",
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -458,14 +392,12 @@
             "Extracted text without bib and appendix": "This paper presents the current state of a work in progress, whose objective is to better understand the effects of factors that significantly influence the performance of Latent Semantic Analysis (LSA). A difficult task, which consists in answering (French) biology Multiple Choice Questions, is used to test the semantic properties of the truncated singular space and to study the relative influence of main parameters. A dedicated software has been designed to fine tune the LSA semantic space for the Multiple Choice Questions task. With optimal parameters, the performances of our simple model are quite surprisingly equal or superior to those of 7th and 8th grades students. This indicates that semantic spaces were quite good despite their low dimensions and the small sizes of training data sets. Besides, we present an original entropy global weighting of answers' terms of each question of the Multiple Choice Questions which was necessary to achieve the model's success.",
             "ArXiv_ID": "0811.0146v3",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -476,14 +408,12 @@
             "Extracted text without bib and appendix": "We consider the task of opportunistic channel access in a primary system composed of independent Gilbert-Elliot channels where the secondary (or opportunistic) user does not dispose of a priori information regarding the statistical characteristics of the system. It is shown that this problem may be cast into the framework of model-based learning in a specific class of Partially Observed Markov Decision Processes (POMDPs) for which we introduce an algorithm aimed at striking an optimal tradeoff between the exploration (or estimation) and exploitation requirements. We provide finite horizon regret bounds for this algorithm as well as a numerical evaluation of its performance in the single channel model as well as in the case of stochastically identical channels.",
             "ArXiv_ID": "0908.0319v1",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -494,14 +424,12 @@
             "Extracted text without bib and appendix": "Contextual bandit algorithms have become popular for online recommendation systems such as Digg, Yahoo! Buzz, and news recommendation in general. \\emph{Offline} evaluation of the effectiveness of new algorithms in these applications is critical for protecting online user experiences but very challenging due to their \"partial-label\" nature. Common practice is to create a simulator which simulates the online environment for the problem at hand and then run an algorithm against this simulator. However, creating simulator itself is often difficult and modeling bias is usually unavoidably introduced. In this paper, we introduce a \\emph{replay} methodology for contextual bandit algorithm evaluation. Different from simulator-based approaches, our method is completely data-driven and very easy to adapt to different applications. More importantly, our method can provide provably unbiased evaluations. Our empirical results on a large-scale news article recommendation dataset collected from Yahoo! Front Page conform well with our theoretical results. Furthermore, comparisons between our offline replay and online bucket evaluation of several contextual bandit algorithms show accuracy and effectiveness of our offline evaluation method.",
             "ArXiv_ID": "1003.5956v2",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -512,32 +440,12 @@
             "Extracted text without bib and appendix": "One of the objectives of designing feature selection learning algorithms is to obtain classifiers that depend on a small number of attributes and have verifiable future performance guarantees. There are few, if any, approaches that successfully address the two goals simultaneously. Performance guarantees become crucial for tasks such as microarray data analysis due to very small sample sizes resulting in limited empirical evaluation. To the best of our knowledge, such algorithms that give theoretical bounds on the future performance have not been proposed so far in the context of the classification of gene expression data. In this work, we investigate the premise of learning a conjunction (or disjunction) of decision stumps in Occam's Razor, Sample Compression, and PAC-Bayes learning settings for identifying a small subset of attributes that can be used to perform reliable classification tasks. We apply the proposed approaches for gene identification from DNA microarray data and compare our results to those of well known successful approaches proposed for the task. We show that our algorithm not only finds hypotheses with much smaller number of genes while giving competitive classification accuracy but also have tight risk guarantees on future performance unlike other approaches. The proposed approaches are general and extensible in terms of both designing novel algorithms and application to other domains.",
             "ArXiv_ID": "1005.0530v1",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
-            ]
-        },
-        {
-            "Title": "Uncovering the Riffled Independence Structure of Rankings",
-            "Year": "2010",
-            "Authors": "Jonathan Huang, Carlos Guestrin",
-            "Extracted abstract": "Representing distributions over permutations can be a daunting task due to the fact that the number of permutations of $n$ objects scales factorially in $n$. One recent way that has been used to reduce storage complexity has been to exploit probabilistic independence, but as we argue, full independence assumptions impose strong sparsity constraints on distributions and are unsuitable for modeling rankings. We identify a novel class of independence structures, called \\emph{riffled independence}, encompassing a more expressive family of distributions while retaining many of the properties necessary for performing efficient inference and reducing sample complexity. In riffled independence, one draws two permutations independently, then performs the \\emph{riffle shuffle}, common in card games, to combine the two permutations to form a single permutation. Within the context of ranking, riffled independence corresponds to ranking disjoint sets of objects independently, then interleaving those rankings. In this paper, we provide a formal introduction to riffled independence and present algorithms for using riffled independence within Fourier-theoretic frameworks which have been explored by a number of recent papers. Additionally, we propose an automated method for discovering sets of items which are riffle independent from a training set of rankings. We show that our clustering-like algorithms can be used to discover meaningful latent coalitions from real preference ranking datasets and to learn the structure of hierarchically decomposable models based on riffled independence.",
-            "Extracted text without bib and appendix": "Representing distributions over permutations can be a daunting task due to the fact that the number of permutations of $n$ objects scales factorially in $n$. One recent way that has been used to reduce storage complexity has been to exploit probabilistic independence, but as we argue, full independence assumptions impose strong sparsity constraints on distributions and are unsuitable for modeling rankings. We identify a novel class of independence structures, called \\emph{riffled independence}, encompassing a more expressive family of distributions while retaining many of the properties necessary for performing efficient inference and reducing sample complexity. In riffled independence, one draws two permutations independently, then performs the \\emph{riffle shuffle}, common in card games, to combine the two permutations to form a single permutation. Within the context of ranking, riffled independence corresponds to ranking disjoint sets of objects independently, then interleaving those rankings. In this paper, we provide a formal introduction to riffled independence and present algorithms for using riffled independence within Fourier-theoretic frameworks which have been explored by a number of recent papers. Additionally, we propose an automated method for discovering sets of items which are riffle independent from a training set of rankings. We show that our clustering-like algorithms can be used to discover meaningful latent coalitions from real preference ranking datasets and to learn the structure of hierarchically decomposable models based on riffled independence.",
-            "ArXiv_ID": "1006.1328v1",
-            "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
-            "selected_terms": [
-                "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -548,14 +456,12 @@
             "Extracted text without bib and appendix": "Low-rank matrix approximations are often used to help scale standard machine learning algorithms to large-scale problems. Recently, matrix coherence has been used to characterize the ability to extract global information from a subset of matrix entries in the context of these low-rank approximations and other sampling-based algorithms, e.g., matrix com- pletion, robust PCA. Since coherence is defined in terms of the singular vectors of a matrix and is expensive to compute, the practical significance of these results largely hinges on the following question: Can we efficiently and accurately estimate the coherence of a matrix? In this paper we address this question. We propose a novel algorithm for estimating coherence from a small number of columns, formally analyze its behavior, and derive a new coherence-based matrix approximation bound based on this analysis. We then present extensive experimental results on synthetic and real datasets that corroborate our worst-case theoretical analysis, yet provide strong support for the use of our proposed algorithm whenever low-rank approximation is being considered. Our algorithm efficiently and accurately estimates matrix coherence across a wide range of datasets, and these coherence estimates are excellent predictors of the effectiveness of sampling-based matrix approximation on a case-by-case basis.",
             "ArXiv_ID": "1009.0861v1",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -566,14 +472,12 @@
             "Extracted text without bib and appendix": "Sequential prediction problems such as imitation learning, where future observations depend on previous predictions (actions), violate the common i.i.d. assumptions made in statistical learning. This leads to poor performance in theory and often in practice. Some recent approaches provide stronger guarantees in this setting, but remain somewhat unsatisfactory as they train either non-stationary or stochastic policies and require a large number of iterations. In this paper, we propose a new iterative algorithm, which trains a stationary deterministic policy, that can be seen as a no regret algorithm in an online learning setting. We show that any such no regret algorithm, combined with additional reduction assumptions, must find a policy with good performance under the distribution of observations it induces in such sequential settings. We demonstrate that this new approach outperforms previous approaches on two challenging imitation learning problems and a benchmark sequence labeling problem.",
             "ArXiv_ID": "1011.0686v3",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         },
         {
@@ -584,14 +488,28 @@
             "Extracted text without bib and appendix": "Generalized Linear Models (GLMs) and Single Index Models (SIMs) provide powerful generalizations of linear regression, where the target variable is assumed to be a (possibly unknown) 1-dimensional function of a linear predictor. In general, these problems entail non-convex estimation procedures, and, in practice, iterative local search heuristics are often used. Kalai and Sastry (2009) recently provided the first provably efficient method for learning SIMs and GLMs, under the assumptions that the data are in fact generated under a GLM and under certain monotonicity and Lipschitz constraints. However, to obtain provable performance, the method requires a fresh sample every iteration. In this paper, we provide algorithms for learning GLMs and SIMs, which are both computationally and statistically efficient. We also provide an empirical study, demonstrating their feasibility in practice.",
             "ArXiv_ID": "1104.2018v1",
             "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
-            "search_category": "Broad Foundational Search",
+            "search_category": "Inclusion & Representation Search",
             "selected_terms": [
                 "Foundation model",
-                "Data Curation & Processing",
-                "Data Collection Methods",
-                "Data Curation & Processing",
-                "Rights & Data Protection Frameworks",
-                "Applications & Domains"
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
+            ]
+        },
+        {
+            "Title": "Rapid Feature Learning with Stacked Linear Denoisers",
+            "Year": "2011",
+            "Authors": "Zhixiang Eddie Xu, Kilian Q. Weinberger, Fei Sha",
+            "Extracted abstract": "We investigate unsupervised pre-training of deep architectures as feature generators for \"shallow\" classifiers. Stacked Denoising Autoencoders (SdA), when used as feature pre-processing tools for SVM classification, can lead to significant improvements in accuracy - however, at the price of a substantial increase in computational cost. In this paper we create a simple algorithm which mimics the layer by layer training of SdAs. However, in contrast to SdAs, our algorithm requires no training through gradient descent as the parameters can be computed in closed-form. It can be implemented in less than 20 lines of MATLABTMand reduces the computation time from several hours to mere seconds. We show that our feature transformation reliably improves the results of SVM classification significantly on all our data sets - often outperforming SdAs and even deep neural networks in three out of four deep learning benchmarks.",
+            "Extracted text without bib and appendix": "We investigate unsupervised pre-training of deep architectures as feature generators for \"shallow\" classifiers. Stacked Denoising Autoencoders (SdA), when used as feature pre-processing tools for SVM classification, can lead to significant improvements in accuracy - however, at the price of a substantial increase in computational cost. In this paper we create a simple algorithm which mimics the layer by layer training of SdAs. However, in contrast to SdAs, our algorithm requires no training through gradient descent as the parameters can be computed in closed-form. It can be implemented in less than 20 lines of MATLABTMand reduces the computation time from several hours to mere seconds. We show that our feature transformation reliably improves the results of SVM classification significantly on all our data sets - often outperforming SdAs and even deep neural networks in three out of four deep learning benchmarks.",
+            "ArXiv_ID": "1105.0972v1",
+            "Search_Query": "cat:cs.LG OR cat:cs.AI OR cat:stat.ML",
+            "search_category": "Inclusion & Representation Search",
+            "selected_terms": [
+                "Foundation model",
+                "Independence",
+                "Social Good & Impact",
+                "Core Humanitarian Principles"
             ]
         }
     ]

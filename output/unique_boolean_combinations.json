@@ -1,0 +1,34 @@
+[
+    {
+        "Combination_title": "Broad Foundational Search",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\") AND (\"Data Curation & Processing\" OR \"Data cleaning\" OR \"Data preprocessing\" OR \"Data wrangling\" OR \"Data normalization\" OR \"Data annotation\" OR \"labeling\" OR \"tagging\" OR \"Data labeling\" OR \"Data enrichment\" OR \"Data augmentation\" OR \"synthetic data expansion\" OR \"Data validation\" OR \"Data quality control\" OR \"Data deduplication\" OR \"Data filtering\" OR \"Data sampling\" OR \"Data stratification\" OR \"balanced subsets\" OR \"Data harmonization\" OR \"standardizing formats\") AND (\"Data Collection Methods\" OR \"Crowdsourcing\" OR \"Web crawling\" OR \"Sensor data collection\" OR \"User-generated data\" OR \"Public dataset repositories\" OR \"APIs for data collection\" OR \"Simulated data generation\" OR \"Active learning\" OR \"Federated data collection\") AND (\"Rights & Data Protection Frameworks\" OR \"Right to be informed\" OR \"Informed consent\" OR \"Explicit consent\" OR \"Opt-in/Opt-out\" OR \"Revocable consent\" OR \"Right to delete\" OR \"Data purging\" OR \"Forgetting mechanisms\" OR \"Data control\" OR \"Data sovereignty\" OR \"User-managed data\" OR \"Legal Frameworks\" OR \"Data subject rights\" OR \"Right to access\" OR \"Right to rectification\" OR \"Right to portability\" OR \"Right to object\" OR \"Data protection\" OR \"Privacy by design\" OR \"Pseudonymization\") AND (\"Applications & Domains\" OR \"Computer vision\" OR \"Natural language processing\" OR \"NLP\" OR \"Speech recognition\" OR \"Autonomous systems\" OR \"Recommender systems\" OR \"Healthcare diagnostics\" OR \"Healthcare\" OR \"Medicine\" OR \"Medical Care\" OR \"Robotics\" OR \"Generative AI\" OR \"Time-series forecasting\" OR \"Anomaly detection\")"
+    },
+    {
+        "Combination_title": "Humanitarian & Social Impact Search",
+        "boolean_combination": "(\"Humanitarian & Crisis Response\" OR \"Disaster relief\" OR \"Emergency response\" OR \"Humanitarian aid\" OR \"Humanitarian assistance\" OR \"Crisis intervention\" OR \"Disaster management\" OR \"Humanitarian action\" OR \"Emergency aid\" OR \"Humanitarian protection\" OR \"First response\" OR \"Post-disaster recovery\" OR \"Humanitarian logistics\" OR \"Disaster risk reduction\" OR \"DRR\" OR \"Humanitarian coordination\" OR \"Refugee support\" OR \"Conflict response\" OR \"Humanitarian operations\" OR \"Mass casualty response\" OR \"Humanitarian access\" OR \"Humanitarian principles\" OR \"neutrality\" OR \"impartiality\" OR \"independence\" OR \"Vulnerable Populations\") AND (\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    },
+    {
+        "Combination_title": "Inclusion & Representation Search",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    },
+    {
+        "Combination_title": "Harm Reduction & Safety Search",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    },
+    {
+        "Combination_title": "Control, Consent & Personal Data Rights",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\") AND (\"Rights & Data Protection Frameworks\" OR \"Right to be informed\" OR \"Informed consent\" OR \"Explicit consent\" OR \"Opt-in/Opt-out\" OR \"Revocable consent\" OR \"Right to delete\" OR \"Data purging\" OR \"Forgetting mechanisms\" OR \"Data control\" OR \"Data sovereignty\" OR \"User-managed data\" OR \"Legal Frameworks\" OR \"Data subject rights\" OR \"Right to access\" OR \"Right to rectification\" OR \"Right to portability\" OR \"Right to object\" OR \"Data protection\" OR \"Privacy by design\" OR \"Pseudonymization\")"
+    },
+    {
+        "Combination_title": "Consent, Agency & Participatory AI",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    },
+    {
+        "Combination_title": "Environmental & Infrastructural Cost",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    },
+    {
+        "Combination_title": "Post-Deployment Monitoring & Redress",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    }
+]
