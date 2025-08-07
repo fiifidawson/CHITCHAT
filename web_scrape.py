@@ -360,14 +360,14 @@ def extract_paper_text(research_paper_path: str) -> str:
 
 
 
-def search_google_scholar_scholarly(query: str, max_results: int, pub_year: int, num_citations: int):
+def search_google_scholar_scholarly(query: str, max_results: int | None = None , pub_year: int = 2020, num_citations: int = 0):
     """Uses scholarly library for Google Scholar."""
     print(f"🚀 Searching Google Scholar for '{query}'...")
     try:
         search_gen = scholarly.search_pubs(query)
         results = []
         for i, paper in enumerate(search_gen):
-            if i >= max_results:
+            if i is not None and i >= max_results:
                 break
 
             bib = paper.get('bib', {})
@@ -445,13 +445,13 @@ def get_arxiv_results(path_to_unique_boolean_combinations):
 
 
 
-def search_repository(query: str, repo: str, max_pages: int = 1, pub_year: int = 2020, num_citations: int = 1):
+def search_repository(query: str, repo: str):
     """
     Search across multiple pages for a boolean query on a given repository.
     """
     repo = repo.lower()
     if repo == 'google_scholar':
-        return search_google_scholar_scholarly(query, max_pages * 10, pub_year, num_citations)
+        return search_google_scholar_scholarly(query)
 
     elif repo == 'openalex':
         return search_openalex(query)
