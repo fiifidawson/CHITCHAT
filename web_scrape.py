@@ -394,6 +394,55 @@ def search_google_scholar_scholarly(query: str, max_results: int, pub_year: int,
         print(f"An error occurred with scholarly: {e}")
     return results
 
+def get_arxiv_results(path_to_unique_boolean_combinations):
+    """
+    Get arXiv search results and return them in the same format as other repositories
+    
+    Args:
+        path_to_unique_boolean_combinations (str): Path to unique boolean combinations JSON
+    
+    Returns:
+        List[dict]: Papers found by arXiv search, ready to be added to total_results
+    """
+    try:
+        # Import your existing arXiv search function
+        from arxiv_paper_search import search_arxiv_papers
+        import json
+        import os
+        
+        print("Starting arXiv search...")
+        
+        # Call your existing arXiv search function
+        # Use a temporary file to avoid conflicts
+        temp_arxiv_file = 'temp_arxiv_results.json'
+        success = search_arxiv_papers(
+            unique_combinations_file=path_to_unique_boolean_combinations,
+            output_file=temp_arxiv_file
+        )
+        
+        if success and os.path.exists(temp_arxiv_file):
+            # Read the results
+            with open(temp_arxiv_file, 'r') as f:
+                arxiv_papers = json.load(f)
+            
+            # Clean up temporary file
+            os.remove(temp_arxiv_file)
+            
+            print(f"✓ ArXiv search completed - found {len(arxiv_papers)} papers")
+            return arxiv_papers
+        else:
+            print("✗ ArXiv search failed or no results found")
+            return []
+            
+    except ImportError as e:
+        print(f"✗ Could not import arXiv search module: {e}")
+        print("Make sure arxiv_paper_search.py is in the same directory")
+        return []
+    except Exception as e:
+        print(f"✗ Error during arXiv search: {e}")
+        return []
+
+
 
 
 def search_repository(query: str, repo: str, max_pages: int = 1, pub_year: int = 2020, num_citations: int = 1):
@@ -444,9 +493,10 @@ def get_llit_papers(path_to_unique_boolean_combinations):
                 total_results += openalex_results
                 total_results += europepmc_results
 
+                # ArXiv Integration - automatically adds to total_results
+                arxiv_results = get_arxiv_results(path_to_unique_boolean_combinations)
+                total_results += arxiv_results
 
-                #FIIFI TO PLACE LITERATURE SEARCH FUNCTIONS HERE (make sure to append your results to total_results as I have done)
-                #####################################################################################################
     
     #write the results to the output json file
     with open(output_json_filename, 'w') as output_json:
