@@ -100,6 +100,32 @@ def create_unique_id(title: str) -> str:
     unique_id = re.sub(r'[^a-z0-9]', '', title.lower())
     return unique_id
 
+def load_processed_ids(output_dir: str = "output") -> set:
+    """Load all previously processed paper IDs from existing JSONL files."""
+    processed_ids = set()
+
+    # Check if output directory exists
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+        return processed_ids
+    
+    # Look for all JSONL files in the output directory
+    for filename in os.listdir(output_dir):
+        if filename.startswith("screening_results_") and filename.endswith(".jsonl"):
+            filepath = os.path.join(output_dir, filename)
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        if line.strip():
+                            result = json.loads(line)
+                            title = result.get('title', '')
+                            unique_id = create_unique_id(title)
+                            processed_ids.add(unique_id)
+            except Exception as e:
+                print(f"Warning: Could not read {filename}: {e}")
+    
+    return processed_ids
+
 
 def load_prompt(prompt_path: str) -> str:
     """Load the prompt from a text file."""
@@ -214,8 +240,10 @@ def main():
     output_file = f"output/screening_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
     print(f"Results will be saved to: {output_file}")
     
-    # Track processed papers to avoid duplicates
-    processed_ids = set()
+    # Track processed papers to avoid duplicates (including from previous runs)
+    print("Loading previously processed papers...")
+    processed_ids = load_processed_ids("output")
+    print(f"Found {len(processed_ids)} previously processed papers")
     
     # Screen each paper and save immediately
     successful_count = 0
