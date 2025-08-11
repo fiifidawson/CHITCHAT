@@ -1,0 +1,102 @@
+You are tasked with screening a research paper according to a systematic four-phase framework for ethical LLM data collection purposes. 
+
+Your role is to ONLY provide objective assessments for each criterion by evaluating each criterion based on the paper content provided.
+
+====================
+INSTRUCTIONS
+====================
+
+For each criterion below, provide a direct assessment (true/false, score, or specific value as requested). Base your evaluation ONLY on the content provided - if information is missing, mark it as such rather than making assumptions.
+
+====================
+PHASE 1: PUBLICATION & TECHNICAL CRITERIA
+====================
+
+Publication Quality - Assess each:
+- Venue name: [Extract the exact publication venue]
+- Is it a top-tier venue? (NeurIPS, ACL, EMNLP, CHI, ICML, ICLR, AAAI, IJCAI, WWW, KDD, or Q1/Q2 journal): [true/false]
+- Citation count: [Extract number as integer]
+- Is it less than 1 year old with promising indicators (awards, policy citations)?: [true/false]
+- Is full text accessible and in English?: [true/false]
+
+Technical Scope - Assess each:
+- Addresses LLM training data collection: [true/false]
+- Addresses text corpus creation: [true/false]
+- Addresses web scraping for NLP datasets: [true/false]
+- Addresses multilingual dataset compilation: [true/false]
+
+====================
+PHASE 2: ETHICAL FLAGS & HUMANITARIAN PRINCIPLES
+====================
+
+Ethical Red Flags - Check for presence of each:
+- Focuses exclusively on model performance without ethics discussion: [true/false]
+- Clearly disregards consent or privacy: [true/false]
+- Missing IRB approval when dealing with vulnerable groups: [true/false]
+- Uses discriminatory algorithms or has military intent: [true/false]
+
+Humanitarian Principles Scores:
+
+**Humanity (0-3):** Does paper address preventing harm through data collection?
+- 3: Explicitly focuses on harm prevention with comprehensive strategies
+- 2: Addresses harm with specific methods and safeguards
+- 1: Acknowledges harm but limited solutions
+- 0: No consideration of harm prevention
+Score: [0-3]
+
+**Impartiality (0-3):** Does paper consider fair representation across groups?
+- 3: Systematic approach to equal treatment across all groups
+- 2: Addresses representation with some methodology
+- 1: Mentions fairness but limited implementation
+- 0: No consideration of fair representation
+Score: [0-3]
+
+**Independence (0-3):** Does paper discuss autonomy from biasing influences?
+- 3: Explicit methods for maintaining independence from external pressures
+- 2: Addresses conflicts with clear mitigation strategies
+- 1: Acknowledges independence concerns but limited solutions
+- 0: No consideration of autonomy/independence
+Score: [0-3]
+
+**Neutrality (0-3):** Does paper address avoiding discriminatory data collection?
+- 3: Comprehensive approach to neutral data collection
+- 2: Specific methods for avoiding discrimination
+- 1: Mentions neutrality but limited implementation
+- 0: No consideration of neutrality
+Score: [0-3]
+
+====================
+PHASE 3: CONTRIBUTION ASSESSMENT
+====================
+
+Methodology Contributions - Check for presence:
+- Provides novel data collection methodology: [true/false]
+- Offers systematic evaluation or comparative analysis: [true/false]
+- Includes reproducible implementation details: [true/false]
+
+Ethical Analysis Contributions - Check for presence:
+- Includes explicit ethical/legal framework or principles (including technical terms with ethical dimensions like safety, explainability, transparency, bias): [true/false]
+- Contains empirical analysis of bias in data: [true/false]
+- Proposes concrete harm mitigation strategies: [true/false]
+- Provides policy or data governance recommendations: [true/false]
+- Acknowledges ethical tensions and trade-offs: [true/false]
+
+====================
+PHASE 4: FINAL PRIORITY ASSIGNMENT
+====================
+
+Based on ALL your assessments above, assign ONE of these priority levels:
+
+**HIGH PRIORITY:** Strong in both methodology AND ethics, highly aligned with objectives
+**MEDIUM PRIORITY:** Strong in EITHER methodology OR ethics (but not both)
+**LOW PRIORITY:** Passes basic criteria but lacks significant contributions
+**EXCLUDE:** Fails fundamental criteria or is misaligned with project goals
+
+Priority Level: [Select exactly one]
+
+====================
+IMPORTANT NOTES
+====================
+- Provide ONLY the requested assessments
+- Mark information as unavailable rather than guessing
+- Base everything on the provided paper content only

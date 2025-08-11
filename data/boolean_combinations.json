@@ -1,0 +1,94 @@
+[
+    {
+        "WORD": "Foundation model",
+        "boolean_combination": "(\"Foundation model\" OR \"Base model\" OR \"Pre-trained model\" OR \"General-purpose model\" OR \"Large-scale model\" OR \"Core model\" OR \"Backbone model\" OR \"Universal model\" OR \"Multi-task model\" OR \"Generalist model\" OR \"Master model\")"
+    },
+    {
+        "WORD": "Artificial Intelligence System",
+        "boolean_combination": "(\"Artificial Intelligence System\" OR \"Artificial Intelligence\" OR \"AI\" OR \"model\" OR \"Machine learning system\" OR \"Intelligent system\" OR \"Automated system\" OR \"Cognitive system\" OR \"AI-based system\" OR \"Smart system\" OR \"Learning system\" OR \"Adaptive system\" OR \"Autonomous system\" OR \"Rule-based system\" OR \"Expert system\" OR \"Decision support system\" OR \"DSS\" OR \"Neural network-based system\" OR \"Deep learning system\" OR \"Reinforcement learning system\" OR \"Generative AI system\" OR \"Computer vision system\" OR \"Natural language processing\" OR \"NLP\" OR \"system\" OR \"Speech recognition system\" OR \"Robotic system\" OR \"Autonomous agent\" OR \"Multi-agent system\" OR \"Predictive analytics system\")"
+    },
+    {
+        "WORD": "General Data Collection & Dataset Creation",
+        "boolean_combination": "(\"General Data Collection & Dataset Creation\" OR \"Data gathering\" OR \"Data aggregation\" OR \"Data acquisition\" OR \"Data sourcing\" OR \"Dataset compilation\" OR \"Dataset assembly\" OR \"Dataset construction\" OR \"Dataset generation\" OR \"Dataset development\" OR \"Data harvesting\" OR \"Data scraping\" OR \"web scraping\" OR \"automated collection\" OR \"Data mining\" OR \"extracting patterns from raw data\" OR \"Data extraction\" OR \"Data ingestion\" OR \"Data procurement\")"
+    },
+    {
+        "WORD": "Data Curation & Processing",
+        "boolean_combination": "(\"Data Curation & Processing\" OR \"Data cleaning\" OR \"Data preprocessing\" OR \"Data wrangling\" OR \"Data normalization\" OR \"Data annotation\" OR \"labeling\" OR \"tagging\" OR \"Data labeling\" OR \"Data enrichment\" OR \"Data augmentation\" OR \"synthetic data expansion\" OR \"Data validation\" OR \"Data quality control\" OR \"Data deduplication\" OR \"Data filtering\" OR \"Data sampling\" OR \"Data stratification\" OR \"balanced subsets\" OR \"Data harmonization\" OR \"standardizing formats\")"
+    },
+    {
+        "WORD": "Data Collection Methods",
+        "boolean_combination": "(\"Data Collection Methods\" OR \"Crowdsourcing\" OR \"Web crawling\" OR \"Sensor data collection\" OR \"User-generated data\" OR \"Public dataset repositories\" OR \"APIs for data collection\" OR \"Simulated data generation\" OR \"Active learning\" OR \"Federated data collection\")"
+    },
+    {
+        "WORD": "Machine Learning",
+        "boolean_combination": "(\"Machine Learning\" OR \"Statistical learning\" OR \"Predictive modeling\" OR \"Data-driven learning\" OR \"Algorithmic learning\" OR \"Automated learning\" OR \"Pattern recognition\" OR \"Supervised learning\" OR \"labeled data\" OR \"Unsupervised learning\" OR \"unlabeled data\" OR \"Semi-supervised learning\" OR \"mixed labeled/unlabeled\" OR \"Self-supervised learning\" OR \"auto-generated labels\" OR \"Reinforcement learning\" OR \"RL\" OR \"reward-based\" OR \"Online learning\" OR \"continuous updates\" OR \"Transfer learning\" OR \"knowledge reuse\" OR \"Meta-learning\" OR \"\"learning to learn\"\" OR \"Few-shot learning\" OR \"minimal examples\" OR \"Zero-shot learning\" OR \"no training examples\" OR \"Active learning\" OR \"human-in-the-loop\" OR \"Explainable AI\" OR \"XAI\" OR \"interpretable ML\" OR \"Federated learning\" OR \"decentralized training\" OR \"Ensemble learning\" OR \"multiple models combined\")"
+    },
+    {
+        "WORD": "Deep Learning",
+        "boolean_combination": "(\"Deep Learning\" OR \"Neural networks\" OR \"NNs\" OR \"Artificial neural networks\" OR \"ANNs\" OR \"Deep neural networks\" OR \"DNNs\" OR \"Convolutional neural networks\" OR \"CNNs\" OR \"for vision\" OR \"Recurrent neural networks\" OR \"RNNs\" OR \"for sequences\" OR \"Long short-term memory\" OR \"LSTM\" OR \"sequential data\" OR \"Transformers\" OR \"self-attention models\" OR \"Graph neural networks\" OR \"GNNs\" OR \"relational data\" OR \"Autoencoders\" OR \"unsupervised representation learning\" OR \"Generative adversarial networks\" OR \"GANs\" OR \"synthetic data\" OR \"Variational autoencoders\" OR \"VAEs\" OR \"probabilistic generation\" OR \"Diffusion models\" OR \"generative AI\" OR \"Sparse neural networks\" OR \"efficiency-focused\" OR \"Quantized models\" OR \"low-precision computation\" OR \"Neural architecture search\" OR \"NAS\" OR \"automated DL design\")"
+    },
+    {
+        "WORD": "Applications & Domains",
+        "boolean_combination": "(\"Applications & Domains\" OR \"Computer vision\" OR \"Natural language processing\" OR \"NLP\" OR \"Speech recognition\" OR \"Autonomous systems\" OR \"Recommender systems\" OR \"Healthcare diagnostics\" OR \"Healthcare\" OR \"Medicine\" OR \"Medical Care\" OR \"Robotics\" OR \"Generative AI\" OR \"Time-series forecasting\" OR \"Anomaly detection\")"
+    },
+    {
+        "WORD": "Rights & Data Protection Frameworks",
+        "boolean_combination": "(\"Rights & Data Protection Frameworks\" OR \"Right to be informed\" OR \"Informed consent\" OR \"Explicit consent\" OR \"Opt-in/Opt-out\" OR \"Revocable consent\" OR \"Right to delete\" OR \"Data purging\" OR \"Forgetting mechanisms\" OR \"Data control\" OR \"Data sovereignty\" OR \"User-managed data\" OR \"Legal Frameworks\" OR \"Data subject rights\" OR \"Right to access\" OR \"Right to rectification\" OR \"Right to portability\" OR \"Right to object\" OR \"Data protection\" OR \"Privacy by design\" OR \"Pseudonymization\")"
+    },
+    {
+        "WORD": "Humanitarian & Crisis Response",
+        "boolean_combination": "(\"Humanitarian & Crisis Response\" OR \"Disaster relief\" OR \"Emergency response\" OR \"Humanitarian aid\" OR \"Humanitarian assistance\" OR \"Crisis intervention\" OR \"Disaster management\" OR \"Humanitarian action\" OR \"Emergency aid\" OR \"Humanitarian protection\" OR \"First response\" OR \"Post-disaster recovery\" OR \"Humanitarian logistics\" OR \"Disaster risk reduction\" OR \"DRR\" OR \"Humanitarian coordination\" OR \"Refugee support\" OR \"Conflict response\" OR \"Humanitarian operations\" OR \"Mass casualty response\" OR \"Humanitarian access\" OR \"Humanitarian principles\" OR \"neutrality\" OR \"impartiality\" OR \"independence\" OR \"Vulnerable Populations\")"
+    },
+    {
+        "WORD": "Core Humanitarian Principles",
+        "boolean_combination": "(\"Core Humanitarian Principles\" OR \"Humanitarian imperative\" OR \"Do no harm\" OR \"ethical obligation\" OR \"Humanity\" OR \"alleviating suffering\" OR \"Dignity preservation\" OR \"Principle of neutrality\" OR \"Principle of impartiality\" OR \"Principle of independence\" OR \"Principle of non-discrimination\")"
+    },
+    {
+        "WORD": "Neutrality",
+        "boolean_combination": "(\"Neutrality\" OR \"Non-partisanship\" OR \"Political neutrality\" OR \"Conflict neutrality\" OR \"Non-alignment\" OR \"Avoiding perceived bias\" OR \"Refusal to take sides\" OR \"Humanitarian space\" OR \"Trust-building with all parties\" OR \"Mediation role\")"
+    },
+    {
+        "WORD": "Impartiality",
+        "boolean_combination": "(\"Impartiality\" OR \"Needs-based assistance\" OR \"Proportional response\" OR \"Equitable aid distribution\" OR \"Non-preferential treatment\" OR \"Prioritization by vulnerability\" OR \"Unbiased humanitarian action\" OR \"Fair access to aid\" OR \"Inclusivity in aid delivery\")"
+    },
+    {
+        "WORD": "Independence",
+        "boolean_combination": "(\"Independence\" OR \"Autonomy from political agendas\" OR \"Financial independence\" OR \"Operational self-sufficiency\" OR \"Freedom from external control\" OR \"Non-governmental mandate\" OR \"Donor neutrality\" OR \"Avoiding co-optation\" OR \"Unconstrained humanitarian access\")"
+    },
+    {
+        "WORD": "Social Good & Impact",
+        "boolean_combination": "(\"Social Good & Impact\" OR \"Social impact\" OR \"Public good\" OR \"Collective benefit\" OR \"Community welfare\" OR \"Pro bono initiatives\" OR \"Philanthropy\" OR \"Social justice\" OR \"Equity initiatives\" OR \"Grassroots activism\" OR \"Nonprofit work\" OR \"Corporate social responsibility\" OR \"CSR\" OR \"Social entrepreneurship\" OR \"Civic engagement\" OR \"Altruistic efforts\" OR \"Global development\" OR \"Sustainable development\" OR \"Inclusive growth\" OR \"Human-centered design\" OR \"Ethical innovation\" OR \"Community resilience\")"
+    },
+    {
+        "WORD": "Vulnerable Populations",
+        "boolean_combination": "(\"Vulnerable Populations\" OR \"Marginalized groups\" OR \"At-risk communities\" OR \"Displaced persons\" OR \"IDPs\" OR \"refugees\" OR \"Underserved populations\" OR \"High-need groups\" OR \"Socially excluded individuals\" OR \"Economically disadvantaged\" OR \"Minority groups\" OR \"Persons with disabilities\" OR \"PWDs\" OR \"Elderly\" OR \"Elderly in crisis\" OR \"Children in emergencies\" OR \"Indigenous communities\" OR \"Stateless persons\" OR \"Survivors of violence\" OR \"Homeless populations\" OR \"Low-income households\" OR \"Gender-based violence survivors\" OR \"Human trafficking victims\" OR \"Persons with chronic illnesses\" OR \"Food-insecure populations\")"
+    },
+    {
+        "WORD": "Low-Resource Settings",
+        "boolean_combination": "(\"Low-Resource Settings\" OR \"Resource-constrained environments\" OR \"Underdeveloped regions\" OR \"Hard-to-reach areas\" OR \"Fragile states\" OR \"humanitarian deserts\" OR \"areas with minimal aid\" OR \"Remote communities\" OR \"Informal settlements\" OR \"slums\" OR \"camps\" OR \"Post-conflict zones\" OR \"Areas of extreme poverty\" OR \"Off-grid locations\" OR \"Low-infrastructure settings\" OR \"Humanitarian \"last-mile\" delivery\" OR \"Crisis-affected regions\" OR \"Disaster-prone areas\" OR \"Medical deserts\" OR \"lack of healthcare access.\")"
+    },
+    {
+        "WORD": "Human Rights & Advocacy",
+        "boolean_combination": "(\"Human Rights & Advocacy\" OR \"Human rights protection\" OR \"Civil liberties\" OR \"Dignity preservation\" OR \"Right to life and security\" OR \"Freedom from discrimination\" OR \"Gender equality\" OR \"Child rights\" OR \"Indigenous rights\" OR \"Refugee rights\" OR \"Right to education\" OR \"Right to healthcare\" OR \"Labor rights\" OR \"Anti-slavery efforts\" OR \"Justice and accountability\" OR \"Truth and reconciliation\" OR \"Human rights violations\" OR \"Advocacy campaigns\" OR \"Legal empowerment\" OR \"Human rights defenders\" OR \"Ethical humanitarianism\")"
+    },
+    {
+        "WORD": "Organizations & Frameworks",
+        "boolean_combination": "(\"Organizations & Frameworks\" OR \"UN agencies\" OR \"UNHCR\" OR \"UNICEF\" OR \"OCHA\" OR \"International NGOs\" OR \"Red Cross\" OR \"MSF\" OR \"Save the Children\" OR \"Community-based organizations\" OR \"CBOs\" OR \"Humanitarian clusters\" OR \"sectoral coordination\" OR \"Sphere Standards\" OR \"humanitarian benchmarks\" OR \"Sustainable Development Goals\" OR \"SDGs\" OR \"International humanitarian law\" OR \"IHL\" OR \"Universal Declaration of Human Rights\" OR \"UDHR\")"
+    },
+    {
+        "WORD": "Key Actions & Interventions",
+        "boolean_combination": "(\"Key Actions & Interventions\" OR \"Needs assessment\" OR \"Rapid deployment\" OR \"Cash-based interventions\" OR \"Psychosocial support\" OR \"Emergency shelter provision\" OR \"Food security programs\" OR \"WASH initiatives\" OR \"Water\" OR \"Sanitation\" OR \"Hygiene\" OR \"Protection monitoring\" OR \"Advocacy and lobbying\" OR \"Capacity building\" OR \"local training\" OR \"Data collection for vulnerable groups\" OR \"Crisis mapping\")"
+    },
+    {
+        "WORD": "Environmental & Equity Concerns",
+        "boolean_combination": "(\"Environmental & Equity Concerns\" OR \"Environmental impact\" OR \"E-waste from hardware\" OR \"Resource depletion\" OR \"Carbon footprint\" OR \"CO emissions\" OR \"Greenhouse gas\" OR \"GHG\" OR \"accounting\" OR \"Compute inequality\" OR \"Global AI divide\" OR \"Centralized compute access\" OR \"Energy cost\" OR \"Megawatt-hour\" OR \"MWh\" OR \"usage\" OR \"Renewable energy offsets\" OR \"AI sustainability\" OR \"Green AI\" OR \"Low-power AI\" OR \"Efficient architectures\" OR \"sparse models\" OR \"green AI\" OR \"carbon-aware AI\" OR \"lifecycle emissions\" OR \"low-energy model\")"
+    },
+    {
+        "WORD": "Mitigation Strategies",
+        "boolean_combination": "(\"Mitigation Strategies\" OR \"Model compression\" OR \"quantization\" OR \"pruning\" OR \"Federated learning\" OR \"reduce centralized compute\" OR \"Carbon-aware training\" OR \"scheduling for renewable energy\" OR \"Hardware efficiency\" OR \"neuromorphic chips\")"
+    },
+    {
+        "WORD": "AI Development & Deployment Guide",
+        "boolean_combination": "(\"AI Development & Deployment Guide\" OR \"offline AI\" OR \"edge AI\" OR \"field deployment\" OR \"fail-safes\" OR \"fallback strategies\" OR \"informational self-determination\" OR \"explanation rights\" OR \"justifiability\" OR \"risk-based qualification\" OR \"contextual performance evaluation\" OR \"organizational change\" OR \"skill erosion\" OR \"institutional drift\" OR \"neutral inference\" OR \"independent fine-tuning\" OR \"non-aligned benchmarks\")"
+    }
+]
