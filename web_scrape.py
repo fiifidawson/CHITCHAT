@@ -479,7 +479,9 @@ def get_llit_papers(path_to_unique_boolean_combinations):
     #using these combinations
     with open(path_to_unique_boolean_combinations, 'r') as input_json:
         json_contents = json.load(input_json)
-        for topic_section in json_contents:
+        for i, topic_section in enumerate(json_contents):
+            if i == 0:
+                continue
             unique_combinations = topic_section['boolean_combination']
             
             ###############place calls to specialized functions written for literature search here###############
@@ -495,10 +497,10 @@ def get_llit_papers(path_to_unique_boolean_combinations):
             europepmc_results = search_repository(unique_combinations, "europepmc")
             append_results_to_json(output_json_filename, europepmc_results, "Europe PMC")
 
-            # ArXiv Integration
-            print("Starting to scrape arxiv...")
-            arxiv_results = get_arxiv_results(path_to_unique_boolean_combinations)
-            append_results_to_json(output_json_filename, arxiv_results, "ArXiv")
+        # ArXiv Integration
+        print("Starting to scrape arxiv...")
+        arxiv_results = get_arxiv_results(path_to_unique_boolean_combinations)
+        append_results_to_json(output_json_filename, arxiv_results, "ArXiv")
         
     return output_json_filename
 

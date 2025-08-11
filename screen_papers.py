@@ -16,6 +16,7 @@ from pydantic import BaseModel, Field
 class PublicationQuality(BaseModel):
     venue_name: str = Field(description="Name of the publication venue")
     is_top_tier_venue: bool = Field(description="Published in top-tier conference or Q1/Q2 journal")
+    publication_year: int = Field(description="Year of publication")
     citation_count: int = Field(description="Number of citations")
     is_recent_promising: bool = Field(description="Less than 1 year old with promising indicators (awards, policy citations)")
     full_text_english: bool = Field(description="Full text accessible and in English")
@@ -117,15 +118,14 @@ def screen_paper(client: OpenAI, prompt_text: str, paper: Dict[str, Any]) -> Pap
     paper_content = f"""
 PAPER TITLE: {paper.get('title', 'N/A')}
 
-ABSTRACT:
-{paper.get('abstract', 'No abstract available')}
+YEAR: {paper.get('year', 'N/A')}
 
 FULL TEXT:
 {paper.get('extracted_text', 'No full text available')}
 """
-    
-    # Truncate paper content to first 60000 characters (money and context length reseaons)
+    # Truncate paper content to avoid exceeding context length and being too costly
     truncated_paper_content = paper_content[:60000]
+
 
     # Combine the prompt with the paper text
     full_prompt = f"{prompt_text}\n\n---PAPER CONTENT BEGINS---\n{truncated_paper_content}\n---PAPER CONTENT ENDS---"
