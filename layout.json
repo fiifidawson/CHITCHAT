@@ -1,0 +1,41 @@
+{"title": "Insights into Radiology Publications.", 
+"original_metadata": 
+    {"authors": "Sathiadoss P, Bhayana R, Shaikh ZA, Krishna S.", 
+     "year": 2025, 
+     "url": "https://doi.org/10.1055/s-0044-1793914"},
+"screening_results": {
+     "paper_title": "Insights into Radiology Publications.", 
+     "publication_quality": 
+        {"venue_name": "Indian Journal of Radiology and Imaging", 
+         "is_top_tier_venue": false, 
+         "publication_year": 2025, 
+         "citation_count": -1, 
+         "is_recent_promising": false, 
+         "full_text_english": true}, 
+      "technical_scope": 
+        {"addresses_llm_data_collection": false, 
+         "addresses_text_corpus_creation": false, 
+         "addresses_web_scraping_nlp": false, 
+         "addresses_multilingual_compilation": false}, 
+      "ethical_flags": 
+        {"focuses_only_on_performance": false, 
+         "disregards_ethical_principles": false, 
+         "missing_ethical_approval": false, 
+         "violates_humanitarian_principles": false}, 
+       "humanitarian_principles": 
+        {"humanity_score": 0, 
+         "impartiality_score": 0, 
+         "independence_score": 0, 
+         "neutrality_score": 0}, 
+       "methodology_contributions": 
+       {"novel_methodology": false, 
+        "systematic_evaluation": false, 
+        "reproducible_implementation": false}, 
+       "ethical_contributions": 
+       {"explicit_framework": false, 
+        "empirical_bias_analysis": false, 
+        "harm_mitigation_strategies": false, 
+        "policy_recommendations": false, 
+        "acknowledges_tensions": false}, 
+       "priority_level": "EXCLUDE"}, 
+"final_priority": "EXCLUDE"}
