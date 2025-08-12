@@ -483,6 +483,7 @@ def get_llit_papers(path_to_unique_boolean_combinations):
             
             if i <= 1: # Restart from a certain point
                 continue
+            
             unique_combinations = topic_section['boolean_combination']
             
             ###############place calls to specialized functions written for literature search here###############
