@@ -480,7 +480,8 @@ def get_llit_papers(path_to_unique_boolean_combinations):
     with open(path_to_unique_boolean_combinations, 'r') as input_json:
         json_contents = json.load(input_json)
         for i, topic_section in enumerate(json_contents):
-            if i == 0:
+            
+            if i <= 1: # Restart from a certain point
                 continue
             unique_combinations = topic_section['boolean_combination']
             
