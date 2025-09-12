@@ -111,7 +111,9 @@ def load_processed_ids(output_dir: str = "output") -> set:
     
     # Look for all JSONL files in the output directory
     for filename in os.listdir(output_dir):
+        print(f"File in output folder found: {filename}")
         if filename.startswith("screening_results_") and filename.endswith(".jsonl"):
+            print(f"File with previously screened papers found: {filename}")
             filepath = os.path.join(output_dir, filename)
             try:
                 with open(filepath, 'r', encoding='utf-8') as f:
@@ -125,6 +127,36 @@ def load_processed_ids(output_dir: str = "output") -> set:
                 print(f"Warning: Could not read {filename}: {e}")
     
     return processed_ids
+
+def debug_jsonl_structure(output_dir: str = "output"):
+    """Debug function to inspect the structure of JSONL files."""
+    jsonl_files = [f for f in os.listdir(output_dir) 
+                   if f.startswith("screening_results_") and f.endswith(".jsonl")]
+    
+    print(f"\nDEBUG: Inspecting JSONL files in {output_dir}")
+    print("=" * 60)
+    
+    for filename in jsonl_files:
+        filepath = os.path.join(output_dir, filename)
+        print(f"\nFile: {filename}")
+        
+        try:
+            with open(filepath, 'r', encoding='utf-8') as f:
+                # Read first line to inspect structure
+                first_line = f.readline()
+                if first_line.strip():
+                    result = json.loads(first_line)
+                    print(f"  Keys in JSON: {list(result.keys())}")
+                    
+                    # Count total lines
+                    f.seek(0)
+                    line_count = sum(1 for line in f if line.strip())
+                    print(f"  Total entries: {line_count}")
+                    
+        except Exception as e:
+            print(f"  Error reading file: {e}")
+    
+    print("\n" + "=" * 60)
 
 
 def load_prompt(prompt_path: str) -> str:
@@ -239,6 +271,10 @@ def main():
     # Create output file with timestamp
     output_file = f"output/screening_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
     print(f"Results will be saved to: {output_file}")
+
+    # Debug
+    print("Debug jsonl structure...")
+    debug_jsonl_structure()
     
     # Track processed papers to avoid duplicates (including from previous runs)
     print("Loading previously processed papers...")
@@ -286,17 +322,17 @@ def main():
         
         processed_ids.add(unique_id)
         
-        try:
-            screening = screen_paper(client, prompt_text, paper)
+        # try:
+        #     screening = screen_paper(client, prompt_text, paper)
             
-            # Save result immediately
-            append_screening_result(screening, paper, output_file)
-            successful_count += 1
+        #     # Save result immediately
+        #     append_screening_result(screening, paper, output_file)
+        #     successful_count += 1
                         
-        except Exception as e:
-            print(f"  ✗ Failed to screen: {e}")
-            failed_count += 1
-            continue
+        # except Exception as e:
+        #     print(f"  ✗ Failed to screen: {e}")
+        #     failed_count += 1
+        #     continue
     
     # Print final summary
     print("\n" + "="*50)
