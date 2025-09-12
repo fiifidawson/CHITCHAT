@@ -4,7 +4,7 @@ ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  A
 <div align="center">
     <img src="assets/logo.png" alt=" Logo" width="750" height="90">
     <br>
-    <!-- <em>Caption for the centered image</em> -->
+    <a href="https://github.com/fiifidawson/ai_10211100348/tree/main/docs"><strong>Explore the docs »</strong></a>
 </div>
 
 ## Setting up RCP
@@ -34,7 +34,11 @@ runai submit \
 ```
 3. For `screen_papers.sh` you need to add a file `openai_key.txt` with an openai api key.
 
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
 ## Run using the command line
 1. Install: `pip install openai pypdf2 pydantic`
 2. Add OpenAI API key with `export OPENAI_API_KEY="your-api-key-here"`
 3. Run the script with `python3 screen_papers.py path/to/paper_screening_prompt.txt path/to/papers.json`
+
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
