@@ -1,6 +1,16 @@
 # CHITCHAT
 ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  Alignment  in  chatbot  Technologies
 
+<div align="center">
+    <img src="assets/logo.png" alt=" Logo" width="750" height="90">
+    <br>
+    <!-- <em>Caption for the centered image</em> -->
+</div>
+
+## Setting up RCP
+Before setting up the RCP, contact the project lead to be added to the RCP(Research Computing Platform).
+[Click here to learn about setting up RCP](https://github.com/MichelDucartier/rcp-docker-images/blob/master/LIGHT_README.md)
+
 ## Run as an RCP job
 1. Run the `web_scrape.sh` or `screen_papers.sh` script from RCP.
 2. The script to run the `web_scrape.sh` script on RCP looks like this (change USER):
