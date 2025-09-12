@@ -7,6 +7,31 @@ ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  A
     <a href="https://github.com/fiifidawson/CHITCHAT/tree/main/docs"><strong>Explore the docs »</strong></a>
 </div>
 
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>      
+        <li><a href="#setting-up-RCP">Setting up RCP</a></li>
+        <li><a href="#run-as-an-rcp-job">Run as an RCP job</a></li>        
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a>
+    <ul>
+        <li><a href="#dashboard-overview">Dashboard Overview</a></li>
+      </ul>    
+    </li> 
+    <li><a href="#technical-report">Technical Report</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
+
 ## Setting up RCP
 Before setting up the RCP, contact the project lead to be added to the RCP(Research Computing Platform).
 [Click here to learn about setting up RCP](https://github.com/MichelDucartier/rcp-docker-images/blob/master/LIGHT_README.md)
