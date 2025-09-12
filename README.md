@@ -4,7 +4,7 @@ ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  A
 <div align="center">
     <img src="assets/logo.png" alt=" Logo" width="750" height="90">
     <br>
-    <a href="https://github.com/fiifidawson/ai_10211100348/tree/main/docs"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/fiifidawson/CHITCHAT/tree/main/docs"><strong>Explore the docs »</strong></a>
 </div>
 
 ## Setting up RCP
