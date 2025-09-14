@@ -29,6 +29,7 @@ ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  A
       </ul>    
     </li> 
     <li><a href="#technical-report">Technical Report</a></li>
+    <li><a href="#main-authors">Main Authors</a></li>
     <li><a href="#license">License</a></li>
     <li><a href="#contact">Contact</a></li>
   </ol>
@@ -66,9 +67,34 @@ runai submit \
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
+---
+
 ## Run using the command line
 1. Install: `pip install openai pypdf2 pydantic`
 2. Add OpenAI API key with `export OPENAI_API_KEY="your-api-key-here"`
 3. Run the script with `python3 screen_papers.py path/to/paper_screening_prompt.txt path/to/papers.json`
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+## Technical Report 
+
+---
+
+## Main Authors
+
+This project is led by the following researchers:
+
+- **Annie Hartley** – EPFL / Main Contributor
+- **Laura Ferrarello** – EPFL / Main Contributor
+- **Johan Rochel** – EPFL / Main Contributor
+- **David Sasu** – EPFL / Main Contributor
+- **Tim Arni** – EPFL / Main Contributor
+- **Fiifi Dawson** – EPFL  / Main Contributor
+- **Oriane Peter** – King's College London  / Main Contributor
+
+For academic citations, please refer to the [CITATION.md](./CITATION.md) file.
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
