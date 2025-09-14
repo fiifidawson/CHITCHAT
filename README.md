@@ -14,52 +14,92 @@ ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  A
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">About The Project</a>
+      <a href="#summary">Summary</a>
     </li>
     <li>
-      <a href="#getting-started">Getting Started</a>
+      <a href="#research-motivation">Research Motivatione</a>
       <ul>      
-        <li><a href="#setting-up-RCP">Setting up RCP</a></li>
-        <li><a href="#run-as-an-rcp-job">Run as an RCP job</a></li>        
+        <li><a href="#setup">Setup</a></li>       
       </ul>
     </li>
-    <li><a href="#usage">Usage</a>
-    <ul>
-        <li><a href="#dashboard-overview">Dashboard Overview</a></li>
-      </ul>    
-    </li> 
-    <li><a href="#technical-report">Technical Report</a></li>
-    <li><a href="#main-authors">Main Authors</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
+        <li>
+      <a href="#methods">Methods</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#technical-report">Technical Report</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#main-authors">Main Authors</a>
+    </li>
+    </li>
+        <li>
+      <a href="#contributing">Contributing</a>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#license">License</a>
+    </li>
   </ol>
 </details>
 
----
-
-## Technical Report
 
 ---
 
+# Summary
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Research Motivation
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Methods
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Technical Report
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Heading
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
 ---
 
-## Run using the command line
-1. Install: `pip install openai pypdf2 pydantic`
-2. Add OpenAI API key with `export OPENAI_API_KEY="your-api-key-here"`
-3. Run the script with `python3 screen_papers.py path/to/paper_screening_prompt.txt path/to/papers.json`
+# Heading
 
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
 ---
 
-## Technical Report 
-
----
-
-## Main Authors
+# Main Authors
 
 This project is led by the following researchers:
 
@@ -74,4 +114,11 @@ This project is led by the following researchers:
 For academic citations, please refer to the [CITATION.md](./CITATION.md) file.
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
+<!-- ---
+
+# Citation -->
+
 ---
+
+# License
+<p align="right">[<a href="#readme-top">back to top</a>]</p>

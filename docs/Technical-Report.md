@@ -12,20 +12,43 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#project-structure">Project Structure</a>
-      <ul> 
-        <li><a href="#component-diagram">Component Diagriam</a></li>
-        <li><a href="#architectural-description">Architectural Description</a></li>
-      </ul>
+      <a href="#project-overview">Project Overview</a>
     </li>
     <li>
-      <a href="#methodology">Methodology</a>
+      <a href="#folder-structure">Folder Structure</a>
       <ul>      
-        <li><a href="#data-ingestion">Data Ingestion</a></li>
-        <li><a href="#vector-storage-and-retrieval">Vector Storage and Retrieval</a></li>   
-        <li><a href="#answer-generation">Answer Generation</a> </li>
-        <li><a href="#user-interface">User Interface</a> </li>
-        <li><a href="#novelty-highlights">Novelty Highlights</a> </li>         
+        <li><a href="#setup">Setup</a></li>       
+      </ul>
+    </li>
+        <li>
+      <a href="#script-breakdwon">Script Breakdown</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#contributing">Contributing</a>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
       </ul>
     </li>
   </ol>
@@ -92,7 +115,7 @@ CHITCHAT/
 
 ---
 
-# Prerequisites / Setup
+# Setup
 ## Virtual Environment Setup
 ### Linux/Unix Systems
 1. **Prerequisites**
@@ -146,6 +169,11 @@ CHITCHAT/
 
 ---
 
+# Workflow
+Step-by-step sequence of how someone would use the repo
+
+
+
 ## Running Locally
 
 ---
@@ -178,7 +206,15 @@ runai submit \
 ```
 3. For `screen_papers.sh` you need to add a file `openai_key.txt` with an openai api key.
 
+## Run using the command line
+1. Add OpenAI API key with `export OPENAI_API_KEY="your-api-key-here"`
+2. Run the script with `python3 screen_papers.py path/to/paper_screening_prompt.txt path/to/papers.json`
+
 <p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+---
+
+# Script Breakdown
 
 ---
 
@@ -205,7 +241,7 @@ If you're part of the main project team, kindly reach out to **David**, **Tim**,
    - Open a PR describing the problem and your solution.  
    - Link the related issue in your PR description.  
 
-## Notes  
+**Notes** 
 - PRs should be small, focused, and easy to review.  
 - Communication is encouraged—ask questions on Slack if you're unsure.  
 <p align="right">[<a href="#technical-report-top">back to top</a>]</p>
