@@ -111,7 +111,6 @@ This project is led by the following researchers:
 - **Fiifi Dawson** – EPFL  / Main Contributor
 - **Oriane Peter** – King's College London  / Main Contributor
 
-For academic citations, please refer to the [CITATION.md](./CITATION.md) file.
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
 <!-- ---

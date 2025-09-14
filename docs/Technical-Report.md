@@ -172,6 +172,30 @@ CHITCHAT/
 # Workflow
 Step-by-step sequence of how someone would use the repo
 
+== src/
+= boolean/
+    csv_to_json.py
+    boolean_combinations.py
+    unique_boolean_combinations.py
+= api/
+    web_scrape.py
+    arxiv_paper_search.py
+screen_papers.py
+
+= scripts/
+    web_scrape.sh
+    screen_papers.sh
+
+= analysis/
+    paper_analysis.py
+    web_scrape_analysis.py
+    word_cloud_analysis.py
+
+```
+Modules:
+input_directory: input_format -> input -> process -> output -> output_directory: output_format
+```
+
 
 
 ## Running Locally
