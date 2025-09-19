@@ -1,0 +1,67 @@
+You are tasked with extracting relevant recommendations from a research paper according to a systematic four-phase framework. The goal of the framework is to extract concrete recommendations for groups looking to build or evaluate humanitarian AI systems. The framework is centred around ethical trade-off or tension, and each extracted recommendation extracted should explicitly target or help resolve such a trade-off. We are only interested in concrete recommendations that apply to AI developers, and that can be acted upon. 
+
+Your role is to extract the necessary informations and summarise them, ONLY based on the paper content provided. 
+
+!!IMPORTANT: DO NOT ADD OR INFER ANY INFORMATION WHICH ARE NOT DIRECTLY INCLUDED IN THE PROVIDED PAPER TEXT.!!
+
+====================
+INSTRUCTIONS
+====================
+
+Complete each of the phases below. Base your evaluation ONLY on the content provided - if information is missing, mark it as such rather than making assumptions.
+
+====================
+PHASE 1: EXTRACTING ETHICAL TRADE-OFF
+====================
+
+We are interested in curating a list of recommendations aimed at individuals or institutions looking to develop or evaluate humanitarian AI systems, focusing on the ethical trade-off occurring when developing these systems. Therefore, the first step is to extract such tensions or trade-off mentioned in the paper, and for which the paper mentions concrete way to resolve or mitigate. For each identified ethical tension/trade-off, provide a short and descriptive name, a concise description, and a direct quote from the paper mentioning this trade-off. In no such trade-off is explicitly mentioned in the paper, provide an empty list.  
+
+====================
+PHASE 2: EXTRACTING ADDRESSED HARMS
+====================
+
+For each of the ethical trade-off identified in phase 1, extract the related algorithmic harms which the trade-off implies, if explicitly discussed in the paper. For each of the relevant harms identified, report the best direct quote from the paper describing this harm and classify it using Shelby's taxonomy of algorithmic harms, as described below. If no harm is relevant, provide an empty list. 
+
+# Shelby's taxonomy of algorithmic harms:
+- Representational Harms: Harms such as stereotyping, demeaning, erasure, alienation, denying people the opportunity to self-identify or reifying essentialist social categories
+- Allocative Harms: Harms such as opportunity or economic loss
+- Quality-of-Service Harms: Harms such as alienating users, increased their labor, or leading to a service or benefit loss
+- Interpersonal Harms: Interpersonal harms such as loss of agency, Tech-facilitated violence, diminished health and well-being or privacy violations
+- Social System Harms: Society level harms such as information harms, cultural harms, civic and political harms, socio-economic harms or environmental harms
+- Other types of harms: Other Harms not mentioned in Shelby's taxonomy of algorithmic harms
+- Undefined Harms: Harms mentioned in the paper but not defined enough to categorise in any of the above categories
+
+====================
+PHASE 3: EXTRACTING HUMANITARIAN PRINCIPLE RELEVANCE
+====================
+For each ethical trade-off identified in phase 1, assess its relevance to each of the ICRC humanitarian principles listed below. This assessment should include a relevance score from 1 to 3, a concise justification of this score for the recommendation considered, and a direct quote of the paper, if possible, justifying the recommendation relevance for the humanitarian principle in question. 
+
+# ICRC Humanitarian Principles:
+- Humanity: Prevent and alleviate human suffering wherever it may be found. Protect life and health. Ensure respect for the human being. Promote mutual understanding, friendship, cooperation and lasting peace among all peoples.
+- Impartiality: Make no discrimination as to nationality, race, religious beliefs, class or political opinions. Endeavour to relieve the suffering of individuals, being guided solely by their needs, and to give priority to the most urgent cases of distress.
+- Independence: National Societies, while auxiliaries in the humanitarian services of their governments and subject to the laws of their respective countries, must always maintain their autonomy so that they may be able at all times to act in accordance with the humanitarian principles.
+- Neutrality: In order to continue to enjoy the confidence of all, do not take sides in hostilities or engage at any time in controversies of a political, racial, religious or ideological nature.
+
+====================
+PHASE 4: EXTRACTING RECOMMANDATIONS
+====================
+
+This is the most important step of the process. For each ethical trade-off identified in phase 1, extract a list of concrete recommendations aimed at individuals or institutions looking to develop or evaluate humanitarian AI systems. To do so, extract any direct recommendation mentioned in the paper. For each of this recommendation, provide a short and descriptive name, a concise description of the recommendation, and a direct quote from the paper. You should also indicate at which of the AI systems development and evaluation systems this recommendation applied. To do so, used the stages describe below.
+
+# AI Systems Development Stages:
+1. Data Sourcing & Selection: Gathering and choosing the appropriate raw data required to train and evaluate the model.
+2.Data Preprocessing & Annotation: Cleaning, formatting, and labeling the collected data to make it suitable for machine learning.
+3. Model Selection & Pretraining: Choosing a suitable AI architecture and performing initial, broad training on a massive dataset.
+4. Fine-tuning & Instruction Tuning: Adapting the general pretrained model for a specific task or to follow user instructions more accurately.
+5. Safety Tuning & Red-Teaming: Testing the model for vulnerabilities, biases, and potential for harm. Red-teaming involves adversarial attempts to "break" the model to identify weaknesses.
+6: Deployment & Local Adaptation: Releasing the trained model into a live production environment and adjusting it for specific local or cultural contexts.
+7. Continuous Monitoring & Alignment: Actively tracking the model's performance after deployment to ensure it remains accurate, helpful, and aligned with its intended goals.
+8. Governance & Maintenance: Establishing rules and policies for the model's use, performing regular updates, and managing its overall lifecycle.
+
+====================
+IMPORTANT NOTES
+====================
+- Provide ONLY the requested assessments
+- Mark information as unavailable rather than guessing
+- Base everything on the provided paper content only
+- Follow the indicated structure to provide your output 
