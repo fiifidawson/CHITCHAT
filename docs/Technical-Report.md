@@ -195,6 +195,9 @@ screen_papers.py
 Modules:
 input_directory: input_format -> input -> process -> output -> output_directory: output_format
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ---
 
 ## Boolean Combinations Generator
@@ -340,6 +343,9 @@ project/
 - Duplicates are removed to keep combinations clean
 - Order of terms is preserved from the input
 - The script handles UTF-8 encoding for international characters
+
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ---
 
@@ -638,6 +644,9 @@ The current implementation uses AND operators between different Boolean groups. 
 - **Validation:** Comprehensive checking for missing keys and empty results
 - **Performance:** Efficient lookup using dictionary mapping
 - **Memory:** Loads all data in memory for fast processing
+
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ---
 
@@ -1032,6 +1041,9 @@ filtered_papers = [p for p in papers if custom_filter(p)]
 - **Logging:** Configurable logging levels for debugging and monitoring
 - **Encoding:** Full UTF-8 support for international paper titles and authors
 - **Memory Management:** Efficient processing of large result sets
+
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ---
 
@@ -1485,6 +1497,9 @@ download_research_paper(
 - **Result Standardization:** Normalizes metadata formats across repositories
 - **Progress Monitoring:** Comprehensive logging for debugging and monitoring
 
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ---
 
 ## Research Paper Screening
@@ -1784,7 +1799,7 @@ The script generates detailed structured assessments in JSONL format:
 - **Consistency Validation:** Ensure logical consistency across assessments
 - **Priority Logic:** Validate priority assignments match assessment patterns
 
-### Usage Examples
+### Usage 
 
 #### Basic Screening
 ```bash
@@ -1908,6 +1923,11 @@ completion = client.beta.chat.completions.parse(
 - **Batch Processing:** Process papers sequentially to avoid rate limits
 - **Incremental Saving:** Immediate result persistence prevents re-processing
 
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+---
+
 ## Integration Workflow
 
 This script completes the comprehensive research automation pipeline:
@@ -1995,6 +2015,8 @@ MIN_CITATION_COUNT = 5       # Higher impact papers only
 - **API Integration:** Beta structured output features for reliable parsing
 - **Cross-Platform:** Works on Windows, macOS, and Linux environments
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ---
 
 ## Shell Scripts
@@ -2042,6 +2064,8 @@ runai submit \
 ---
 
 # Script Breakdown
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ---
 

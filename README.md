@@ -83,12 +83,8 @@ ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  A
 ---
 
 # Technical Report
-<p align="right">[<a href="#readme-top">back to top</a>]</p>
 
----
-
-# Heading
-
+This repo has by a detailed technical report that explains the project’s structure, scripts, data flow, and expected outputs. For a full breakdown of please see the [Technical Report](https://github.com/fiifidawson/CHITCHAT/blob/main/docs/Technical-Report.md).
 <p align="right">[<a href="#readme-top">back to top</a>]</p>
 
 ---
