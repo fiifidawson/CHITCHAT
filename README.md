@@ -108,6 +108,7 @@ This project is led by the following researchers:
 - **Johan Rochel** – EPFL / Main Contributor
 - **David Sasu** – EPFL / Main Contributor
 - **Tim Arni** – EPFL / Main Contributor
+- **Trevor Brokowski** – EPFL / Main Contributor
 - **Fiifi Dawson** – EPFL  / Main Contributor
 - **Oriane Peter** – King's College London  / Main Contributor
 
