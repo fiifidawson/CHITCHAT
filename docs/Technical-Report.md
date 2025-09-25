@@ -573,7 +573,7 @@ python unique_boolean_combinations.py
 
 ### Error Handling & Feedback
 
-The script provides comprehensive error handling:
+The script provides error handling:
 
 #### File-Related Errors
 - **Missing Input File:** Clear message if boolean combinations file doesn't exist
@@ -648,7 +648,7 @@ The current implementation uses AND operators between different Boolean groups. 
 
 - **Encoding:** Full UTF-8 support for international characters
 - **Logic:** Uses AND operators to combine different Boolean groups
-- **Validation:** Comprehensive checking for missing keys and empty results
+- **Validation:** checking for missing keys and empty results
 - **Performance:** Efficient lookup using dictionary mapping
 - **Memory:** Loads all data in memory for fast processing
 
@@ -687,7 +687,7 @@ This script automates academic paper discovery by searching the arXiv repository
 - **Category-Aware Searching:** Maps research categories to relevant arXiv subject classifications
 - **Rate Limit Compliance:** Respects arXiv API guidelines (3-second delays)
 - **Duplicate Filtering:** Prevents duplicate papers across different search strategies
-- **Comprehensive Metadata Extraction:** Captures title, authors, year, abstract, and full text
+- **Metadata Extraction:** Captures title, authors, year, abstract, and full text
 - **Error Recovery:** Robust handling of network issues and malformed responses
 
 ### Search Strategy Architecture
@@ -755,7 +755,7 @@ The script expects output from `unique_boolean_combinations.py`:
 
 ### Output Format
 
-The script generates comprehensive paper records:
+The script generates paper records:
 
 ```json
 [
@@ -788,7 +788,7 @@ The script generates comprehensive paper records:
 **Features:** Loads combinations and sets up rate limiting
 
 #### `search_all_combinations(max_results_per_query)`
-**Purpose:** Execute comprehensive search across all combinations  
+**Purpose:** Execute search across all combinations  
 **Parameters:**
 - `max_results_per_query` (int): Maximum papers per query (default: 15)
 **Returns:** List of dictionaries with paper metadata  
