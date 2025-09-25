@@ -16,12 +16,22 @@
     </li>
     <li>
       <a href="#folder-structure">Folder Structure</a>
-      <ul>      
-        <li><a href="#setup">Setup</a></li>       
-      </ul>
     </li>
         <li>
-      <a href="#script-breakdwon">Script Breakdown</a>
+      <a href="#setup">Setup</a>
+      <ul>      
+        <li><a href="#virtual-environment-setup">Virtual Environment Setup</a>
+          <ul>      
+          <li><a href="#linuxunix-systems">Linux/Unix Systems</a></li>       
+        </ul>
+        <ul>      
+          <li><a href="#windows-systems">Windows Systems</a></li>       
+        </ul></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#work-flow">Main Section</a>
       <ul>      
         <li><a href="#sub-section">Sub-Section</a></li>       
       </ul>
@@ -170,26 +180,6 @@ CHITCHAT/
 ---
 
 # Workflow
-Step-by-step sequence of how someone would use the repo
-
-== src/
-= boolean/
-    csv_to_json.py
-    boolean_combinations.py
-    unique_boolean_combinations.py
-= api/
-    web_scrape.py
-    arxiv_paper_search.py
-screen_papers.py
-
-= scripts/
-    web_scrape.sh
-    screen_papers.sh
-
-= analysis/
-    paper_analysis.py
-    web_scrape_analysis.py
-    word_cloud_analysis.py
 
 ```
 Modules:
@@ -330,11 +320,13 @@ The script provides feedback during execution:
 
 Ensure your directory structure includes:
 ```
-project/
-├── boolean_combinations.py
+CHITCHAT/
 └── data/
-    ├── structure.json          # Input file
-    └── boolean_combinations.json   # Output file (generated)
+        ├── structure.json                # Input file
+        └── boolean_combinations.json     # Output file (generated)
+└── src/
+    └── boolean/
+        └── boolean_combinations.py 
 ```
 
 **Notes:**
@@ -379,6 +371,8 @@ This script creates unique Boolean search combinations by combining multiple pre
 - Provides detailed feedback on missing or found keys
 - Handles error cases gracefully
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Predefined Research Categories
 
 The script includes 8 specialized research categories:
@@ -415,6 +409,8 @@ The script includes 8 specialized research categories:
 **Focus:** Environmental impact of AI systems  
 **Key Terms:** Environmental Concerns, Mitigation, AI Development, Infrastructure
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Input Format Requirements
 
 The script requires the output from `boolean_combinations.py`:
@@ -448,6 +444,7 @@ The script generates complex Boolean combinations:
   }
 ]
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Class Methods Reference
 
@@ -481,6 +478,8 @@ The script generates complex Boolean combinations:
 - `category`: Category name to update
 - `new_keys`: List of new key terms for the category
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Processing Logic
 
 The script follows this detailed process:
@@ -511,6 +510,9 @@ The script follows this detailed process:
    - Save to JSON with proper formatting
    - Generate success/failure reports
 
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Usage 
 
 #### Basic Usage
@@ -525,8 +527,8 @@ success = generate_unique_boolean_combinations()
 ```python
 # Specify custom input and output files
 success = generate_unique_boolean_combinations(
-    input_file='./my_data/boolean_combinations.json',
-    output_file='./results/unique_searches.json'
+    input_file='./data/boolean_combinations.json',
+    output_file='./output/unique_boolean_combinations.json'
 )
 ```
 
@@ -566,6 +568,7 @@ combinations = generator.generate_all_unique_combinations()
 ```bash
 python unique_boolean_combinations.py
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Error Handling & Feedback
 
@@ -602,12 +605,14 @@ Generated 8 unique combinations
 ### File Structure Requirements
 
 ```
-project/
-├── unique_boolean_combinations.py
+CHITCHAT/
 ├── data/
-│   └── boolean_combinations.json      # Input (from previous script)
-└── output/
-    └── unique_boolean_combinations.json   # Output (generated)
+│   └── boolean_combinations.json          # Input file (from previous script - boolean_combinations.py)
+├── output/
+│   └── unique_boolean_combinations.json   # Output file (generated)
+└── src/
+    └── boolean/
+        └── unique_boolean_combinations.py
 ```
 
 ### Integration Workflow
@@ -618,6 +623,7 @@ This script is designed to work in sequence with `boolean_combinations.py`:
 2. **Step 2:** Run `unique_boolean_combinations.py` to create complex research-focused combinations
 3. **Step 3:** Use the generated combinations in academic databases and search engines
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Customization Options
 
@@ -657,15 +663,17 @@ This script automates academic paper discovery by searching the arXiv repository
 
 ### Data Flow
 ```
-./output/unique_boolean_combinations.json → Process → ./output/obtained_lit.json
+../output/unique_boolean_combinations.json → Process → ../output/obtained_lit.json
 ```
 
-**Input Directory:** `./output/`  
+**Input Directory:** `../output/`  
 **Input Format:** JSON file with unique Boolean combinations by research category  
 **Process:** Extract key terms, create arXiv queries, search API, filter duplicates  
 **Output:** JSON file with comprehensive paper metadata and abstracts  
-**Output Directory:** `./output/`  
+**Output Directory:** `../output/`  
 **Output Format:** JSON with structured paper information
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Core Components
 
@@ -724,6 +732,8 @@ The script includes 16 specialized search mappings:
 | **Privacy** | Data protection | `all:"privacy" OR all:"consent"` |
 | **Environmental** | Sustainability | `all:"environmental" OR all:"sustainability"` |
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Input Format Requirements
 
 The script expects output from `unique_boolean_combinations.py`:
@@ -740,6 +750,7 @@ The script expects output from `unique_boolean_combinations.py`:
   }
 ]
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Output Format
 
@@ -765,6 +776,7 @@ The script generates comprehensive paper records:
   }
 ]
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Class Methods Reference
 
@@ -812,6 +824,8 @@ The script generates comprehensive paper records:
 - Manages network errors gracefully
 - Respects API rate limits
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Processing Workflow
 
 The script follows this comprehensive process:
@@ -844,6 +858,8 @@ The script follows this comprehensive process:
 2. **JSON Generation:** Create well-structured output file
 3. **Summary Statistics:** Generate category-wise paper counts
 4. **Success Reporting:** Confirm completion and file locations
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Usage 
 
@@ -897,6 +913,7 @@ for paper in papers[:5]:
 ```bash
 python arxiv_paper_search.py
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Error Handling & Recovery
 
@@ -935,6 +952,8 @@ Papers found by category:
   Environmental & Infrastructural Cost: 25 papers
 ```
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### API Compliance & Best Practices
 
 #### ArXiv API Guidelines
@@ -952,14 +971,18 @@ Papers found by category:
 ### File Structure Requirements
 
 ```
-project/
-├── arxiv_paper_search.py
+CHITCHAT/
 ├── output/
-│   ├── unique_boolean_combinations.json    # Input (from previous script)
+│   ├── unique_boolean_combinations.json   # Input file (# Input file - from previous script)
 │   └── obtained_lit.json                  # Output (generated)
+├── src/
+│   └── api/
+│       └── arxiv_paper_search.py
 └── logs/
-    └── arxiv_search.log                   # Optional logging
+    └── arxiv_search.log                  # Optional logging
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Integration Workflow
 
@@ -984,25 +1007,7 @@ This script completes the research automation pipeline:
 - **API Limits:** Respects arXiv's usage guidelines
 - **Error Recovery:** Continues processing despite individual failures
 
-### Use Cases & Applications
-
-#### Academic Research Applications
-- **Systematic Literature Reviews:** Comprehensive paper discovery across multiple domains
-- **Grant Proposal Research:** Background research with broad coverage
-- **Competitive Analysis:** Understanding research landscape in specific areas
-- **Cross-Disciplinary Studies:** Finding papers at intersection of multiple fields
-
-#### Professional Applications  
-- **Market Research:** Technology trend analysis through academic papers
-- **Policy Development:** Evidence gathering across humanitarian and technical domains
-- **Product Development:** Prior art discovery and innovation landscape mapping
-- **Standards Development:** Research foundation for technical standards
-
-#### Educational Applications
-- **Course Development:** Finding relevant papers for curriculum design
-- **Thesis Research:** Comprehensive literature discovery for graduate students
-- **Research Training:** Teaching systematic search methodologies
-- **Bibliography Generation:** Automated reference collection
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Customization Options
 
@@ -1052,16 +1057,18 @@ filtered_papers = [p for p in papers if custom_filter(p)]
 ### Overview
 This script orchestrates automated paper discovery across multiple academic repositories including Google Scholar, OpenAlex, Europe PMC, and ArXiv. It transforms Boolean search combinations into a unified literature collection pipeline, automatically downloading papers, extracting full text, and aggregating results into a single comprehensive dataset.
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Data Flow
 ```
-./output/unique_boolean_combinations.json → Process → ./output/obtained_lit.json
+../output/unique_boolean_combinations.json → Process → ../output/obtained_lit.json
 ```
 
-**Input Directory:** `./output/`  
+**Input Directory:** `../output/`  
 **Input Format:** JSON file with unique Boolean combinations by research category  
 **Process:** Multi-repository search, PDF download, text extraction, result aggregation  
 **Output:** Comprehensive JSON database with full paper content and metadata  
-**Output Directory:** `./output/`  
+**Output Directory:** `../output/`  
 **Output Format:** JSON with unified paper records from all repositories
 
 ### Repository Integration Architecture
@@ -1074,6 +1081,8 @@ This script orchestrates automated paper discovery across multiple academic repo
 | **OpenAlex** | Open access focus | Structured metadata, API reliability | REST API with cursor pagination |
 | **Europe PMC** | Life sciences emphasis | Full-text access, medical literature | RESTful web services |
 | **ArXiv** | Preprints and CS/Physics | Latest research, open access | Integration with existing arXiv module |
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 #### Core Processing Components
 
@@ -1104,6 +1113,8 @@ This script orchestrates automated paper discovery across multiple academic repo
 - **Source Tracking:** Maintains repository attribution for each paper
 - **Duplicate Handling:** Basic duplicate prevention across sources
 - **Progress Monitoring:** Real-time feedback on collection progress
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Repository-Specific Implementation
 
@@ -1185,6 +1196,8 @@ The script expects output from `unique_boolean_combinations.py`:
 ]
 ```
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Output Format
 
 The script generates a comprehensive literature database:
@@ -1209,6 +1222,8 @@ The script generates a comprehensive literature database:
   }
 ]
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Core Functions Reference
 
@@ -1264,6 +1279,8 @@ The script generates a comprehensive literature database:
 - **Source Tracking:** Maintains attribution for debugging
 - **Error Recovery:** Continues processing despite write failures
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Search Strategy Implementation
 
 #### Query Processing Pipeline
@@ -1287,7 +1304,9 @@ The script generates a comprehensive literature database:
 - **Europe PMC:** 1-second delays between requests  
 - **ArXiv:** Handled by existing module (3-second delays)
 
-### Usage Examples
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+### Usage
 
 #### Basic Literature Collection
 ```python
@@ -1324,6 +1343,7 @@ if pdf_path:
 ```bash
 python web_scrape.py ./output/unique_boolean_combinations.json
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Error Handling & Recovery
 
@@ -1366,21 +1386,27 @@ Starting to scrape arxiv...
 Results written to ./output/obtained_lit.json
 ```
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### File Structure Requirements
 
 ```
-project/
-├── web_scrape.py
+CHITCHAT/
 ├── output/
-│   ├── unique_boolean_combinations.json    # Input
-│   └── obtained_lit.json                  # Output (comprehensive results)
-├── research_paper_downloads/              # Downloaded PDFs
+│   ├── unique_boolean_combinations.json   # Input
+│   └── obtained_lit.json                  # Output 
+├── src/
+│   └── api/
+│       └── web_scrape.py
+├── research_paper_downloads/              # (RCP) Downloaded PDFs
 │   ├── paper1.pdf
 │   ├── paper2.pdf
 │   └── ...
-└── temp/                                  # Temporary files
-    └── temp_arxiv_results.json
+└── temp/
+    └── temp_arxiv_results.json             # (RCP) Temporary files
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Dependencies & Requirements
 
@@ -1405,6 +1431,8 @@ from urllib.parse import quote_plus, urljoin, urlparse
 - **OpenAlex:** Official REST API (https://api.openalex.org/)
 - **Europe PMC:** Official web services (https://europepmc.org/RestfulWebService)
 - **ArXiv:** Integrated via existing module
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Performance Considerations
 
@@ -1436,25 +1464,7 @@ This script completes the comprehensive research automation pipeline:
 4. **Step 4:** `web_scrape.py` - **Comprehensive multi-repository collection**
 5. **Step 5:** Manual analysis of comprehensive literature database
 
-### Use Cases & Applications
-
-#### Academic Research Applications
-- **Systematic Literature Reviews:** Comprehensive coverage across all major repositories
-- **Meta-Analysis Preparation:** Large-scale paper collection with full-text access
-- **Research Gap Analysis:** Identify understudied areas across multiple domains
-- **Citation Network Analysis:** Build comprehensive citation databases
-
-#### Professional Applications
-- **Competitive Intelligence:** Comprehensive technology landscape mapping
-- **Grant Writing Support:** Evidence base construction across multiple sources
-- **Product Development Research:** Prior art discovery with full-text analysis
-- **Policy Research:** Evidence gathering across academic and policy literatures
-
-#### Educational Applications
-- **Course Reading Lists:** Automated collection of relevant papers for curricula
-- **Research Training:** Teaching comprehensive literature search methodologies
-- **Thesis Support:** Complete literature discovery for graduate students
-- **Database Construction:** Building specialized research databases
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Customization Options
 
@@ -1509,15 +1519,17 @@ This script transforms large collections of research papers into prioritized, sy
 
 ### Data Flow
 ```
-./output/obtained_lit.json → Process → ./output/screening_results_TIMESTAMP.jsonl
+../output/obtained_lit.json → Process → ../output/screening_results_TIMESTAMP.jsonl
 ```
 
-**Input Directory:** `./output/`  
+**Input Directory:** `../output/`  
 **Input Format:** JSON file with comprehensive paper metadata and full text  
 **Process:** AI-powered structured screening with multi-phase evaluation  
 **Output:** JSONL file with detailed screening results and priority classifications  
-**Output Directory:** `./output/`  
+**Output Directory:** `../output/`  
 **Output Format:** JSONL with structured screening assessments per paper
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### AI-Powered Assessment Architecture
 
@@ -1536,6 +1548,8 @@ The system employs a **three-phase assessment model** using structured Pydantic 
 ##### Phase 3: Contribution Analysis
 - **Methodology Contributions:** Novel approaches and reproducible implementations
 - **Ethical Contributions:** Framework development and bias analysis
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 #### Structured Assessment Models
 
@@ -1595,6 +1609,8 @@ class EthicalContributions(BaseModel):
     acknowledges_tensions: bool       # Ethical trade-off discussion
 ```
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Priority Classification System
 
 #### `PriorityLevel` Enumeration
@@ -1613,6 +1629,8 @@ The AI model synthesizes all assessment dimensions to assign final priority leve
 - **Ethical Framework:** Comprehensive ethical analysis increases priority
 - **Humanitarian Alignment:** High humanitarian principle scores boost priority
 - **Methodological Innovation:** Novel approaches and reproducibility enhance priority
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Input Format Requirements
 
@@ -1636,6 +1654,8 @@ The script expects comprehensive paper records from `web_scrape.py`:
 - `year`: Publication year for filtering (>= 2020)
 - `extracted_text`: Full text content for analysis (>= 500 characters)
 - `authors`, `url`: Metadata for tracking and reference
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Output Format
 
@@ -1694,6 +1714,8 @@ The script generates detailed structured assessments in JSONL format:
   "final_priority": "HIGH PRIORITY"
 }
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Core Functions Reference
 
@@ -1754,6 +1776,8 @@ The script generates detailed structured assessments in JSONL format:
 - **Structure Inspection:** Analyzes JSONL file formats
 - **Count Reporting:** Provides entry counts per file
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Processing Workflow
 
 #### Phase 1: Initialization & Validation
@@ -1780,6 +1804,8 @@ The script generates detailed structured assessments in JSONL format:
 3. **Statistics Tracking:** Count successful, failed, and filtered papers
 4. **Final Summary:** Comprehensive processing report
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Quality Control & Filtering
 
 #### Pre-Processing Filters
@@ -1798,6 +1824,8 @@ The script generates detailed structured assessments in JSONL format:
 - **Completeness Checks:** Verify all assessment fields populated
 - **Consistency Validation:** Ensure logical consistency across assessments
 - **Priority Logic:** Validate priority assignments match assessment patterns
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Usage 
 
@@ -1836,6 +1864,8 @@ def custom_filter(paper):
 # Apply custom filtering
 filtered_papers = [p for p in papers if custom_filter(p)]
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Error Handling & Recovery
 
@@ -1884,17 +1914,22 @@ All results saved to: output/screening_results_20231201_143022.jsonl
 ### File Structure Requirements
 
 ```
-project/
-├── screen_papers.py
-├── screening_prompt.txt              # AI screening instructions
+CHITCHAT
+├── docs/
+│   └── prompt/
+│       └── paper_screening_prompt.txt           # AI screening instructions
 ├── output/
-│   ├── obtained_lit.json            # Input (from web_scrape.py)
+│   ├── obtained_lit.json                        # Input (from web_scrape.py)
 │   ├── screening_results_20231201_143022.jsonl  # Output (timestamped)
 │   ├── screening_results_20231202_091534.jsonl  # Additional runs
 │   └── ...
-└── logs/                            # Optional logging
+├── src/
+│   └── screen_papers.py
+└── logs/                                        # Optional logging
     └── screening.log
 ```
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### OpenAI Integration
 
@@ -1930,13 +1965,15 @@ completion = client.beta.chat.completions.parse(
 
 ## Integration Workflow
 
-This script completes the comprehensive research automation pipeline:
+This script completes the research automation pipeline:
 
 1. **Step 1:** `boolean_combinations.py` - Generate basic Boolean combinations
 2. **Step 2:** `unique_boolean_combinations.py` - Create research-focused combinations  
 3. **Step 3:** `arxiv_paper_search.py` - Execute arXiv-specific searches
-4. **Step 4:** `web_scrape.py` - Comprehensive multi-repository collection
+4. **Step 4:** `web_scrape.py` - multi-repository collection
 5. **Step 5:** `screen_papers.py` - **AI-based systematic screening and prioritization**
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Performance Considerations
 
@@ -1958,25 +1995,7 @@ This script completes the comprehensive research automation pipeline:
 - **Error Recovery:** Continues processing despite individual failures
 - **Parallel Processing:** Sequential processing respects API rate limits
 
-### Use Cases & Applications
-
-#### Systematic Literature Reviews
-- **Automated Screening:** Reduce manual screening time by 90%
-- **Consistent Criteria:** Standardized assessment across reviewers
-- **Priority Ranking:** Focus manual review on highest-priority papers
-- **Bias Reduction:** Objective AI assessment reduces reviewer bias
-
-#### Research Gap Analysis
-- **Technical Scope Mapping:** Identify understudied areas in LLM data collection
-- **Ethical Framework Assessment:** Map ethical maturity across research domains
-- **Methodology Innovation:** Identify novel approaches and reproducible methods
-- **Humanitarian Impact:** Assess research alignment with humanitarian principles
-
-#### Grant Writing & Funding
-- **Literature Foundation:** Quickly identify key papers for background sections
-- **Gap Identification:** Demonstrate novel contribution through comprehensive screening
-- **Ethical Compliance:** Ensure proposed research builds on ethically sound foundations
-- **Impact Assessment:** Prioritize research with humanitarian and social benefits
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Customization Options
 
@@ -2016,6 +2035,10 @@ MIN_CITATION_COUNT = 5       # Higher impact papers only
 - **Cross-Platform:** Works on Windows, macOS, and Linux environments
 
 <p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+---
+
+# Running
 
 ---
 
