@@ -349,7 +349,7 @@ This script creates unique Boolean search combinations by combining multiple pre
 
 ### Data Flow
 ```
-./data/boolean_combinations.json → Process → ./output/unique_boolean_combinations.json
+../data/boolean_combinations.json → Process → ../output/unique_boolean_combinations.json
 ```
 
 **Input Directory:** `./data/`  
@@ -1937,7 +1937,7 @@ CHITCHAT
 #### Structured Output Configuration
 ```python
 completion = client.beta.chat.completions.parse(
-    model="gpt-4-turbo",              # High-capability model for analysis
+    model="gpt-5",              # High-capability model for analysis
     messages=[
         {
             "role": "system", 
