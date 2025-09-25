@@ -198,7 +198,7 @@ This script transforms word lists with synonyms into Boolean search combinations
 
 ### Data Flow
 ```
-./data/structure.json → Process → ./data/boolean_combinations.json
+../data/structure.json → Process → ../data/boolean_combinations.json
 ```
 
 **Input Directory:** `./data/`  
@@ -215,8 +215,8 @@ This script transforms word lists with synonyms into Boolean search combinations
 **Purpose:** Converts a structured word list into Boolean search combinations using OR operators.
 
 **Parameters:**
-- `input_file` (str, optional): Path to input JSON file (default: `'./data/structure.json'`)
-- `output_file` (str, optional): Path for output JSON file (default: `'./data/boolean_combinations.json'`)
+- `input_file` (str, optional): Path to input JSON file (default: `'../data/structure.json'`)
+- `output_file` (str, optional): Path for output JSON file (default: `'../data/boolean_combinations.json'`)
 
 **Returns:**
 - List of dictionaries with Boolean combinations on success
