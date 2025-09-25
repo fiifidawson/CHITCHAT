@@ -269,7 +269,7 @@ def main():
         sys.exit(1)
     
     # Create output file with timestamp
-    output_file = f"output/screening_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
+    output_file = f"../output/screening_results_{datetime.now().strftime('%Y%m%d_%H%M%S')}.jsonl"
     print(f"Results will be saved to: {output_file}")
 
     # Debug

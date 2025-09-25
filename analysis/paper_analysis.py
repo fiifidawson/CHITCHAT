@@ -549,8 +549,8 @@ def generate_summary_stats(df, output_dir):
 
 def main():
     # Configuration
-    input_file = "output/screening_results_20250811_100939.jsonl"
-    output_dir = "plots/openai_analysis"
+    input_file = "../output/screening_results_20250811_100939.jsonl" # Update path
+    output_dir = "analysis/plots/openai_analysis"
     
     # Create output directory
     create_output_dir(output_dir)

@@ -480,7 +480,7 @@ class PaperBucketing:
 class WordCloudGenerator:
     """Generates word clouds and related visualizations"""
     
-    def __init__(self, output_dir: str = "output/bucket"):
+    def __init__(self, output_dir: str = "analysis/output/bucket"): # Update path
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.preprocessor = TextPreprocessor()
@@ -741,9 +741,9 @@ class WordCloudAnalyzer:
 def main():
     """Main function to run the analysis"""
     # Configuration
-    papers_file = "output/obtained_lit.json"
-    boolean_combinations_file = "data/boolean_combinations.json"
-    screening_file = "output/screening_results_20250811_204753.jsonl"
+    papers_file = "../output/obtained_lit.json"
+    boolean_combinations_file = "../data/boolean_combinations.json"
+    screening_file = "../output/screening_results_20250811_204753.jsonl"
     
     # Check if files exist
     for file_path in [papers_file, boolean_combinations_file]:

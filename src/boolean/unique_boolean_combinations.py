@@ -8,7 +8,7 @@ class UniqueBooleanCombinationsGenerator:
     based on research categories and predefined key combinations from boolean_combinations.json
     """
     
-    def __init__(self, boolean_combinations_file='./data/boolean_combinations.json'):
+    def __init__(self, boolean_combinations_file='../../data/boolean_combinations.json'):
         self.boolean_combinations_file = boolean_combinations_file
         self.boolean_combinations_data = self._load_boolean_combinations()
         
@@ -179,7 +179,7 @@ class UniqueBooleanCombinationsGenerator:
         print(f"\nGenerated {len(unique_combinations)} unique combinations")
         return unique_combinations
     
-    def save_unique_combinations(self, combinations: List[Dict], output_file='./data/unique_boolean_combinations.json'):
+    def save_unique_combinations(self, combinations: List[Dict], output_file='../../data/unique_boolean_combinations.json'):
         """Save unique combinations to JSON file"""
         try:
             # Clean the combinations for final output (remove internal tracking)
@@ -227,7 +227,7 @@ class UniqueBooleanCombinationsGenerator:
             for i, key in enumerate(keys, 1):
                 print(f"  {i}. {key}")
 
-def generate_unique_boolean_combinations(input_file='./data/boolean_combinations.json', output_file='./output/unique_boolean_combinations.json'):
+def generate_unique_boolean_combinations(input_file='../../data/boolean_combinations.json', output_file='../../output/unique_boolean_combinations.json'):
     """
     Generate unique boolean combinations and save to JSON file
     

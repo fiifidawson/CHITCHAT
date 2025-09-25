@@ -473,7 +473,7 @@ def get_llit_papers(path_to_unique_boolean_combinations):
     Output:
         path_to_obtained_lit_json (str): Path to the json file containing the found literature.
     '''
-    output_json_filename = './output/obtained_lit.json'
+    output_json_filename = '../../output/obtained_lit.json'
 
     #iterate through the unique combinations in each topic section and call a search
     #using these combinations

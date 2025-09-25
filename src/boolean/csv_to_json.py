@@ -14,7 +14,7 @@ def custom_replace(s):
 
 data = []
 
-with open('data/boolean.csv', mode='r', newline='', encoding='utf-8') as csvfile:
+with open('../../data/boolean.csv', mode='r', newline='', encoding='utf-8') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         new_row = {k: custom_replace(v) if isinstance(v, str) else v for k, v in row.items()}

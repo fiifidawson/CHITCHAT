@@ -1,6 +1,6 @@
 import json
 
-def generate_boolean_combinations(input_file='./data/structure.json', output_file='./data/boolean_combinations.json'):
+def generate_boolean_combinations(input_file='../../data/structure.json', output_file='../../data/boolean_combinations.json'):
     """
     Reads structure.json and generates Boolean_combinations.json with boolean search combinations.
     
