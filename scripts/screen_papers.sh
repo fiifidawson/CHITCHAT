@@ -15,7 +15,7 @@ set -euo pipefail
 
 cd /mloscratch/users/arni/chitchat/CHITCHAT
 
-PY_SCRIPT="screen_papers.py"
+PY_SCRIPT="src/screen_papers.py" # Update path if needed
 API_KEY_FILE="openai_key.txt"  # Change this path if needed
 
 # 1. Check arguments

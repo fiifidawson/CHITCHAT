@@ -14,7 +14,7 @@ set -euo pipefail
 
 cd /mloscratch/users/arni/chitchat/CHITCHAT
 
-PY_SCRIPT="web_scrape.py"
+PY_SCRIPT="src/api/web_scrape.py" # Update path if needed
 
 # 1. Check arguments
 if [ "$#" -ne 1 ]; then
