@@ -18,49 +18,245 @@ TODO: Complete Table of Contents
     <li>
       <a href="#folder-structure">Folder Structure</a>
     </li>
-        <li>
+    <li>
       <a href="#setup">Setup</a>
       <ul>      
         <li><a href="#virtual-environment-setup">Virtual Environment Setup</a>
           <ul>      
-          <li><a href="#linuxunix-systems">Linux/Unix Systems</a></li>       
-        </ul>
-        <ul>      
-          <li><a href="#windows-systems">Windows Systems</a></li>       
-        </ul></li>       
+            <li><a href="#linuxunix-systems">Linux/Unix Systems</a></li>       
+          </ul>
+          <ul>      
+              <li><a href="#windows-systems">Windows Systems</a></li>       
+          </ul>
+        </li>       
       </ul>
     </li>
-    </li>
-        <li>
-      <a href="#work-flow">Main Section</a>
+    <li>
+      <a href="#workflow">Workflow</a>
       <ul>      
-        <li><a href="#sub-section">Sub-Section</a></li>       
+        <li><a href="#boolean-combinations-generator">Boolean Combinations Generator</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#function-reference">Function Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-logic">Processing Logic</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling">Error Handling</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-messages">Output Messages</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+        </li>
+        <li><a href="#unique-boolean-combinations-generator">Unique Boolean Combinations Generator</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-components">Core Components</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#predefined-research-categories">Predefined Research Categories</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#class-methods-reference">Class Methods Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-logic">Processing Logic</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling--feedback">Error Handling &amp; Feedback</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-messages">Output Messages</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#integration-workflow">Integration Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#customization-options">Customization Options</a></li>       
+            </ul>
+        </li>
+        <li><a href="#arxiv-paper-search-automation">ArXiv Paper Search Automation</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-components">Core Components</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#search-strategy-architecture">Search Strategy Architecture</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#class-methods-reference">Class Methods Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-workflow">Processing Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling--recovery">Error Handling & Recovery</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#api-compliance--best-practices">API Compliance & Best Practices</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#integration-workflow">Integration Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#performance-considerations">Performance Considerations</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#customization-options">Customization Options</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#technical-implementation-notes">Technical Implementation Notes</a></li>       
+            </ul>
+        </li>
+        <li><a href="#multi-repository-research-paper-web-scraper">Multi-Repository Research Paper Web Scraper</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#repository-integration-architecture">Repository Integration Architecture</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#repository-specific-implementation">Repository-Specific Implementation</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-functions-reference">Core Functions Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#search-strategy-implementation">Search Strategy Implementation</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#dependencies--equirements">Dependencies & Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#performance-considerations">Performance Considerations</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#integration-workflow">Integration Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#customization-options">Customization Options</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#technical-implementation-notes">Technical Implementation Notes</a></li>       
+            </ul>
+        </li>
+        <li><a href="#research-paper-screening">Research Paper Screening</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#ai-powered-assessment-architecture">AI-Powered Assessment Architecture</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#priority-classification-system">Priority Classification System</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-functions-reference">Core Functions Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-workflow">Processing Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling--recovery">Error Handling & Recovery</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#openai-integration">OpenAI Integration</a></li>       
+            </ul>
+        </li>          
       </ul>
     </li>
-    </li>
-        <li>
-      <a href="#main-section">Main Section</a>
+    <li>
+      <a href="#running">Running</a>
       <ul>      
-        <li><a href="#sub-section">Sub-Section</a></li>       
+        <li><a href="#shell-scripts">Shell Scripts</a></li>       
       </ul>
+      <ul>      
+        <li><a href="#running-locally">Running Locally</a></li>       
+      </ul>
+      <ul>      
+        <li><a href="#running-on-rcp"> Running on RCP</a></li>       
+      </ul>
+      <ul>      
+        <li><a href="#run-using-the-command-line"> Run using the command line</a></li>       
+      </ul>
+    <li>
+      <a href="#script-breakdown">Script Breakdown</a>
     </li>
-    </li>
-        <li>
+    <li>
       <a href="#contributing">Contributing</a>
-    </li>
-    </li>
-        <li>
-      <a href="#main-section">Main Section</a>
-      <ul>      
-        <li><a href="#sub-section">Sub-Section</a></li>       
-      </ul>
-    </li>
-    </li>
-        <li>
-      <a href="#main-section">Main Section</a>
-      <ul>      
-        <li><a href="#sub-section">Sub-Section</a></li>       
-      </ul>
     </li>
   </ol>
 </details>
@@ -208,6 +404,8 @@ This script transforms word lists with synonyms into Boolean search combinations
 **Output Directory:** `./data/`  
 **Output Format:** JSON with Boolean combinations
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Function Reference
 
 `generate_boolean_combinations(input_file, output_file)`
@@ -221,6 +419,8 @@ This script transforms word lists with synonyms into Boolean search combinations
 **Returns:**
 - List of dictionaries with Boolean combinations on success
 - `None` if an error occurs
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Input Format Requirements
 
@@ -242,6 +442,8 @@ Your input JSON file should contain an array of objects with the following struc
 **Required Fields:**
 - `WORD`: The primary term
 - `SYNONYMS AND NEAR SYNONYMS`: Comma-separated list of related terms
+
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Output Format
 
@@ -276,6 +478,8 @@ The script performs the following operations:
    - Encloses the entire combination in parentheses
 5. **Output Generation:** Saves the results as formatted JSON
 
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
 ### Usage 
 
 #### Basic Usage
@@ -299,6 +503,7 @@ result = generate_boolean_combinations(
 ```bash
 python boolean_combinations.py
 ```
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
 
 ### Error Handling
 
