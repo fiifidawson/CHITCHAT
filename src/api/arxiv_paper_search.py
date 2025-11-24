@@ -16,7 +16,7 @@ class ArxivPaperSearcher:
     Automated arXiv paper search using unique boolean combinations
     """
     
-    def __init__(self, unique_combinations_file='output/unique_boolean_combinations.json'):
+    def __init__(self, unique_combinations_file='../../output/unique_boolean_combinations.json'):
         self.unique_combinations_file = unique_combinations_file
         self.base_url = "http://export.arxiv.org/api/query"
         self.unique_combinations = self._load_unique_combinations()
@@ -308,7 +308,7 @@ class ArxivPaperSearcher:
             logger.error(f"✗ Error saving results: {str(e)}")
             return False
 
-def search_arxiv_papers(unique_combinations_file='output/unique_boolean_combinations.json', output_file='output/obtained_lit.json'):
+def search_arxiv_papers(unique_combinations_file='../../output/unique_boolean_combinations.json', output_file='../../output/obtained_lit.json'):
     """
     Main function to search arXiv papers using all unique boolean combinations
     

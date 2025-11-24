@@ -409,7 +409,7 @@ def get_arxiv_results(path_to_unique_boolean_combinations):
     """
     try:
         # Import your existing arXiv search function
-        from arxiv_paper_search import search_arxiv_papers
+        from src.api.arxiv_paper_search import search_arxiv_papers
         import json
         import os
         
@@ -473,7 +473,7 @@ def get_llit_papers(path_to_unique_boolean_combinations):
     Output:
         path_to_obtained_lit_json (str): Path to the json file containing the found literature.
     '''
-    output_json_filename = './output/obtained_lit.json'
+    output_json_filename = '../../output/obtained_lit.json'
 
     #iterate through the unique combinations in each topic section and call a search
     #using these combinations

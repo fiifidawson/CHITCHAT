@@ -34,7 +34,7 @@ class PaperAnalyzer:
         self.boolean_combinations_file = boolean_combinations_file
         self.papers = []
         self.boolean_combinations = {}
-        self.output_dir = Path("plots/web_scrape")
+        self.output_dir = Path("analysis/plots/web_scrape") # Update path
         self.output_dir.mkdir(exist_ok=True)
         
         # Color palette for consistent styling
@@ -671,7 +671,7 @@ class PaperAnalyzer:
 # Example usage
 if __name__ == "__main__":
     # Initialize analyzer
-    analyzer = PaperAnalyzer('output/obtained_lit_part_1.json', 'output/unique_boolean_combinations.json')
+    analyzer = PaperAnalyzer('output/obtained_lit.json', 'output/unique_boolean_combinations.json')
     
     # Run complete analysis
     stats = analyzer.run_analysis()

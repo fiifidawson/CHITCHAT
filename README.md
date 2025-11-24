@@ -1,30 +1,120 @@
+<a id="readme-top"></a>
+
 # CHITCHAT
 ArCHitectures for  Interpretable &amp;  Transparent  Continuous  Humanitarian  Alignment  in  chatbot  Technologies
 
-## Run as an RCP job
-1. Run the `web_scrape.sh` or `screen_papers.sh` script from RCP.
-2. The script to run the `web_scrape.sh` script on RCP looks like this (change USER):
-```
-runai submit \
-  --name paper-scraping \
-  --image registry.rcp.epfl.ch/multimeditron/basic:latest-USER \
-  --pvc light-scratch:/mloscratch \ # <- CAN ALSO BE LIGHTSCRATCH
-  --large-shm \
-  -e NAS_HOME=/mloscratch/users/USER \
-  -e HF_API_KEY_FILE_AT=/mloscratch/users/USER/keys/hf_key.txt \
-  -e WANDB_API_KEY_FILE_AT=/mloscratch/users/USER/keys/wandb_key.txt \
-  -e GITCONFIG_AT=/mloscratch/users/USER/.gitconfig \
-  -e GIT_CREDENTIALS_AT=/mloscratch/users/USER/.git-credentials \
-  -e VSCODE_CONFIG_AT=/mloscratch/users/USER/.vscode-server \
-  --backoff-limit 0 \
-  --run-as-gid 84257 \
-  --gpu 0 \
-  --command -- "/mloscratch/users/USER/CHITCHAT/web_scrape.sh" \
-                "/mloscratch/users/USER/CHITCHAT/output/unique_boolean_combinations.json"
-```
-3. For `screen_papers.sh` you need to add a file `openai_key.txt` with an openai api key.
+<div align="center">
+    <img src="assets/logo.png" alt=" Logo" width="750" height="90">
+    <br>
+    <a href="https://github.com/fiifidawson/CHITCHAT/tree/main/docs"><strong>Explore the docs »</strong></a>
+</div>
 
-## Run using the command line
-1. Install: `pip install openai pypdf2 pydantic`
-2. Add OpenAI API key with `export OPENAI_API_KEY="your-api-key-here"`
-3. Run the script with `python3 screen_papers.py path/to/paper_screening_prompt.txt path/to/papers.json`
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#summary">Summary</a>
+    </li>
+    <li>
+      <a href="#research-motivation">Research Motivatione</a>
+      <ul>      
+        <li><a href="#setup">Setup</a></li>       
+      </ul>
+    </li>
+        <li>
+      <a href="#methods">Methods</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#technical-report">Technical Report</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#main-authors">Main Authors</a>
+    </li>
+    </li>
+        <li>
+      <a href="#contributing">Contributing</a>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#main-section">Main Section</a>
+      <ul>      
+        <li><a href="#sub-section">Sub-Section</a></li>       
+      </ul>
+    </li>
+    </li>
+        <li>
+      <a href="#license">License</a>
+    </li>
+  </ol>
+</details>
+
+
+---
+
+# Summary
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Research Motivation
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Methods
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Technical Report
+
+This repo has by a detailed technical report that explains the project’s structure, scripts, data flow, and expected outputs. For a full breakdown of please see the [Technical Report](https://github.com/fiifidawson/CHITCHAT/blob/main/docs/Technical-Report.md).
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Heading
+
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+---
+
+# Main Authors
+
+This project is led by the following researchers:
+
+- **Annie Hartley** – EPFL / Main Contributor
+- **Laura Ferrarello** – EPFL / Main Contributor
+- **Johan Rochel** – EPFL / Main Contributor
+- **David Sasu** – EPFL / Main Contributor
+- **Tim Arni** – EPFL / Main Contributor
+- **Trevor Brokowski** – EPFL / Main Contributor
+- **Fiifi Dawson** – EPFL  / Main Contributor
+- **Oriane Peter** – King's College London  / Main Contributor
+
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
+
+<!-- ---
+
+# Citation -->
+
+---
+
+# License
+<p align="right">[<a href="#readme-top">back to top</a>]</p>
