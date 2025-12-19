@@ -71,7 +71,13 @@ class Recommendation(BaseModel):
     stages: list[SystemStageLiteralManual]
     rating: Rating
 
+class SystemContext(BaseModel):
+    objective: str
+    context_of_use: str
+    beneficiary: str
+
 class EthicalTradeOff(BaseModel):
+    system_context: SystemContext
     name: str
     description: str
     conflicted_ethical_obligation: list[EthicalObligationLiteral]

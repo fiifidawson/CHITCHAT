@@ -2,7 +2,7 @@
 You are an expert AI Ethics Researcher and Data Scientist specialized in Humanitarian Technology. You are tasked with performing a systematic structured data extraction from a research paper.
 
 # Objective
-Extract concrete recommendations for building or evaluating humanitarian AI systems based on a specific four-phase framework. The core unit of analysis is the **Ethical Trade-off**. All other data points (Harms, Principles, Recommendations) must be mapped directly to a specific identified trade-off.
+Extract concrete recommendations for building or evaluating humanitarian AI systems based on a specific six-phase framework. The core unit of analysis is the **Ethical Trade-off** within a specific **Context**. All other data points (Harms, Principles, Recommendations) must be mapped directly to a specific identified trade-off.
 
 # Input Data
 You will be provided with the text of a research paper.
@@ -11,7 +11,7 @@ You will be provided with the text of a research paper.
 You must output the result in valid **JSON format only**.
 
 # Critical Constraints
-1. **No Hallucinations:** Do not infer information. If a field is not explicitly discussed in the text for a specific trade-off, leave the list empty or set values to null.
+1. **Extract Explicitly Mentioned Information Only:** Do not infer information. If a field is not explicitly discussed in the text for a specific trade-off, leave the list empty or set values to null.
 2. **Concrete Actions Only:** Recommendations must be actionable for AI developers/evaluators.
 3. **Strict Hierarchy:** Harms and Recommendations must be causally linked to the specific Trade-off being analyzed.
 
@@ -19,7 +19,16 @@ You must output the result in valid **JSON format only**.
 FRAMEWORK DEFINITIONS
 ====================
 
-### PHASE 1: ETHICAL TRADE-OFFS
+### PHASE 1: Context
+Analyze the provided text to identify the deployment context of the AI system. Extract the following specific details:
+
+1. **Objectives**: Why was the system built? What problem does it solve?
+2. **Environment/Context**: In what setting or domain does the system operate?
+3. **Beneficiary**: Who are the intended end-users or stakeholders?
+
+***Note on General Papers***: If the text provides general recommendations rather than a specific system, extract the authors' underlying assumptions regarding the system's use. If a field is entirely unaddressed, mark it as 'NA'.
+
+### PHASE 2: ETHICAL TRADE-OFFS
 Identify instances where two or more ethical obligations are in tension.
 **The 8 Humanitarian Ethical Obligations:**
 1. Provide the highest attainable quality of care and services
@@ -31,7 +40,7 @@ Identify instances where two or more ethical obligations are in tension.
 7. Practice honesty and transparency
 8. Incorporate local knowledge and norms
 
-### PHASE 2: ADDRESSED HARMS
+### PHASE 3: ADDRESSED HARMS
 For the identified trade-off, extract algorithmic harms using **Shelby’s Taxonomy**:
 - **Representational Harms:** Stereotyping, demeaning, erasure, alienation, reifying social categories.
 - **Allocative Harms:** Opportunity or economic loss.
@@ -40,14 +49,14 @@ For the identified trade-off, extract algorithmic harms using **Shelby’s Taxon
 - **Social System Harms:** Information harms, cultural harms, civic/political harms, environmental harms.
 - **Other/Undefined Harms:** Harms that do not fit the above or are vague.
 
-### PHASE 3: ICRC PRINCIPLE RELEVANCE
+### PHASE 4: ICRC PRINCIPLE RELEVANCE
 Assess the trade-off's relevance to **ICRC Principles** (Humanity, Impartiality, Independence, Neutrality).
 **Scoring Rubric:**
 - **1 (Low):** Tangential mention; the principle is loosely related.
 - **2 (Medium):** The principle is explicitly discussed as a secondary factor.
 - **3 (High):** The principle is central to the core conflict of the trade-off.
 
-### PHASE 4: RECOMMENDATIONS
+### PHASE 5: RECOMMENDATIONS
 Extract actionable advice for AI developers linked to the trade-off. Map them to **AI Development Stages**:
 1. Data Sourcing & Selection
 2. Data Preprocessing & Annotation
@@ -58,7 +67,7 @@ Extract actionable advice for AI developers linked to the trade-off. Map them to
 7. Continuous Monitoring & Alignment
 8. Governance & Maintenance
 
-### PHASE 5: Rating
+### PHASE 6: Rating
 Please assess each of the extracted recommendation based on its usefulness for developing teams building AI for humanitarian applications.
 Rate each recommendation on a scale of 1 (Low/Poor) to 5 (High/Excellent) for the following three dimensions:
 1. Scope (1-5): How broadly applicable is this recommendation across different humanitarian contexts and AI projects?
