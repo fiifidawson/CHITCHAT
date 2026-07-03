@@ -1,0 +1,3 @@
+  - Pipeline Architecture: https://excalidraw.com/#json=o5us0UaZEYcbD3W6KIx9x,4k61Y7mcysrylxVsK5ak_w
+  - Screening Schema: https://excalidraw.com/#json=YIOd_a4mMTx1pVMRUD_Yo,AmItsT0ZuX-D5mRe85PWHA
+  - https://excalidraw.com/#json=HxkQE-KPNvowViFJH7CiG,ujVcFNU0eLUMZlahWJB8xA
