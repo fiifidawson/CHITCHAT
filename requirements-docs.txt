@@ -1,0 +1,14 @@
+# Documentation build dependencies (MkDocs + Material for MkDocs).
+#
+# Build the docs locally:
+#     pip install -r requirements-docs.txt
+#     mkdocs serve
+#
+# The mkdocs<2 cap is deliberate. MkDocs 2.0 removes the plugin system and
+# rewrites the theming system, and Material for MkDocs does not follow it.
+# mkdocs-material 9.x already caps mkdocs<2 transitively; the pin is repeated
+# here so the constraint stays visible if that ever changes.
+# See https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/
+
+mkdocs>=1.6,<2
+mkdocs-material==9.7.7
