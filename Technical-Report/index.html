@@ -1,0 +1,3055 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../about/">
+      
+      
+        <link rel="next" href="../litlens-module/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Technical - CHITCHAT documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#project-overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CHITCHAT documentation" class="md-header__button md-logo" aria-label="CHITCHAT documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CHITCHAT documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Technical
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5M7 15a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  About
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Technical
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../litlens-module/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Litlens
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../paper-discovery-module/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Paper
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CHITCHAT documentation" class="md-nav__button md-logo" aria-label="CHITCHAT documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CHITCHAT documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../litlens-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Litlens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper-discovery-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<p><a id="technical-report-top"></a></p>
+<div align="center">
+  <a href="https://github.com/fiifidawson/CHITCHAT">
+    <img src="../assets/doc.png" alt="Logo" width="80" height="80">
+  </a>
+  <h3 align="center">Technical Report</h3>
+</div>
+
+<p>TODO: Complete Table of Contents</p>
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#project-overview">Project Overview</a>
+    </li>
+    <li>
+      <a href="#folder-structure">Folder Structure</a>
+    </li>
+    <li>
+      <a href="#setup">Setup</a>
+      <ul>      
+        <li><a href="#virtual-environment-setup">Virtual Environment Setup</a>
+          <ul>      
+            <li><a href="#linuxunix-systems">Linux/Unix Systems</a></li>       
+          </ul>
+          <ul>      
+              <li><a href="#windows-systems">Windows Systems</a></li>       
+          </ul>
+        </li>       
+      </ul>
+    </li>
+    <li>
+      <a href="#workflow">Workflow</a>
+      <ul>      
+        <li><a href="#boolean-combinations-generator">Boolean Combinations Generator</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#function-reference">Function Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-logic">Processing Logic</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling">Error Handling</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-messages">Output Messages</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+        </li>
+        <li><a href="#unique-boolean-combinations-generator">Unique Boolean Combinations Generator</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-components">Core Components</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#predefined-research-categories">Predefined Research Categories</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#class-methods-reference">Class Methods Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-logic">Processing Logic</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling--feedback">Error Handling &amp; Feedback</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-messages">Output Messages</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#integration-workflow">Integration Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#customization-options">Customization Options</a></li>       
+            </ul>
+        </li>
+        <li><a href="#arxiv-paper-search-automation">ArXiv Paper Search Automation</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-components">Core Components</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#search-strategy-architecture">Search Strategy Architecture</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#class-methods-reference">Class Methods Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-workflow">Processing Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling--recovery">Error Handling & Recovery</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#api-compliance--best-practices">API Compliance & Best Practices</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#integration-workflow">Integration Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#performance-considerations">Performance Considerations</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#customization-options">Customization Options</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#technical-implementation-notes">Technical Implementation Notes</a></li>       
+            </ul>
+        </li>
+        <li><a href="#multi-repository-research-paper-web-scraper">Multi-Repository Research Paper Web Scraper</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#repository-integration-architecture">Repository Integration Architecture</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#repository-specific-implementation">Repository-Specific Implementation</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-functions-reference">Core Functions Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#search-strategy-implementation">Search Strategy Implementation</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#dependencies--equirements">Dependencies & Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#performance-considerations">Performance Considerations</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#integration-workflow">Integration Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#customization-options">Customization Options</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#technical-implementation-notes">Technical Implementation Notes</a></li>       
+            </ul>
+        </li>
+        <li><a href="#research-paper-screening">Research Paper Screening</a>
+            <ul>
+              <li><a href="#overview">Overview</a></li>
+            </ul>
+            <ul>      
+              <li><a href="#data-flow">Data Flow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#ai-powered-assessment-architecture">AI-Powered Assessment Architecture</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#priority-classification-system">Priority Classification System</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#input-format-requirements">Input Format Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#output-format">Output Format</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#core-functions-reference">Core Functions Reference</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#processing-workflow">Processing Workflow</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#usage">usage</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#error-handling--recovery">Error Handling & Recovery</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#file-structure-requirements">File Structure Requirements</a></li>       
+            </ul>
+            <ul>      
+              <li><a href="#openai-integration">OpenAI Integration</a></li>       
+            </ul>
+        </li>          
+      </ul>
+    </li>
+    <li>
+      <a href="#running">Running</a>
+      <ul>      
+        <li><a href="#shell-scripts">Shell Scripts</a></li>       
+      </ul>
+      <ul>      
+        <li><a href="#running-locally">Running Locally</a></li>       
+      </ul>
+      <ul>      
+        <li><a href="#running-on-rcp"> Running on RCP</a></li>       
+      </ul>
+      <ul>      
+        <li><a href="#run-using-the-command-line"> Run using the command line</a></li>       
+      </ul>
+    <li>
+      <a href="#script-breakdown">Script Breakdown</a>
+    </li>
+    <li>
+      <a href="#contributing">Contributing</a>
+    </li>
+  </ol>
+</details>
+
+<hr />
+<h1 id="project-overview">Project Overview</h1>
+<hr />
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h1 id="folder-structure">Folder Structure</h1>
+<pre><code>CHITCHAT/
+    ├── analysis
+    ├── bucket/
+    │   ├── plots/
+    │   │   ├── openai_analysis/
+    │   │   │   └── plots
+    │   │   └── web_scrape/
+    │   │       └── plots
+    │   ├── paper_analysis.py
+    │   ├── web_scrape_analysis.py
+    │   └── word_cloud_analysis.py      
+    ├── analyze_outputs/
+    │   └── screening_results
+    ├── assets/
+    │   └── images
+    ├── data/
+    │   ├── boolean.csv
+    │   ├── boolean_combinations.json
+    │   ├── structure.json
+    │   └── test_papers.json
+    ├── docs/
+    │   ├── prompt/
+    │   │   └── paper_screening_prompt.txt
+    │   ├── Technical-Report.md
+    │   └── instructions.md
+    ├── output/
+    │   ├── screening_results.jsonl
+    │   └── unique_boolean_combinations.json
+    ├── scripts/
+    │   ├── screen_papers.sh
+    │   └── web_scrape.sh
+    ├── src/
+    │   ├── api/
+    │   │   ├── arxiv_paper_search.py
+    │   │   └── web_scrape.py
+    │   ├── boolean/
+    │   │   ├── boolean_combinations.py
+    │   │   ├── csv_to_json.py
+    │   │   └── unique_boolean_combinations.py
+    │   └── screen_papers.py
+    ├── .gitignore
+    ├── README.md
+    ├── layout.json
+    ├── playground.ipynb
+    └── requirements.txt
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h1 id="setup">Setup</h1>
+<h2 id="virtual-environment-setup">Virtual Environment Setup</h2>
+<h3 id="linuxunix-systems">Linux/Unix Systems</h3>
+<ol>
+<li>
+<p><strong>Prerequisites</strong>
+    Update your system and install Python 3.10 with venv support:
+    <code>bash
+    sudo apt update
+    sudo apt install python3.10 python3.10-venv</code></p>
+</li>
+<li>
+<p><strong>Create Virtual Environment</strong>
+    <code>bash
+    python3.10 -m venv .venv</code></p>
+</li>
+<li>
+<p><strong>Activate Virtual Environment</strong>
+    <code>bash
+    source .venv/bin/activate</code></p>
+</li>
+<li>
+<p><strong>Install Dependencies</strong>
+    <code>bash
+    pip install -r requirements.txt</code></p>
+</li>
+<li>
+<p><strong>Deactivate Virtual Environment</strong>
+    <code>bash
+    deactivate</code></p>
+</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="windows-systems">Windows Systems</h3>
+<ol>
+<li>
+<p><strong>Create Virtual Environment</strong>
+    <code>cmd
+    python -m venv .venv</code></p>
+</li>
+<li>
+<p><strong>Activate Virtual Environment</strong>
+    <code>cmd
+    .venv\Scripts\activate</code></p>
+</li>
+<li>
+<p><strong>Install Dependencies</strong>
+    <code>cmd
+    pip install -r requirements.txt</code></p>
+</li>
+<li>
+<p><strong>Deactivate Virtual Environment</strong>
+    <code>cmd
+    deactivate</code></p>
+</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h1 id="workflow">Workflow</h1>
+<pre><code>Modules:
+input_directory: input_format -&gt; input -&gt; process -&gt; output -&gt; output_directory: output_format
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="boolean-combinations-generator">Boolean Combinations Generator</h2>
+<h3 id="overview">Overview</h3>
+<p>This script transforms word lists with synonyms into Boolean search combinations, making it easy to create comprehensive search queries for databases, search engines, or research applications.</p>
+<h3 id="data-flow">Data Flow</h3>
+<pre><code>../data/structure.json → Process → ../data/boolean_combinations.json
+</code></pre>
+<p><strong>Input Directory:</strong> <code>./data/</code><br />
+<strong>Input Format:</strong> JSON file containing words and their synonyms<br />
+<strong>Process:</strong> Generate Boolean OR combinations from words and synonyms<br />
+<strong>Output:</strong> JSON file with Boolean search strings<br />
+<strong>Output Directory:</strong> <code>./data/</code><br />
+<strong>Output Format:</strong> JSON with Boolean combinations</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="function-reference">Function Reference</h3>
+<p><code>generate_boolean_combinations(input_file, output_file)</code></p>
+<p><strong>Purpose:</strong> Converts a structured word list into Boolean search combinations using OR operators.</p>
+<p><strong>Parameters:</strong>
+- <code>input_file</code> (str, optional): Path to input JSON file (default: <code>'../data/structure.json'</code>)
+- <code>output_file</code> (str, optional): Path for output JSON file (default: <code>'../data/boolean_combinations.json'</code>)</p>
+<p><strong>Returns:</strong>
+- List of dictionaries with Boolean combinations on success
+- <code>None</code> if an error occurs</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="input-format-requirements">Input Format Requirements</h3>
+<p>Your input JSON file should contain an array of objects with the following structure:</p>
+<pre><code class="language-json">[
+  {
+    &quot;WORD&quot;: &quot;example&quot;,
+    &quot;SYNONYMS AND NEAR SYNONYMS&quot;: &quot;sample, instance, illustration, case&quot;
+  },
+  {
+    &quot;WORD&quot;: &quot;research&quot;,
+    &quot;SYNONYMS AND NEAR SYNONYMS&quot;: &quot;study, investigation, analysis&quot;
+  }
+]
+</code></pre>
+<p><strong>Required Fields:</strong>
+- <code>WORD</code>: The primary term
+- <code>SYNONYMS AND NEAR SYNONYMS</code>: Comma-separated list of related terms</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="output-format">Output Format</h3>
+<p>The script generates a JSON file with Boolean search combinations:</p>
+<pre><code class="language-json">[
+  {
+    &quot;WORD&quot;: &quot;example&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;example\&quot; OR \&quot;sample\&quot; OR \&quot;instance\&quot; OR \&quot;illustration\&quot; OR \&quot;case\&quot;)&quot;
+  },
+  {
+    &quot;WORD&quot;: &quot;research&quot;, 
+    &quot;boolean_combination&quot;: &quot;(\&quot;research\&quot; OR \&quot;study\&quot; OR \&quot;investigation\&quot; OR \&quot;analysis\&quot;)&quot;
+  }
+]
+</code></pre>
+<h3 id="processing-logic">Processing Logic</h3>
+<p>The script performs the following operations:</p>
+<ol>
+<li><strong>File Reading:</strong> Loads and parses the input JSON file</li>
+<li><strong>Data Extraction:</strong> Extracts the main word and synonyms from each entry</li>
+<li><strong>Synonym Processing:</strong> </li>
+<li>Splits comma-separated synonyms</li>
+<li>Removes whitespace and empty entries</li>
+<li>Eliminates duplicates while preserving order</li>
+<li><strong>Boolean Generation:</strong> </li>
+<li>Wraps each term in quotes for exact matching</li>
+<li>Combines all terms with OR operators</li>
+<li>Encloses the entire combination in parentheses</li>
+<li><strong>Output Generation:</strong> Saves the results as formatted JSON</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="usage">Usage</h3>
+<h4 id="basic-usage">Basic Usage</h4>
+<pre><code class="language-python">from boolean_combinations import generate_boolean_combinations
+
+# Use default file paths
+result = generate_boolean_combinations()
+</code></pre>
+<h4 id="custom-file-paths">Custom File Paths</h4>
+<pre><code class="language-python"># Specify custom input and output files
+result = generate_boolean_combinations(
+    input_file='./my_data/words.json',
+    output_file='./output/search_terms.json'
+)
+</code></pre>
+<h4 id="command-line-execution">Command Line Execution</h4>
+<pre><code class="language-bash">python boolean_combinations.py
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="error-handling">Error Handling</h3>
+<p>The script includes error handling for:</p>
+<ul>
+<li><strong>File Not Found:</strong> Displays clear message if input file doesn't exist</li>
+<li><strong>Invalid JSON:</strong> Catches and reports JSON parsing errors</li>
+<li><strong>General Exceptions:</strong> Handles unexpected errors gracefully</li>
+</ul>
+<p>All errors are printed to console with descriptive messages.</p>
+<h3 id="output-messages">Output Messages</h3>
+<p>The script provides feedback during execution:
+- Success message with count of generated combinations
+- Preview of first 3 Boolean combinations for verification
+- Error messages for troubleshooting</p>
+<h3 id="file-structure-requirements">File Structure Requirements</h3>
+<p>Ensure your directory structure includes:</p>
+<pre><code>CHITCHAT/
+└── data/
+        ├── structure.json                # Input file
+        └── boolean_combinations.json     # Output file (generated)
+└── src/
+    └── boolean/
+        └── boolean_combinations.py 
+</code></pre>
+<p><strong>Notes:</strong></p>
+<ul>
+<li>Terms are automatically wrapped in quotes to ensure exact phrase matching</li>
+<li>Duplicates are removed to keep combinations clean</li>
+<li>Order of terms is preserved from the input</li>
+<li>The script handles UTF-8 encoding for international characters</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="unique-boolean-combinations-generator">Unique Boolean Combinations Generator</h2>
+<h3 id="overview_1">Overview</h3>
+<p>This script creates unique Boolean search combinations by combining multiple predefined research categories. It takes the output from the basic boolean combinations generator and creates complex search queries tailored for academic research across different domains like AI, humanitarian work, and social impact.</p>
+<h3 id="data-flow_1">Data Flow</h3>
+<pre><code>../data/boolean_combinations.json → Process → ../output/unique_boolean_combinations.json
+</code></pre>
+<p><strong>Input Directory:</strong> <code>./data/</code><br />
+<strong>Input Format:</strong> JSON file with individual Boolean combinations<br />
+<strong>Process:</strong> Combine multiple Boolean terms using AND operators for research categories<br />
+<strong>Output:</strong> JSON file with complex multi-category Boolean search strings<br />
+<strong>Output Directory:</strong> <code>./output/</code><br />
+<strong>Output Format:</strong> JSON with unique category-based combinations</p>
+<h3 id="core-components">Core Components</h3>
+<h4 id="uniquebooleancombinationsgenerator-class"><code>UniqueBooleanCombinationsGenerator</code> Class</h4>
+<p><strong>Purpose:</strong> Main class that handles the generation of unique Boolean combinations for specific research categories.</p>
+<p><strong>Key Features:</strong>
+- Loads existing Boolean combinations from JSON
+- Maps predefined research categories to relevant search terms
+- Combines multiple Boolean expressions using AND operators
+- Provides detailed feedback on missing or found keys
+- Handles error cases gracefully</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="predefined-research-categories">Predefined Research Categories</h3>
+<p>The script includes 8 specialized research categories:</p>
+<h4 id="1-broad-foundational-search">1. Broad Foundational Search</h4>
+<p><strong>Focus:</strong> Core AI and ML concepts<br />
+<strong>Key Terms:</strong> Foundation model, AI Systems, Machine Learning, Deep Learning, Applications &amp; Domains</p>
+<h4 id="2-humanitarian-social-impact-search">2. Humanitarian &amp; Social Impact Search</h4>
+<p><strong>Focus:</strong> Crisis response and humanitarian applications<br />
+<strong>Key Terms:</strong> Humanitarian principles, Neutrality, Social Good, Vulnerable Populations, Human Rights</p>
+<h4 id="3-inclusion-representation-search">3. Inclusion &amp; Representation Search</h4>
+<p><strong>Focus:</strong> Equity and representation in AI<br />
+<strong>Key Terms:</strong> Vulnerable Populations, Human Rights, Data Collection Methods, Rights &amp; Protection</p>
+<h4 id="4-transparency-accountability-search">4. Transparency &amp; Accountability Search</h4>
+<p><strong>Focus:</strong> AI governance and accountability<br />
+<strong>Key Terms:</strong> AI Systems, Data Processing, Rights Frameworks, Development Guides</p>
+<h4 id="5-harm-reduction-safety-search">5. Harm Reduction &amp; Safety Search</h4>
+<p><strong>Focus:</strong> AI safety and risk mitigation<br />
+<strong>Key Terms:</strong> Mitigation Strategies, Environmental Concerns, Rights Frameworks, Safety Guides</p>
+<h4 id="6-control-consent-personal-data-rights">6. Control, Consent &amp; Personal Data Rights</h4>
+<p><strong>Focus:</strong> Data privacy and user control<br />
+<strong>Key Terms:</strong> Rights Frameworks, Data Collection, Privacy Protection, AI Systems</p>
+<h4 id="7-consent-agency-participatory-ai">7. Consent, Agency &amp; Participatory AI</h4>
+<p><strong>Focus:</strong> User agency and participatory design<br />
+<strong>Key Terms:</strong> Human Rights, Organizations, Key Actions, Social Good</p>
+<h4 id="8-environmental-infrastructural-cost">8. Environmental &amp; Infrastructural Cost</h4>
+<p><strong>Focus:</strong> Environmental impact of AI systems<br />
+<strong>Key Terms:</strong> Environmental Concerns, Mitigation, AI Development, Infrastructure</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="input-format-requirements_1">Input Format Requirements</h3>
+<p>The script requires the output from <code>boolean_combinations.py</code>:</p>
+<pre><code class="language-json">[
+  {
+    &quot;WORD&quot;: &quot;Foundation model&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Foundation model\&quot; OR \&quot;Large language model\&quot; OR \&quot;Pre-trained model\&quot;)&quot;
+  },
+  {
+    &quot;WORD&quot;: &quot;Machine Learning&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Machine Learning\&quot; OR \&quot;ML\&quot; OR \&quot;Statistical learning\&quot;)&quot;
+  }
+]
+</code></pre>
+<h3 id="output-format_1">Output Format</h3>
+<p>The script generates complex Boolean combinations:</p>
+<pre><code class="language-json">[
+  {
+    &quot;Combination_title&quot;: &quot;Broad Foundational Search&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Foundation model\&quot; OR \&quot;Large language model\&quot;) AND (\&quot;Machine Learning\&quot; OR \&quot;ML\&quot;) AND (\&quot;Deep Learning\&quot; OR \&quot;Neural networks\&quot;)&quot;
+  },
+  {
+    &quot;Combination_title&quot;: &quot;Humanitarian &amp; Social Impact Search&quot;, 
+    &quot;boolean_combination&quot;: &quot;(\&quot;Humanitarian\&quot; OR \&quot;Crisis response\&quot;) AND (\&quot;Social Good\&quot; OR \&quot;Social impact\&quot;) AND (\&quot;Vulnerable Populations\&quot; OR \&quot;At-risk groups\&quot;)&quot;
+  }
+]
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="class-methods-reference">Class Methods Reference</h3>
+<h4 id="__init__boolean_combinations_file"><code>__init__(boolean_combinations_file)</code></h4>
+<p><strong>Purpose:</strong> Initialize the generator with input file path<br />
+<strong>Parameters:</strong> Path to boolean combinations JSON file<br />
+<strong>Default:</strong> <code>'./data/boolean_combinations.json'</code></p>
+<h4 id="generate_all_unique_combinations"><code>generate_all_unique_combinations()</code></h4>
+<p><strong>Purpose:</strong> Generate combinations for all predefined categories<br />
+<strong>Returns:</strong> List of dictionaries with combination details<br />
+<strong>Output:</strong> Console feedback with progress and warnings</p>
+<h4 id="save_unique_combinationscombinations-output_file"><code>save_unique_combinations(combinations, output_file)</code></h4>
+<p><strong>Purpose:</strong> Save generated combinations to JSON file<br />
+<strong>Parameters:</strong>
+- <code>combinations</code>: List of generated combinations
+- <code>output_file</code>: Output file path (default: <code>'./data/unique_boolean_combinations.json'</code>)</p>
+<h4 id="display_available_keys"><code>display_available_keys()</code></h4>
+<p><strong>Purpose:</strong> Show all available keys from input file<br />
+<strong>Use Case:</strong> Debugging and verification of available terms</p>
+<h4 id="display_predefined_combinations"><code>display_predefined_combinations()</code></h4>
+<p><strong>Purpose:</strong> Display all predefined category mappings<br />
+<strong>Use Case:</strong> Understanding what categories and terms are configured</p>
+<h4 id="update_predefined_combinationcategory-new_keys"><code>update_predefined_combination(category, new_keys)</code></h4>
+<p><strong>Purpose:</strong> Modify predefined combinations for a category<br />
+<strong>Parameters:</strong>
+- <code>category</code>: Category name to update
+- <code>new_keys</code>: List of new key terms for the category</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="processing-logic_1">Processing Logic</h3>
+<p>The script follows this detailed process:</p>
+<ol>
+<li><strong>Initialization:</strong></li>
+<li>Load boolean combinations from input JSON</li>
+<li>Initialize predefined category mappings</li>
+<li>
+<p>Verify input data integrity</p>
+</li>
+<li>
+<p><strong>Category Processing:</strong></p>
+</li>
+<li>Iterate through each predefined research category</li>
+<li>For each category, collect the specified key terms</li>
+<li>
+<p>Look up Boolean combinations for each key</p>
+</li>
+<li>
+<p><strong>Combination Generation:</strong></p>
+</li>
+<li>Find matching Boolean expressions for each key</li>
+<li>Track found and missing keys for reporting</li>
+<li>Combine multiple Boolean expressions with AND operators</li>
+<li>
+<p>Handle single vs. multiple combination scenarios</p>
+</li>
+<li>
+<p><strong>Quality Assurance:</strong></p>
+</li>
+<li>Report missing keys that couldn't be found</li>
+<li>Count successful key matches per category</li>
+<li>
+<p>Provide detailed console feedback</p>
+</li>
+<li>
+<p><strong>Output Generation:</strong></p>
+</li>
+<li>Clean combinations for final output</li>
+<li>Save to JSON with proper formatting</li>
+<li>Generate success/failure reports</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="usage_1">Usage</h3>
+<h4 id="basic-usage_1">Basic Usage</h4>
+<pre><code class="language-python">from unique_boolean_combinations import generate_unique_boolean_combinations
+
+# Generate with default paths
+success = generate_unique_boolean_combinations()
+</code></pre>
+<h4 id="custom-file-paths_1">Custom File Paths</h4>
+<pre><code class="language-python"># Specify custom input and output files
+success = generate_unique_boolean_combinations(
+    input_file='./data/boolean_combinations.json',
+    output_file='./output/unique_boolean_combinations.json'
+)
+</code></pre>
+<h4 id="using-the-class-directly">Using the Class Directly</h4>
+<pre><code class="language-python">from unique_boolean_combinations import UniqueBooleanCombinationsGenerator
+
+# Create generator instance
+generator = UniqueBooleanCombinationsGenerator('./data/boolean_combinations.json')
+
+# Display available keys
+generator.display_available_keys()
+
+# Display predefined combinations
+generator.display_predefined_combinations()
+
+# Generate combinations
+combinations = generator.generate_all_unique_combinations()
+
+# Save results
+generator.save_unique_combinations(combinations, './output/results.json')
+</code></pre>
+<h4 id="customizing-categories">Customizing Categories</h4>
+<pre><code class="language-python">generator = UniqueBooleanCombinationsGenerator()
+
+# Update a specific category
+new_keys = [&quot;Machine Learning&quot;, &quot;Deep Learning&quot;, &quot;Neural Networks&quot;]
+generator.update_predefined_combination(&quot;Broad Foundational Search&quot;, new_keys)
+
+# Generate with updated configuration
+combinations = generator.generate_all_unique_combinations()
+</code></pre>
+<h4 id="command-line-execution_1">Command Line Execution</h4>
+<pre><code class="language-bash">python unique_boolean_combinations.py
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="error-handling-feedback">Error Handling &amp; Feedback</h3>
+<p>The script provides error handling:</p>
+<h4 id="file-related-errors">File-Related Errors</h4>
+<ul>
+<li><strong>Missing Input File:</strong> Clear message if boolean combinations file doesn't exist</li>
+<li><strong>Invalid JSON:</strong> Handles corrupted or malformed JSON input</li>
+<li><strong>Save Errors:</strong> Reports issues when writing output file</li>
+</ul>
+<h4 id="data-related-warnings">Data-Related Warnings</h4>
+<ul>
+<li><strong>Missing Keys:</strong> Reports when predefined keys aren't found in input data</li>
+<li><strong>Empty Categories:</strong> Handles categories with no valid combinations</li>
+<li><strong>Key Mismatches:</strong> Detailed reporting of found vs. missing terms</li>
+</ul>
+<h4 id="console-feedback">Console Feedback</h4>
+<pre><code>Generating unique boolean combinations...
+==================================================
+
+Processing: Broad Foundational Search
+Keys: Foundation model, Machine Learning, Deep Learning
+✓ Generated combination with 3 keys
+
+Processing: Humanitarian &amp; Social Impact Search  
+Keys: Humanitarian &amp; Crisis Response, Social Good &amp; Impact
+⚠ Missing keys: Social Good &amp; Impact
+✓ Generated combination with 1 keys
+
+Generated 8 unique combinations
+✓ Successfully saved to ./output/unique_boolean_combinations.json
+</code></pre>
+<h3 id="file-structure-requirements_1">File Structure Requirements</h3>
+<pre><code>CHITCHAT/
+├── data/
+│   └── boolean_combinations.json          # Input file (from previous script - boolean_combinations.py)
+├── output/
+│   └── unique_boolean_combinations.json   # Output file (generated)
+└── src/
+    └── boolean/
+        └── unique_boolean_combinations.py
+</code></pre>
+<h3 id="integration-workflow">Integration Workflow</h3>
+<p>This script is designed to work in sequence with <code>boolean_combinations.py</code>:</p>
+<ol>
+<li><strong>Step 1:</strong> Run <code>boolean_combinations.py</code> to generate basic Boolean combinations</li>
+<li><strong>Step 2:</strong> Run <code>unique_boolean_combinations.py</code> to create complex research-focused combinations</li>
+<li><strong>Step 3:</strong> Use the generated combinations in academic databases and search engines</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="customization-options">Customization Options</h3>
+<h4 id="adding-new-categories">Adding New Categories</h4>
+<pre><code class="language-python"># Add to predefined_combinations dictionary
+&quot;New Research Category&quot;: [
+    &quot;Key Term 1&quot;,
+    &quot;Key Term 2&quot;, 
+    &quot;Key Term 3&quot;
+]
+</code></pre>
+<h4 id="modifying-existing-categories">Modifying Existing Categories</h4>
+<p>Use the <code>update_predefined_combination()</code> method or directly edit the predefined combinations dictionary.</p>
+<h4 id="changing-combination-logic">Changing Combination Logic</h4>
+<p>The current implementation uses AND operators between different Boolean groups. This can be modified in the <code>_generate_combination_for_category()</code> method.</p>
+<h3 id="technical-notes">Technical Notes</h3>
+<ul>
+<li><strong>Encoding:</strong> Full UTF-8 support for international characters</li>
+<li><strong>Logic:</strong> Uses AND operators to combine different Boolean groups</li>
+<li><strong>Validation:</strong> checking for missing keys and empty results</li>
+<li><strong>Performance:</strong> Efficient lookup using dictionary mapping</li>
+<li><strong>Memory:</strong> Loads all data in memory for fast processing</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="arxiv-paper-search-automation">ArXiv Paper Search Automation</h2>
+<h3 id="overview_2">Overview</h3>
+<p>This script automates academic paper discovery by searching the arXiv repository using complex Boolean combinations. It transforms abstract search strategies into concrete research results, automatically retrieving relevant papers across multiple research categories with intelligent query optimization and duplicate filtering.</p>
+<h3 id="data-flow_2">Data Flow</h3>
+<pre><code>../output/unique_boolean_combinations.json → Process → ../output/obtained_lit.json
+</code></pre>
+<p><strong>Input Directory:</strong> <code>../output/</code><br />
+<strong>Input Format:</strong> JSON file with unique Boolean combinations by research category<br />
+<strong>Process:</strong> Extract key terms, create arXiv queries, search API, filter duplicates<br />
+<strong>Output:</strong> JSON file with comprehensive paper metadata and abstracts<br />
+<strong>Output Directory:</strong> <code>../output/</code><br />
+<strong>Output Format:</strong> JSON with structured paper information</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="core-components_1">Core Components</h3>
+<h4 id="arxivpapersearcher-class"><code>ArxivPaperSearcher</code> Class</h4>
+<p><strong>Purpose:</strong> Automated arXiv paper discovery engine that converts Boolean combinations into targeted searches.</p>
+<p><strong>Key Features:</strong>
+- <strong>Intelligent Query Generation:</strong> Extracts key terms and creates optimized arXiv-specific queries
+- <strong>Category-Aware Searching:</strong> Maps research categories to relevant arXiv subject classifications
+- <strong>Rate Limit Compliance:</strong> Respects arXiv API guidelines (3-second delays)
+- <strong>Duplicate Filtering:</strong> Prevents duplicate papers across different search strategies
+- <strong>Metadata Extraction:</strong> Captures title, authors, year, abstract, and full text
+- <strong>Error Recovery:</strong> Robust handling of network issues and malformed responses</p>
+<h3 id="search-strategy-architecture">Search Strategy Architecture</h3>
+<h4 id="1-key-term-extraction">1. Key Term Extraction</h4>
+<p><strong>Process:</strong> Intelligent parsing of complex Boolean combinations
+- Extracts quoted terms from Boolean expressions
+- Filters out common stop words and short terms
+- Prioritizes domain-specific terminology
+- Limits to 8 most relevant terms per combination</p>
+<h4 id="2-query-generation-strategies">2. Query Generation Strategies</h4>
+<h5 id="strategy-1-individual-term-searches">Strategy 1: Individual Term Searches</h5>
+<ul>
+<li>Focuses on the most important 2-4 terms</li>
+<li>Creates targeted searches for specific concepts</li>
+<li>Format: <code>all:"Foundation model"</code></li>
+</ul>
+<h5 id="strategy-2-combined-term-searches">Strategy 2: Combined Term Searches</h5>
+<ul>
+<li>Combines related terms with AND operators</li>
+<li>Captures papers at intersection of concepts</li>
+<li>Format: <code>all:"Machine Learning" AND all:"Deep Learning"</code></li>
+</ul>
+<h5 id="strategy-3-category-based-searches">Strategy 3: Category-Based Searches</h5>
+<ul>
+<li>Maps combination titles to arXiv categories</li>
+<li>Uses domain-specific search patterns</li>
+<li>Examples:</li>
+<li><strong>AI/ML Categories:</strong> <code>cat:cs.LG</code>, <code>cat:cs.AI</code>, <code>cat:stat.ML</code></li>
+<li><strong>Ethics Focus:</strong> <code>all:"bias" OR all:"fairness"</code></li>
+<li><strong>Environmental:</strong> <code>all:"sustainability" OR all:"energy consumption"</code></li>
+</ul>
+<h4 id="3-category-mapping-system">3. Category Mapping System</h4>
+<p>The script includes 16 specialized search mappings:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Search Focus</th>
+<th>Example Queries</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Broad Foundational</strong></td>
+<td>Core AI/ML concepts</td>
+<td><code>cat:cs.LG</code>, <code>cat:cs.AI</code></td>
+</tr>
+<tr>
+<td><strong>Humanitarian</strong></td>
+<td>Crisis response</td>
+<td><code>all:"humanitarian"</code>, <code>all:"disaster relief"</code></td>
+</tr>
+<tr>
+<td><strong>Social Impact</strong></td>
+<td>Ethics and society</td>
+<td><code>all:"social impact"</code>, <code>all:"ethics"</code></td>
+</tr>
+<tr>
+<td><strong>Inclusion</strong></td>
+<td>Bias and fairness</td>
+<td><code>all:"bias" OR all:"fairness"</code></td>
+</tr>
+<tr>
+<td><strong>Safety</strong></td>
+<td>Risk mitigation</td>
+<td><code>all:"safety" OR all:"security"</code></td>
+</tr>
+<tr>
+<td><strong>Privacy</strong></td>
+<td>Data protection</td>
+<td><code>all:"privacy" OR all:"consent"</code></td>
+</tr>
+<tr>
+<td><strong>Environmental</strong></td>
+<td>Sustainability</td>
+<td><code>all:"environmental" OR all:"sustainability"</code></td>
+</tr>
+</tbody>
+</table>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="input-format-requirements_2">Input Format Requirements</h3>
+<p>The script expects output from <code>unique_boolean_combinations.py</code>:</p>
+<pre><code class="language-json">[
+  {
+    &quot;Combination_title&quot;: &quot;Broad Foundational Search&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Foundation model\&quot; OR \&quot;Large language model\&quot;) AND (\&quot;Machine Learning\&quot; OR \&quot;ML\&quot;)&quot;
+  },
+  {
+    &quot;Combination_title&quot;: &quot;Humanitarian &amp; Social Impact Search&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Humanitarian\&quot; OR \&quot;Crisis response\&quot;) AND (\&quot;Social Good\&quot; OR \&quot;Social impact\&quot;)&quot;
+  }
+]
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="output-format_2">Output Format</h3>
+<p>The script generates paper records:</p>
+<pre><code class="language-json">[
+  {
+    &quot;title&quot;: &quot;Large Language Models for Crisis Response: A Comprehensive Survey&quot;,
+    &quot;authors&quot;: &quot;Smith, J., Johnson, M., Chen, L.&quot;,
+    &quot;url&quot;: &quot;http://arxiv.org/abs/2023.12345&quot;,
+    &quot;abstract&quot;: &quot;This paper presents a comprehensive survey of large language models...&quot;,
+    &quot;year&quot;: &quot;2023&quot;,
+    &quot;extracted_text&quot;: &quot;Full abstract text with cleaned formatting...&quot;
+  },
+  {
+    &quot;title&quot;: &quot;Ethical AI in Humanitarian Settings: Challenges and Opportunities&quot;, 
+    &quot;authors&quot;: &quot;Brown, K., Davis, R.&quot;,
+    &quot;url&quot;: &quot;http://arxiv.org/abs/2023.67890&quot;,
+    &quot;abstract&quot;: &quot;We explore the ethical implications of deploying AI systems...&quot;,
+    &quot;year&quot;: &quot;2023&quot;,
+    &quot;extracted_text&quot;: &quot;Complete extracted abstract content...&quot;
+  }
+]
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="class-methods-reference_1">Class Methods Reference</h3>
+<h4 id="__init__unique_combinations_file"><code>__init__(unique_combinations_file)</code></h4>
+<p><strong>Purpose:</strong> Initialize the searcher with input file path<br />
+<strong>Parameters:</strong> Path to unique combinations JSON file<br />
+<strong>Default:</strong> <code>'output/unique_boolean_combinations.json'</code><br />
+<strong>Features:</strong> Loads combinations and sets up rate limiting</p>
+<h4 id="search_all_combinationsmax_results_per_query"><code>search_all_combinations(max_results_per_query)</code></h4>
+<p><strong>Purpose:</strong> Execute search across all combinations<br />
+<strong>Parameters:</strong>
+- <code>max_results_per_query</code> (int): Maximum papers per query (default: 15)
+<strong>Returns:</strong> List of dictionaries with paper metadata<br />
+<strong>Features:</strong> Handles duplicate filtering and progress tracking</p>
+<h4 id="save_resultspapers-output_file"><code>save_results(papers, output_file)</code></h4>
+<p><strong>Purpose:</strong> Save search results with cleaned formatting<br />
+<strong>Parameters:</strong>
+- <code>papers</code>: List of paper dictionaries
+- <code>output_file</code>: Output JSON file path
+<strong>Features:</strong> Standardizes field names and removes internal tracking</p>
+<h4 id="_extract_key_terms_from_booleanboolean_combination"><code>_extract_key_terms_from_boolean(boolean_combination)</code></h4>
+<p><strong>Purpose:</strong> Parse Boolean expressions to extract search terms<br />
+<strong>Process:</strong>
+- Uses regex to find quoted terms
+- Filters stop words and short terms<br />
+- Limits to 8 most relevant terms
+- Removes duplicates and special characters</p>
+<h4 id="_create_arxiv_queriescombination_title-key_terms"><code>_create_arxiv_queries(combination_title, key_terms)</code></h4>
+<p><strong>Purpose:</strong> Generate optimized arXiv-specific queries<br />
+<strong>Strategy:</strong>
+- Individual term searches for precision
+- Combined searches for intersection discovery
+- Category-based searches for domain coverage
+- Limits to 4 queries per combination</p>
+<h4 id="_search_arxivquery-max_results"><code>_search_arxiv(query, max_results)</code></h4>
+<p><strong>Purpose:</strong> Execute single arXiv API search<br />
+<strong>Features:</strong>
+- Handles XML response parsing
+- Extracts comprehensive metadata
+- Manages network errors gracefully
+- Respects API rate limits</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="processing-workflow">Processing Workflow</h3>
+<p>The script follows this comprehensive process:</p>
+<h4 id="phase-1-initialization">Phase 1: Initialization</h4>
+<ol>
+<li><strong>Load Combinations:</strong> Read unique Boolean combinations from JSON</li>
+<li><strong>Validate Input:</strong> Check file format and content integrity</li>
+<li><strong>Setup Tracking:</strong> Initialize duplicate detection and logging</li>
+</ol>
+<h4 id="phase-2-query-generation">Phase 2: Query Generation</h4>
+<ol>
+<li><strong>Parse Boolean Logic:</strong> Extract key terms from complex expressions</li>
+<li><strong>Term Prioritization:</strong> Rank terms by relevance and specificity</li>
+<li><strong>Query Optimization:</strong> Create multiple search strategies per combination</li>
+<li><strong>Category Mapping:</strong> Apply domain-specific search patterns</li>
+</ol>
+<h4 id="phase-3-search-execution">Phase 3: Search Execution</h4>
+<ol>
+<li><strong>Sequential Processing:</strong> Handle each combination systematically</li>
+<li><strong>Multi-Query Approach:</strong> Execute multiple search strategies</li>
+<li><strong>Rate Limit Management:</strong> Enforce 3-second delays between requests</li>
+<li><strong>Response Processing:</strong> Parse XML and extract metadata</li>
+</ol>
+<h4 id="phase-4-result-management">Phase 4: Result Management</h4>
+<ol>
+<li><strong>Duplicate Detection:</strong> Filter papers by title comparison</li>
+<li><strong>Metadata Enhancement:</strong> Add search category information</li>
+<li><strong>Quality Assurance:</strong> Validate extracted information</li>
+<li><strong>Progress Reporting:</strong> Provide detailed console feedback</li>
+</ol>
+<h4 id="phase-5-output-generation">Phase 5: Output Generation</h4>
+<ol>
+<li><strong>Data Cleaning:</strong> Standardize field names and formats</li>
+<li><strong>JSON Generation:</strong> Create well-structured output file</li>
+<li><strong>Summary Statistics:</strong> Generate category-wise paper counts</li>
+<li><strong>Success Reporting:</strong> Confirm completion and file locations</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="usage_2">Usage</h3>
+<h4 id="basic-usage_2">Basic Usage</h4>
+<pre><code class="language-python">from arxiv_paper_search import search_arxiv_papers
+
+# Search with default settings
+success = search_arxiv_papers()
+</code></pre>
+<h4 id="custom-file-paths_2">Custom File Paths</h4>
+<pre><code class="language-python"># Specify custom input and output files
+success = search_arxiv_papers(
+    unique_combinations_file='./my_combinations.json',
+    output_file='./results/papers.json'
+)
+</code></pre>
+<h4 id="using-the-class-directly_1">Using the Class Directly</h4>
+<pre><code class="language-python">from arxiv_paper_search import ArxivPaperSearcher
+
+# Create searcher instance
+searcher = ArxivPaperSearcher('./data/combinations.json')
+
+# Execute comprehensive search
+papers = searcher.search_all_combinations(max_results_per_query=25)
+
+# Save results with custom filename
+searcher.save_results(papers, './output/research_papers.json')
+</code></pre>
+<h4 id="advanced-configuration">Advanced Configuration</h4>
+<pre><code class="language-python"># Custom search with detailed control
+searcher = ArxivPaperSearcher()
+searcher.rate_limit_delay = 5  # Slower rate for cautious searching
+
+# Search with higher result limits
+papers = searcher.search_all_combinations(max_results_per_query=30)
+
+# Process results
+print(f&quot;Found {len(papers)} unique papers&quot;)
+for paper in papers[:5]:
+    print(f&quot;- {paper['title']} ({paper['year']})&quot;)
+</code></pre>
+<h4 id="command-line-execution_2">Command Line Execution</h4>
+<pre><code class="language-bash">python arxiv_paper_search.py
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="error-handling-recovery">Error Handling &amp; Recovery</h3>
+<h4 id="network-related-errors">Network-Related Errors</h4>
+<ul>
+<li><strong>Connection Timeouts:</strong> 30-second timeout with retry capability</li>
+<li><strong>Rate Limiting:</strong> Automatic delay enforcement to prevent API blocks</li>
+<li><strong>HTTP Errors:</strong> Graceful handling of 4xx/5xx responses</li>
+<li><strong>XML Parsing:</strong> Robust handling of malformed API responses</li>
+</ul>
+<h4 id="data-related-errors">Data-Related Errors</h4>
+<ul>
+<li><strong>Missing Files:</strong> Clear error messages for missing input files</li>
+<li><strong>Invalid JSON:</strong> Comprehensive validation of input format</li>
+<li><strong>Empty Combinations:</strong> Graceful skipping of invalid entries</li>
+<li><strong>Term Extraction Failures:</strong> Fallback strategies for complex Boolean expressions</li>
+</ul>
+<h4 id="console-output-examples">Console Output Examples</h4>
+<pre><code>=== Starting Automated arXiv Paper Search ===
+Processing 8 unique boolean combinations...
+
+--- Processing 1/8: Broad Foundational Search ---
+Extracted key terms: ['Foundation model', 'Machine Learning', 'Deep Learning']...
+  Executing query: all:&quot;Foundation model&quot;
+  Found 15 entries for query: all:&quot;Foundation model&quot;
+  Executing query: all:&quot;Machine Learning&quot; AND all:&quot;Deep Learning&quot;
+  Found 12 entries for query: all:&quot;Machine Learning&quot; AND all:&quot;Deep Learning&quot;
+  Found 18 unique papers for Broad Foundational Search
+
+=== Search Complete ===
+Total unique papers found: 156
+✓ Results saved to obtained_lit.json
+
+Papers found by category:
+  Broad Foundational Search: 18 papers
+  Humanitarian &amp; Social Impact Search: 12 papers
+  Environmental &amp; Infrastructural Cost: 25 papers
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="api-compliance-best-practices">API Compliance &amp; Best Practices</h3>
+<h4 id="arxiv-api-guidelines">ArXiv API Guidelines</h4>
+<ul>
+<li><strong>Rate Limiting:</strong> 3-second minimum delay between requests</li>
+<li><strong>Bulk Requests:</strong> Maximum 50 results per query</li>
+<li><strong>User Agent:</strong> Proper identification in requests</li>
+<li><strong>Error Handling:</strong> Graceful degradation on failures</li>
+</ul>
+<h4 id="search-optimization">Search Optimization</h4>
+<ul>
+<li><strong>Query Complexity:</strong> Balance between precision and recall</li>
+<li><strong>Term Selection:</strong> Prioritize domain-specific terminology</li>
+<li><strong>Category Usage:</strong> Leverage arXiv subject classifications</li>
+<li><strong>Duplicate Prevention:</strong> Efficient title-based deduplication</li>
+</ul>
+<h3 id="file-structure-requirements_2">File Structure Requirements</h3>
+<pre><code>CHITCHAT/
+├── output/
+│   ├── unique_boolean_combinations.json   # Input file (# Input file - from previous script)
+│   └── obtained_lit.json                  # Output (generated)
+├── src/
+│   └── api/
+│       └── arxiv_paper_search.py
+└── logs/
+    └── arxiv_search.log                  # Optional logging
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="integration-workflow_1">Integration Workflow</h3>
+<p>This script completes the research automation pipeline:</p>
+<ol>
+<li><strong>Step 1:</strong> <code>boolean_combinations.py</code> - Generate basic Boolean combinations</li>
+<li><strong>Step 2:</strong> <code>unique_boolean_combinations.py</code> - Create research-focused combinations  </li>
+<li><strong>Step 3:</strong> <code>arxiv_paper_search.py</code> - Execute automated paper discovery</li>
+<li><strong>Step 4:</strong> Manual review and analysis of discovered papers</li>
+</ol>
+<h3 id="performance-considerations">Performance Considerations</h3>
+<h4 id="search-efficiency">Search Efficiency</h4>
+<ul>
+<li><strong>Parallel Processing:</strong> Sequential execution respects rate limits</li>
+<li><strong>Memory Usage:</strong> Efficient streaming of search results</li>
+<li><strong>Network Optimization:</strong> Connection reuse and timeout management</li>
+<li><strong>Duplicate Tracking:</strong> In-memory set for fast duplicate detection</li>
+</ul>
+<h4 id="scalability-factors">Scalability Factors</h4>
+<ul>
+<li><strong>Combination Count:</strong> Script handles dozens of research categories</li>
+<li><strong>Result Volume:</strong> Capable of processing hundreds of papers</li>
+<li><strong>API Limits:</strong> Respects arXiv's usage guidelines</li>
+<li><strong>Error Recovery:</strong> Continues processing despite individual failures</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="customization-options_1">Customization Options</h3>
+<h4 id="query-strategy-modification">Query Strategy Modification</h4>
+<pre><code class="language-python"># Modify category mappings in _create_arxiv_queries method
+category_mappings = {
+    &quot;Custom Category&quot;: ['all:&quot;custom term&quot;', 'cat:cs.CR'],
+    # Add your specific mappings
+}
+</code></pre>
+<h4 id="rate-limit-adjustment">Rate Limit Adjustment</h4>
+<pre><code class="language-python"># Modify delay for different use cases
+searcher.rate_limit_delay = 5  # Slower for cautious use
+searcher.rate_limit_delay = 1  # Faster for testing (use carefully)
+</code></pre>
+<h4 id="result-filtering">Result Filtering</h4>
+<pre><code class="language-python"># Add custom filters in search processing
+def custom_filter(paper):
+    year = int(paper.get('year', 0))
+    return year &gt;= 2020  # Only recent papers
+
+# Apply during processing
+filtered_papers = [p for p in papers if custom_filter(p)]
+</code></pre>
+<h3 id="technical-implementation-notes">Technical Implementation Notes</h3>
+<ul>
+<li><strong>XML Processing:</strong> Uses ElementTree for robust arXiv API response parsing</li>
+<li><strong>HTTP Handling:</strong> Requests library with proper timeout and error handling  </li>
+<li><strong>Text Processing:</strong> Comprehensive cleaning and normalization of extracted content</li>
+<li><strong>Logging:</strong> Configurable logging levels for debugging and monitoring</li>
+<li><strong>Encoding:</strong> Full UTF-8 support for international paper titles and authors</li>
+<li><strong>Memory Management:</strong> Efficient processing of large result sets</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="multi-repository-research-paper-web-scraper">Multi-Repository Research Paper Web Scraper</h2>
+<h3 id="overview_3">Overview</h3>
+<p>This script orchestrates automated paper discovery across multiple academic repositories including Google Scholar, OpenAlex, Europe PMC, and ArXiv. It transforms Boolean search combinations into a unified literature collection pipeline, automatically downloading papers, extracting full text, and aggregating results into a single comprehensive dataset.</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="data-flow_3">Data Flow</h3>
+<pre><code>../output/unique_boolean_combinations.json → Process → ../output/obtained_lit.json
+</code></pre>
+<p><strong>Input Directory:</strong> <code>../output/</code><br />
+<strong>Input Format:</strong> JSON file with unique Boolean combinations by research category<br />
+<strong>Process:</strong> Multi-repository search, PDF download, text extraction, result aggregation<br />
+<strong>Output:</strong> Comprehensive JSON database with full paper content and metadata<br />
+<strong>Output Directory:</strong> <code>../output/</code><br />
+<strong>Output Format:</strong> JSON with unified paper records from all repositories</p>
+<h3 id="repository-integration-architecture">Repository Integration Architecture</h3>
+<h4 id="supported-academic-repositories">Supported Academic Repositories</h4>
+<table>
+<thead>
+<tr>
+<th>Repository</th>
+<th>Coverage</th>
+<th>Strengths</th>
+<th>Search Method</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Google Scholar</strong></td>
+<td>Broad academic coverage</td>
+<td>Citation tracking, diverse sources</td>
+<td><code>scholarly</code> library with filtering</td>
+</tr>
+<tr>
+<td><strong>OpenAlex</strong></td>
+<td>Open access focus</td>
+<td>Structured metadata, API reliability</td>
+<td>REST API with cursor pagination</td>
+</tr>
+<tr>
+<td><strong>Europe PMC</strong></td>
+<td>Life sciences emphasis</td>
+<td>Full-text access, medical literature</td>
+<td>RESTful web services</td>
+</tr>
+<tr>
+<td><strong>ArXiv</strong></td>
+<td>Preprints and CS/Physics</td>
+<td>Latest research, open access</td>
+<td>Integration with existing arXiv module</td>
+</tr>
+</tbody>
+</table>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h4 id="core-processing-components">Core Processing Components</h4>
+<h5 id="1-multi-repository-search-engine">1. Multi-Repository Search Engine</h5>
+<p><strong>Purpose:</strong> Coordinates searches across all repositories using unified Boolean queries
+- <strong>Query Adaptation:</strong> Transforms Boolean combinations for repository-specific formats
+- <strong>Rate Limiting:</strong> Respects each repository's API guidelines
+- <strong>Error Recovery:</strong> Continues processing if individual repositories fail
+- <strong>Result Standardization:</strong> Normalizes data formats across different sources</p>
+<h5 id="2-intelligent-pdf-download-system">2. Intelligent PDF Download System</h5>
+<p><strong>Purpose:</strong> Automated paper acquisition with fallback strategies
+- <strong>Direct PDF Detection:</strong> Identifies PDF URLs from content headers
+- <strong>HTML Parsing:</strong> Extracts PDF links from publisher pages using BeautifulSoup
+- <strong>Multi-Format Support:</strong> Handles various publisher link formats (/pdf, /epdf)
+- <strong>Error Handling:</strong> Graceful degradation when papers are behind paywalls</p>
+<h5 id="3-full-text-extraction-engine">3. Full-Text Extraction Engine</h5>
+<p><strong>Purpose:</strong> Converts downloaded PDFs to searchable text
+- <strong>Multi-Library Support:</strong> Uses PyPDF2 and PyMuPDF for robust extraction
+- <strong>PDF Validation:</strong> Checks PDF headers and repairs missing EOF markers
+- <strong>Error Recovery:</strong> Handles corrupted or encrypted PDFs gracefully
+- <strong>Text Cleaning:</strong> Normalizes extracted content for consistency</p>
+<h5 id="4-result-aggregation-system">4. Result Aggregation System</h5>
+<p><strong>Purpose:</strong> Merges results from all repositories into unified format
+- <strong>Incremental Building:</strong> Appends results progressively to avoid memory issues
+- <strong>Source Tracking:</strong> Maintains repository attribution for each paper
+- <strong>Duplicate Handling:</strong> Basic duplicate prevention across sources
+- <strong>Progress Monitoring:</strong> Real-time feedback on collection progress</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="repository-specific-implementation">Repository-Specific Implementation</h3>
+<h4 id="google-scholar-integration">Google Scholar Integration</h4>
+<pre><code class="language-python">def search_google_scholar_scholarly(query, max_results, pub_year=2020, num_citations=0)
+</code></pre>
+<p><strong>Features:</strong>
+- <strong>Quality Filtering:</strong> Minimum publication year and citation thresholds
+- <strong>Citation Analysis:</strong> Leverages Google Scholar's citation tracking
+- <strong>Rate Limiting:</strong> Built-in delays to prevent blocking
+- <strong>Metadata Extraction:</strong> Author lists, publication years, abstracts</p>
+<p><strong>Filtering Criteria:</strong>
+- Publication year &gt;= 2020 (configurable)
+- Minimum citation count &gt;= 0 (configurable)
+- Only papers with successful PDF downloads</p>
+<h4 id="openalex-integration">OpenAlex Integration</h4>
+<pre><code class="language-python">def search_openalex(query, per_page=200, max_pages=None, sleep_between=1.0)
+</code></pre>
+<p><strong>Features:</strong>
+- <strong>Cursor Pagination:</strong> Efficient handling of large result sets
+- <strong>Abstract Reconstruction:</strong> Rebuilds abstracts from inverted indexes
+- <strong>Open Access Priority:</strong> Focuses on freely available content
+- <strong>Structured Metadata:</strong> Rich bibliographic information</p>
+<p><strong>API Capabilities:</strong>
+- Up to 200 results per page
+- Unlimited pagination with cursor support
+- 1-second delays between requests
+- Comprehensive work metadata</p>
+<h4 id="europe-pmc-integration">Europe PMC Integration</h4>
+<pre><code class="language-python">def search_europepmc(query, result_type='core', page_size=1000, max_pages=None)
+</code></pre>
+<p><strong>Features:</strong>
+- <strong>Medical Focus:</strong> Specialized for life sciences literature
+- <strong>Full-Text Access:</strong> Direct links to publisher content
+- <strong>Flexible Result Types:</strong> 'lite' for metadata, 'core' for abstracts
+- <strong>Large Page Sizes:</strong> Up to 1000 results per request</p>
+<p><strong>Metadata Extraction:</strong>
+- Journal and book publication details
+- Comprehensive author information
+- Abstract and full-text URL handling
+- Publication year from multiple sources</p>
+<h4 id="arxiv-integration">ArXiv Integration</h4>
+<pre><code class="language-python">def get_arxiv_results(path_to_unique_boolean_combinations)
+</code></pre>
+<p><strong>Features:</strong>
+- <strong>Module Reuse:</strong> Integrates existing ArXiv search functionality
+- <strong>Temporary File Handling:</strong> Manages intermediate results efficiently
+- <strong>Error Recovery:</strong> Graceful handling of import or execution failures
+- <strong>Result Standardization:</strong> Converts ArXiv format to unified structure</p>
+<h3 id="input-format-requirements_3">Input Format Requirements</h3>
+<p>The script expects output from <code>unique_boolean_combinations.py</code>:</p>
+<pre><code class="language-json">[
+  {
+    &quot;Combination_title&quot;: &quot;Broad Foundational Search&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Foundation model\&quot; OR \&quot;Large language model\&quot;) AND (\&quot;Machine Learning\&quot; OR \&quot;ML\&quot;)&quot;
+  },
+  {
+    &quot;Combination_title&quot;: &quot;Humanitarian &amp; Social Impact Search&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;Humanitarian\&quot; OR \&quot;Crisis response\&quot;) AND (\&quot;Social Good\&quot; OR \&quot;Social impact\&quot;)&quot;
+  }
+]
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="output-format_3">Output Format</h3>
+<p>The script generates a comprehensive literature database:</p>
+<pre><code class="language-json">[
+  {
+    &quot;title&quot;: &quot;Large Language Models in Crisis Response: A Survey&quot;,
+    &quot;authors&quot;: &quot;Smith, J., Johnson, M., Chen, L.&quot;,
+    &quot;url&quot;: &quot;https://example.com/paper1&quot;,
+    &quot;abstract&quot;: &quot;This comprehensive survey examines the application of large language models...&quot;,
+    &quot;year&quot;: &quot;2023&quot;,
+    &quot;extracted_text&quot;: &quot;Complete full-text content of the paper including methodology, results, and conclusions...&quot;
+  },
+  {
+    &quot;title&quot;: &quot;Ethical Considerations in AI for Humanitarian Applications&quot;,
+    &quot;authors&quot;: &quot;Brown, K., Davis, R., Wilson, S.&quot;,
+    &quot;url&quot;: &quot;https://example.com/paper2&quot;, 
+    &quot;abstract&quot;: &quot;We explore the ethical implications of deploying AI systems in humanitarian contexts...&quot;,
+    &quot;year&quot;: &quot;2023&quot;,
+    &quot;extracted_text&quot;: &quot;Full paper content extracted from PDF including all sections and references...&quot;
+  }
+]
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="core-functions-reference">Core Functions Reference</h3>
+<h4 id="get_llit_paperspath_to_unique_boolean_combinations"><code>get_llit_papers(path_to_unique_boolean_combinations)</code></h4>
+<p><strong>Purpose:</strong> Main orchestration function for literature collection<br />
+<strong>Process:</strong>
+1. Load Boolean combinations from JSON
+2. Iterate through each research category
+3. Execute searches across all repositories
+4. Aggregate results progressively
+5. Return path to comprehensive literature file</p>
+<p><strong>Parameters:</strong>
+- <code>path_to_unique_boolean_combinations</code> (str): Input file path</p>
+<p><strong>Returns:</strong> 
+- Path to output JSON file with all collected papers</p>
+<h4 id="download_research_paperurl-save_dir"><code>download_research_paper(url, save_dir)</code></h4>
+<p><strong>Purpose:</strong> Generic paper download with publisher support<br />
+<strong>Strategy:</strong>
+1. <strong>Direct PDF Check:</strong> Verify if URL is direct PDF link
+2. <strong>HTML Parsing:</strong> Extract PDF links from publisher pages<br />
+3. <strong>Fallback Handling:</strong> Multiple link pattern recognition
+4. <strong>File Management:</strong> Organized storage with proper naming</p>
+<p><strong>Parameters:</strong>
+- <code>url</code> (str): Paper URL or direct PDF link
+- <code>save_dir</code> (str): Directory for downloaded papers</p>
+<p><strong>Returns:</strong>
+- File path on success, None on failure</p>
+<h4 id="extract_paper_textresearch_paper_path"><code>extract_paper_text(research_paper_path)</code></h4>
+<p><strong>Purpose:</strong> Robust PDF text extraction<br />
+<strong>Features:</strong>
+- <strong>PDF Validation:</strong> Checks for valid PDF format
+- <strong>EOF Repair:</strong> Fixes common PDF corruption issues
+- <strong>Multi-Page Handling:</strong> Extracts from all pages
+- <strong>Error Recovery:</strong> Handles encrypted or corrupted files</p>
+<p><strong>Parameters:</strong>
+- <code>research_paper_path</code> (str): Path to downloaded PDF</p>
+<p><strong>Returns:</strong>
+- Extracted text string or raises appropriate exceptions</p>
+<h4 id="append_results_to_jsonoutput_file-new_results-source_name"><code>append_results_to_json(output_file, new_results, source_name)</code></h4>
+<p><strong>Purpose:</strong> Incremental result aggregation<br />
+<strong>Features:</strong>
+- <strong>File Creation:</strong> Creates output file if it doesn't exist
+- <strong>Progressive Building:</strong> Appends results without memory overload
+- <strong>Source Tracking:</strong> Maintains attribution for debugging
+- <strong>Error Recovery:</strong> Continues processing despite write failures</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="search-strategy-implementation">Search Strategy Implementation</h3>
+<h4 id="query-processing-pipeline">Query Processing Pipeline</h4>
+<ol>
+<li><strong>Boolean Combination Loading:</strong> Read research category combinations</li>
+<li><strong>Query Adaptation:</strong> Transform Boolean logic for each repository</li>
+<li><strong>Repository Sequencing:</strong> Execute searches in optimal order</li>
+<li><strong>Result Collection:</strong> Gather papers with metadata extraction</li>
+<li><strong>Text Processing:</strong> Download and extract full content</li>
+<li><strong>Aggregation:</strong> Merge results into unified format</li>
+</ol>
+<h4 id="quality-control-measures">Quality Control Measures</h4>
+<ul>
+<li><strong>Publication Year Filtering:</strong> Focus on recent research (2020+)</li>
+<li><strong>Citation Threshold:</strong> Prioritize impactful papers</li>
+<li><strong>Download Verification:</strong> Ensure successful PDF acquisition</li>
+<li><strong>Text Extraction Validation:</strong> Verify readable content extraction</li>
+<li><strong>Source Attribution:</strong> Track which repository found each paper</li>
+</ul>
+<h4 id="rate-limiting-strategy">Rate Limiting Strategy</h4>
+<ul>
+<li><strong>Google Scholar:</strong> Built-in delays in <code>scholarly</code> library</li>
+<li><strong>OpenAlex:</strong> 1-second delays between requests</li>
+<li><strong>Europe PMC:</strong> 1-second delays between requests  </li>
+<li><strong>ArXiv:</strong> Handled by existing module (3-second delays)</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="usage_3">Usage</h3>
+<h4 id="basic-literature-collection">Basic Literature Collection</h4>
+<pre><code class="language-python">from web_scrape import get_llit_papers
+
+# Collect papers using all repositories
+output_file = get_llit_papers('./output/unique_boolean_combinations.json')
+print(f&quot;Literature collection saved to: {output_file}&quot;)
+</code></pre>
+<h4 id="repository-specific-search">Repository-Specific Search</h4>
+<pre><code class="language-python">from web_scrape import search_repository
+
+# Search specific repository
+query = '&quot;machine learning&quot; AND &quot;healthcare&quot;'
+results = search_repository(query, &quot;openalex&quot;)
+print(f&quot;Found {len(results)} papers from OpenAlex&quot;)
+</code></pre>
+<h4 id="manual-pdf-processing">Manual PDF Processing</h4>
+<pre><code class="language-python">from web_scrape import download_research_paper, extract_paper_text
+
+# Download and extract specific paper
+paper_url = &quot;https://example.com/paper.pdf&quot;
+pdf_path = download_research_paper(paper_url)
+if pdf_path:
+    text_content = extract_paper_text(pdf_path)
+    print(f&quot;Extracted {len(text_content)} characters&quot;)
+</code></pre>
+<h4 id="command-line-execution_3">Command Line Execution</h4>
+<pre><code class="language-bash">python web_scrape.py ./output/unique_boolean_combinations.json
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="error-handling-recovery_1">Error Handling &amp; Recovery</h3>
+<h4 id="network-related-errors_1">Network-Related Errors</h4>
+<ul>
+<li><strong>Connection Timeouts:</strong> Configurable timeouts for each repository</li>
+<li><strong>Rate Limiting:</strong> Automatic delays and retry mechanisms  </li>
+<li><strong>Server Errors:</strong> Graceful handling of 4xx/5xx responses</li>
+<li><strong>Repository Unavailability:</strong> Continues with available sources</li>
+</ul>
+<h4 id="pdf-processing-errors">PDF Processing Errors</h4>
+<ul>
+<li><strong>Download Failures:</strong> Logs failures but continues processing</li>
+<li><strong>Corrupted PDFs:</strong> Attempts repair before extraction</li>
+<li><strong>Paywall Detection:</strong> Identifies and reports access restrictions</li>
+<li><strong>Format Issues:</strong> Multiple extraction libraries as fallbacks</li>
+</ul>
+<h4 id="data-processing-errors">Data Processing Errors</h4>
+<ul>
+<li><strong>Missing Metadata:</strong> Handles incomplete paper records gracefully</li>
+<li><strong>Text Extraction Failures:</strong> Reports issues but preserves other data</li>
+<li><strong>JSON Write Errors:</strong> Maintains data integrity during aggregation</li>
+<li><strong>File System Issues:</strong> Creates directories and handles permissions</li>
+</ul>
+<h4 id="console-output-examples_1">Console Output Examples</h4>
+<pre><code>Starting to scrape google scholar...
+🚀 Searching Google Scholar for '(Foundation model OR LLM) AND (Machine Learning)'...
+found pdf link using beautifulsoup and now proceeding to download the paper...
+✅ Appended 15 results from Google Scholar. Total papers: 15
+
+Starting to scrape openalex...
+✅ Appended 32 results from OpenAlex. Total papers: 47
+
+Starting to scrape europepmc...
+No PDF link found on this page...https://example.com/paper1
+✅ Appended 8 results from Europe PMC. Total papers: 55
+
+Starting to scrape arxiv...
+✅ ArXiv search completed - found 23 papers
+✅ Appended 23 results from ArXiv. Total papers: 78
+
+Results written to ./output/obtained_lit.json
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="file-structure-requirements_3">File Structure Requirements</h3>
+<pre><code>CHITCHAT/
+├── output/
+│   ├── unique_boolean_combinations.json   # Input
+│   └── obtained_lit.json                  # Output 
+├── src/
+│   └── api/
+│       └── web_scrape.py
+├── research_paper_downloads/              # (RCP) Downloaded PDFs
+│   ├── paper1.pdf
+│   ├── paper2.pdf
+│   └── ...
+└── temp/
+    └── temp_arxiv_results.json             # (RCP) Temporary files
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="dependencies-requirements">Dependencies &amp; Requirements</h3>
+<h4 id="required-libraries">Required Libraries</h4>
+<pre><code class="language-python"># Web scraping and HTTP
+import requests
+from bs4 import BeautifulSoup
+from scholarly import scholarly
+
+# PDF processing  
+import fitz  # PyMuPDF
+from PyPDF2 import PdfReader
+
+# Standard libraries
+import json, time, os, io, re, tempfile
+from urllib.parse import quote_plus, urljoin, urlparse
+</code></pre>
+<h4 id="external-api-dependencies">External API Dependencies</h4>
+<ul>
+<li><strong>Google Scholar:</strong> Via <code>scholarly</code> library (unofficial)</li>
+<li><strong>OpenAlex:</strong> Official REST API (https://api.openalex.org/)</li>
+<li><strong>Europe PMC:</strong> Official web services (https://europepmc.org/RestfulWebService)</li>
+<li><strong>ArXiv:</strong> Integrated via existing module</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="performance-considerations_1">Performance Considerations</h3>
+<h4 id="memory-management">Memory Management</h4>
+<ul>
+<li><strong>Incremental Processing:</strong> Results appended progressively to avoid memory overload</li>
+<li><strong>Streaming Downloads:</strong> PDF downloads use chunked streaming</li>
+<li><strong>Temporary File Cleanup:</strong> Automatic cleanup of intermediate files</li>
+<li><strong>Result Aggregation:</strong> JSON files updated incrementally</li>
+</ul>
+<h4 id="processing-efficiency">Processing Efficiency</h4>
+<ul>
+<li><strong>Parallel Repository Access:</strong> Sequential processing respects rate limits</li>
+<li><strong>Caching Strategy:</strong> Downloaded PDFs stored for potential reuse</li>
+<li><strong>Error Recovery:</strong> Failed downloads don't block other papers</li>
+<li><strong>Progress Tracking:</strong> Real-time feedback on collection status</li>
+</ul>
+<h4 id="scalability-factors_1">Scalability Factors</h4>
+<ul>
+<li><strong>Result Volume:</strong> Can handle thousands of papers per repository</li>
+<li><strong>Storage Requirements:</strong> Downloaded PDFs require significant disk space</li>
+<li><strong>Processing Time:</strong> Full-text extraction is time-intensive</li>
+<li><strong>API Limits:</strong> Each repository has different rate limiting rules</li>
+</ul>
+<h3 id="integration-workflow_2">Integration Workflow</h3>
+<p>This script completes the comprehensive research automation pipeline:</p>
+<ol>
+<li><strong>Step 1:</strong> <code>boolean_combinations.py</code> - Generate basic Boolean combinations</li>
+<li><strong>Step 2:</strong> <code>unique_boolean_combinations.py</code> - Create research-focused combinations  </li>
+<li><strong>Step 3:</strong> <code>arxiv_paper_search.py</code> - Execute arXiv-specific searches</li>
+<li><strong>Step 4:</strong> <code>web_scrape.py</code> - <strong>Comprehensive multi-repository collection</strong></li>
+<li><strong>Step 5:</strong> Manual analysis of comprehensive literature database</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="customization-options_2">Customization Options</h3>
+<h4 id="repository-configuration">Repository Configuration</h4>
+<pre><code class="language-python"># Enable/disable specific repositories
+def get_llit_papers(path_to_unique_boolean_combinations):
+    # Customize repository selection
+    search_google_scholar = True
+    search_openalex = True  
+    search_europepmc = True
+    search_arxiv = True
+</code></pre>
+<h4 id="quality-filters">Quality Filters</h4>
+<pre><code class="language-python"># Modify paper quality criteria
+google_scholar_results = search_google_scholar_scholarly(
+    query=unique_combinations,
+    pub_year=2018,  # Change minimum year
+    num_citations=5  # Require minimum citations
+)
+</code></pre>
+<h4 id="download-configuration">Download Configuration</h4>
+<pre><code class="language-python"># Customize PDF download behavior
+download_research_paper(
+    url=paper_url,
+    save_dir=&quot;custom_downloads&quot;  # Custom storage location
+)
+</code></pre>
+<h3 id="technical-implementation-notes_1">Technical Implementation Notes</h3>
+<ul>
+<li><strong>Multi-Format PDF Support:</strong> Handles various publisher PDF formats and protection schemes</li>
+<li><strong>Abstract Reconstruction:</strong> Rebuilds abstracts from OpenAlex inverted indexes</li>
+<li><strong>Publisher Compatibility:</strong> Generic PDF extraction works across major publishers</li>
+<li><strong>Error Resilience:</strong> Continues processing despite individual paper failures</li>
+<li><strong>Result Standardization:</strong> Normalizes metadata formats across repositories</li>
+<li><strong>Progress Monitoring:</strong> Comprehensive logging for debugging and monitoring</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="research-paper-screening">Research Paper Screening</h2>
+<h3 id="overview_4">Overview</h3>
+<p>This script transforms large collections of research papers into prioritized, systematically evaluated datasets using OpenAI's structured output capabilities. It performs comprehensive multi-dimensional analysis including publication quality assessment, technical scope evaluation, ethical framework analysis, and humanitarian principle scoring to automatically prioritize papers for systematic literature reviews.</p>
+<h3 id="data-flow_4">Data Flow</h3>
+<pre><code>../output/obtained_lit.json → Process → ../output/screening_results_TIMESTAMP.jsonl
+</code></pre>
+<p><strong>Input Directory:</strong> <code>../output/</code><br />
+<strong>Input Format:</strong> JSON file with comprehensive paper metadata and full text<br />
+<strong>Process:</strong> AI-powered structured screening with multi-phase evaluation<br />
+<strong>Output:</strong> JSONL file with detailed screening results and priority classifications<br />
+<strong>Output Directory:</strong> <code>../output/</code><br />
+<strong>Output Format:</strong> JSONL with structured screening assessments per paper</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="ai-powered-assessment-architecture">AI-Powered Assessment Architecture</h3>
+<h4 id="evaluation-framework-structure">Evaluation Framework Structure</h4>
+<p>The system employs a <strong>three-phase assessment model</strong> using structured Pydantic models for consistent evaluation:</p>
+<h5 id="phase-1-publication-quality-technical-scope">Phase 1: Publication Quality &amp; Technical Scope</h5>
+<ul>
+<li><strong>Publication Quality Assessment:</strong> Venue ranking, citation analysis, recency evaluation</li>
+<li><strong>Technical Scope Evaluation:</strong> Relevance to LLM data collection and NLP corpus creation</li>
+</ul>
+<h5 id="phase-2-ethical-humanitarian-analysis">Phase 2: Ethical &amp; Humanitarian Analysis</h5>
+<ul>
+<li><strong>Ethical Flag Detection:</strong> Identifies papers with ethical concerns or omissions</li>
+<li><strong>Humanitarian Principles Scoring:</strong> Quantitative assessment against humanitarian principles</li>
+</ul>
+<h5 id="phase-3-contribution-analysis">Phase 3: Contribution Analysis</h5>
+<ul>
+<li><strong>Methodology Contributions:</strong> Novel approaches and reproducible implementations</li>
+<li><strong>Ethical Contributions:</strong> Framework development and bias analysis</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h4 id="structured-assessment-models">Structured Assessment Models</h4>
+<h5 id="publicationquality-model"><code>PublicationQuality</code> Model</h5>
+<pre><code class="language-python">class PublicationQuality(BaseModel):
+    venue_name: str                    # Publication venue identification
+    is_top_tier_venue: bool           # Q1/Q2 journal or top-tier conference
+    publication_year: int             # Publication year
+    citation_count: int               # Citation metrics
+    is_recent_promising: bool         # Recent papers with promise indicators
+    full_text_english: bool           # Accessibility and language verification
+</code></pre>
+<h5 id="technicalscope-model"><code>TechnicalScope</code> Model</h5>
+<pre><code class="language-python">class TechnicalScope(BaseModel):
+    addresses_llm_data_collection: bool      # LLM training data focus
+    addresses_text_corpus_creation: bool     # Text corpus development
+    addresses_web_scraping_nlp: bool         # Web scraping for NLP datasets
+    addresses_multilingual_compilation: bool # Multilingual dataset work
+</code></pre>
+<h5 id="humanitarianprinciples-model"><code>HumanitarianPrinciples</code> Model</h5>
+<pre><code class="language-python">class HumanitarianPrinciples(BaseModel):
+    humanity_score: int      # Harm prevention (0-3 scale)
+    impartiality_score: int  # Fair representation (0-3 scale)  
+    independence_score: int  # Autonomy from bias (0-3 scale)
+    neutrality_score: int    # Non-discriminatory practices (0-3 scale)
+</code></pre>
+<h5 id="ethicalflags-model"><code>EthicalFlags</code> Model</h5>
+<pre><code class="language-python">class EthicalFlags(BaseModel):
+    focuses_only_on_performance: bool     # Ethics discussion presence
+    disregards_ethical_principles: bool   # Consent/privacy violations
+    missing_ethical_approval: bool        # IRB approval for vulnerable groups
+    violates_humanitarian_principles: bool # Discriminatory or military intent
+</code></pre>
+<h5 id="methodologycontributions-model"><code>MethodologyContributions</code> Model</h5>
+<pre><code class="language-python">class MethodologyContributions(BaseModel):
+    novel_methodology: bool           # Novel data collection methods
+    systematic_evaluation: bool       # Comparative analysis presence
+    reproducible_implementation: bool # Implementation detail adequacy
+</code></pre>
+<h5 id="ethicalcontributions-model"><code>EthicalContributions</code> Model</h5>
+<pre><code class="language-python">class EthicalContributions(BaseModel):
+    explicit_framework: bool          # Ethical framework inclusion
+    empirical_bias_analysis: bool     # Bias analysis in data
+    harm_mitigation_strategies: bool  # Concrete mitigation proposals
+    policy_recommendations: bool      # Data governance recommendations
+    acknowledges_tensions: bool       # Ethical trade-off discussion
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="priority-classification-system">Priority Classification System</h3>
+<h4 id="prioritylevel-enumeration"><code>PriorityLevel</code> Enumeration</h4>
+<pre><code class="language-python">class PriorityLevel(str, Enum):
+    HIGH = &quot;HIGH PRIORITY&quot;      # Critical papers for inclusion
+    MEDIUM = &quot;MEDIUM PRIORITY&quot;  # Important supporting papers
+    LOW = &quot;LOW PRIORITY&quot;        # Tangentially relevant papers
+    EXCLUDE = &quot;EXCLUDE&quot;         # Papers failing inclusion criteria
+</code></pre>
+<h4 id="priority-assignment-logic">Priority Assignment Logic</h4>
+<p>The AI model synthesizes all assessment dimensions to assign final priority levels based on:
+- <strong>Publication Quality:</strong> Top-tier venues and high citation counts increase priority
+- <strong>Technical Relevance:</strong> Direct address of LLM data collection raises priority
+- <strong>Ethical Framework:</strong> Comprehensive ethical analysis increases priority
+- <strong>Humanitarian Alignment:</strong> High humanitarian principle scores boost priority
+- <strong>Methodological Innovation:</strong> Novel approaches and reproducibility enhance priority</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="input-format-requirements_4">Input Format Requirements</h3>
+<p>The script expects comprehensive paper records from <code>web_scrape.py</code>:</p>
+<pre><code class="language-json">[
+  {
+    &quot;title&quot;: &quot;Ethical Data Collection for Large Language Model Training&quot;,
+    &quot;authors&quot;: &quot;Smith, J., Johnson, M., Chen, L.&quot;,
+    &quot;url&quot;: &quot;https://example.com/paper1&quot;,
+    &quot;abstract&quot;: &quot;This paper presents a comprehensive framework for ethical data collection...&quot;,
+    &quot;year&quot;: &quot;2023&quot;,
+    &quot;extracted_text&quot;: &quot;Complete full-text content including methodology, results, ethical considerations, and detailed implementation guidelines...&quot;
+  }
+]
+</code></pre>
+<p><strong>Required Fields:</strong>
+- <code>title</code>: Paper title for identification
+- <code>year</code>: Publication year for filtering (&gt;= 2020)
+- <code>extracted_text</code>: Full text content for analysis (&gt;= 500 characters)
+- <code>authors</code>, <code>url</code>: Metadata for tracking and reference</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="output-format_4">Output Format</h3>
+<p>The script generates detailed structured assessments in JSONL format:</p>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;Ethical Data Collection for Large Language Model Training&quot;,
+  &quot;original_metadata&quot;: {
+    &quot;authors&quot;: &quot;Smith, J., Johnson, M., Chen, L.&quot;,
+    &quot;year&quot;: &quot;2023&quot;,
+    &quot;url&quot;: &quot;https://example.com/paper1&quot;
+  },
+  &quot;screening_results&quot;: {
+    &quot;paper_title&quot;: &quot;Ethical Data Collection for Large Language Model Training&quot;,
+    &quot;publication_quality&quot;: {
+      &quot;venue_name&quot;: &quot;Nature Machine Intelligence&quot;,
+      &quot;is_top_tier_venue&quot;: true,
+      &quot;publication_year&quot;: 2023,
+      &quot;citation_count&quot;: 45,
+      &quot;is_recent_promising&quot;: true,
+      &quot;full_text_english&quot;: true
+    },
+    &quot;technical_scope&quot;: {
+      &quot;addresses_llm_data_collection&quot;: true,
+      &quot;addresses_text_corpus_creation&quot;: true,
+      &quot;addresses_web_scraping_nlp&quot;: false,
+      &quot;addresses_multilingual_compilation&quot;: true
+    },
+    &quot;ethical_flags&quot;: {
+      &quot;focuses_only_on_performance&quot;: false,
+      &quot;disregards_ethical_principles&quot;: false,
+      &quot;missing_ethical_approval&quot;: false,
+      &quot;violates_humanitarian_principles&quot;: false
+    },
+    &quot;humanitarian_principles&quot;: {
+      &quot;humanity_score&quot;: 3,
+      &quot;impartiality_score&quot;: 2,
+      &quot;independence_score&quot;: 2,
+      &quot;neutrality_score&quot;: 3
+    },
+    &quot;methodology_contributions&quot;: {
+      &quot;novel_methodology&quot;: true,
+      &quot;systematic_evaluation&quot;: true,
+      &quot;reproducible_implementation&quot;: true
+    },
+    &quot;ethical_contributions&quot;: {
+      &quot;explicit_framework&quot;: true,
+      &quot;empirical_bias_analysis&quot;: true,
+      &quot;harm_mitigation_strategies&quot;: true,
+      &quot;policy_recommendations&quot;: true,
+      &quot;acknowledges_tensions&quot;: true
+    },
+    &quot;priority_level&quot;: &quot;HIGH PRIORITY&quot;
+  },
+  &quot;final_priority&quot;: &quot;HIGH PRIORITY&quot;
+}
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="core-functions-reference_1">Core Functions Reference</h3>
+<h4 id="main"><code>main()</code></h4>
+<p><strong>Purpose:</strong> Primary orchestration function for paper screening workflow
+<strong>Process:</strong>
+1. <strong>Command Line Validation:</strong> Verify prompt file and paper collection exist
+2. <strong>API Setup:</strong> Initialize OpenAI client with structured output capability
+3. <strong>Data Loading:</strong> Load papers and screening prompts
+4. <strong>Duplicate Prevention:</strong> Track previously processed papers across sessions
+5. <strong>Quality Filtering:</strong> Apply year and content length filters
+6. <strong>AI Screening:</strong> Execute structured assessments for each paper
+7. <strong>Result Persistence:</strong> Save assessments immediately to prevent data loss</p>
+<h4 id="screen_paperclient-prompt_text-paper"><code>screen_paper(client, prompt_text, paper)</code></h4>
+<p><strong>Purpose:</strong> Execute AI-powered structured paper assessment
+<strong>Features:</strong>
+- <strong>Content Preparation:</strong> Formats paper data for AI analysis
+- <strong>Text Truncation:</strong> Limits content to 60,000 characters for cost control
+- <strong>Structured Output:</strong> Uses OpenAI's beta structured output feature
+- <strong>Error Handling:</strong> Comprehensive exception management</p>
+<p><strong>Parameters:</strong>
+- <code>client</code> (OpenAI): Initialized OpenAI client
+- <code>prompt_text</code> (str): Loaded screening prompt
+- <code>paper</code> (Dict): Paper data with full text content</p>
+<p><strong>Returns:</strong> 
+- <code>PaperScreening</code>: Complete structured assessment</p>
+<h4 id="load_processed_idsoutput_dir"><code>load_processed_ids(output_dir)</code></h4>
+<p><strong>Purpose:</strong> Prevent duplicate processing across multiple runs
+<strong>Features:</strong>
+- <strong>Cross-Session Tracking:</strong> Reads all previous JSONL output files
+- <strong>Unique ID Generation:</strong> Creates consistent identifiers from paper titles
+- <strong>Directory Management:</strong> Creates output directories if missing</p>
+<p><strong>Returns:</strong> Set of processed paper IDs for duplicate detection</p>
+<h4 id="append_screening_resultscreening-paper-output_file"><code>append_screening_result(screening, paper, output_file)</code></h4>
+<p><strong>Purpose:</strong> Immediate result persistence to prevent data loss
+<strong>Features:</strong>
+- <strong>JSONL Format:</strong> Appends single line per paper for streaming processing
+- <strong>Complete Record:</strong> Includes original metadata and full screening results
+- <strong>Atomic Writes:</strong> Each paper saved immediately after processing</p>
+<h4 id="create_unique_idtitle"><code>create_unique_id(title)</code></h4>
+<p><strong>Purpose:</strong> Generate consistent identifiers for duplicate detection
+<strong>Process:</strong>
+- Convert title to lowercase
+- Remove non-alphanumeric characters
+- Create reproducible hash from cleaned title</p>
+<h4 id="debug_jsonl_structureoutput_dir"><code>debug_jsonl_structure(output_dir)</code></h4>
+<p><strong>Purpose:</strong> Development utility for inspecting output file structure
+<strong>Features:</strong>
+- <strong>File Discovery:</strong> Finds all screening result files
+- <strong>Structure Inspection:</strong> Analyzes JSONL file formats
+- <strong>Count Reporting:</strong> Provides entry counts per file</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="processing-workflow_1">Processing Workflow</h3>
+<h4 id="phase-1-initialization-validation">Phase 1: Initialization &amp; Validation</h4>
+<ol>
+<li><strong>Command Line Processing:</strong> Validate prompt and paper file arguments</li>
+<li><strong>File Existence Verification:</strong> Check all required files are accessible</li>
+<li><strong>API Key Validation:</strong> Verify OpenAI API credentials</li>
+<li><strong>Output Directory Setup:</strong> Create necessary directories</li>
+</ol>
+<h4 id="phase-2-data-loading-filtering">Phase 2: Data Loading &amp; Filtering</h4>
+<ol>
+<li><strong>Prompt Loading:</strong> Read screening prompt from external file</li>
+<li><strong>Paper Collection Loading:</strong> Load comprehensive paper dataset</li>
+<li><strong>Duplicate Detection:</strong> Identify previously processed papers</li>
+<li><strong>Quality Filtering:</strong> Apply year (&gt;=2020) and content length (&gt;=500 chars) filters</li>
+</ol>
+<h4 id="phase-3-ai-powered-assessment">Phase 3: AI-Powered Assessment</h4>
+<ol>
+<li><strong>Paper Preparation:</strong> Format content for AI analysis with truncation</li>
+<li><strong>Structured Screening:</strong> Execute multi-dimensional assessment via OpenAI</li>
+<li><strong>Result Validation:</strong> Ensure complete structured response</li>
+<li><strong>Immediate Persistence:</strong> Save results to prevent data loss</li>
+</ol>
+<h4 id="phase-4-progress-tracking-reporting">Phase 4: Progress Tracking &amp; Reporting</h4>
+<ol>
+<li><strong>Real-Time Feedback:</strong> Progress bars and status updates</li>
+<li><strong>Error Logging:</strong> Detailed error reporting and recovery</li>
+<li><strong>Statistics Tracking:</strong> Count successful, failed, and filtered papers</li>
+<li><strong>Final Summary:</strong> Comprehensive processing report</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="quality-control-filtering">Quality Control &amp; Filtering</h3>
+<h4 id="pre-processing-filters">Pre-Processing Filters</h4>
+<ul>
+<li><strong>Publication Year:</strong> Only papers from 2020 onwards</li>
+<li><strong>Content Length:</strong> Minimum 500 characters of extracted text</li>
+<li><strong>Language:</strong> Full text must be in English</li>
+<li><strong>Duplicate Detection:</strong> Cross-session duplicate prevention</li>
+</ul>
+<h4 id="ai-assessment-quality">AI Assessment Quality</h4>
+<ul>
+<li><strong>Structured Output:</strong> Ensures consistent assessment format</li>
+<li><strong>Multi-Dimensional Analysis:</strong> Comprehensive evaluation across multiple criteria</li>
+<li><strong>Quantitative Scoring:</strong> Numerical scores for humanitarian principles</li>
+<li><strong>Binary Flags:</strong> Clear yes/no assessments for critical factors</li>
+</ul>
+<h4 id="post-processing-validation">Post-Processing Validation</h4>
+<ul>
+<li><strong>Completeness Checks:</strong> Verify all assessment fields populated</li>
+<li><strong>Consistency Validation:</strong> Ensure logical consistency across assessments</li>
+<li><strong>Priority Logic:</strong> Validate priority assignments match assessment patterns</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="usage_4">Usage</h3>
+<h4 id="basic-screening">Basic Screening</h4>
+<pre><code class="language-bash"># Screen papers using provided prompt
+python screen_papers.py screening_prompt.txt obtained_lit.json
+</code></pre>
+<h4 id="custom-configuration">Custom Configuration</h4>
+<pre><code class="language-python">from screen_papers import screen_paper, load_papers_from_json
+from openai import OpenAI
+
+# Initialize client
+client = OpenAI(api_key=&quot;your-api-key&quot;)
+
+# Load data
+papers = load_papers_from_json(&quot;papers.json&quot;)
+prompt = &quot;Your screening prompt here...&quot;
+
+# Screen individual paper
+for paper in papers:
+    result = screen_paper(client, prompt, paper)
+    print(f&quot;Priority: {result.priority_level}&quot;)
+</code></pre>
+<h4 id="batch-processing-with-custom-filters">Batch Processing with Custom Filters</h4>
+<pre><code class="language-python"># Custom filtering logic
+def custom_filter(paper):
+    year = int(paper.get('year', 0))
+    text_length = len(paper.get('extracted_text', ''))
+    return year &gt;= 2021 and text_length &gt;= 1000  # Stricter criteria
+
+# Apply custom filtering
+filtered_papers = [p for p in papers if custom_filter(p)]
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="error-handling-recovery_2">Error Handling &amp; Recovery</h3>
+<h4 id="network-api-errors">Network &amp; API Errors</h4>
+<ul>
+<li><strong>Rate Limiting:</strong> Automatic retry logic for API limits</li>
+<li><strong>Connection Failures:</strong> Graceful handling of network issues</li>
+<li><strong>Authentication Errors:</strong> Clear error messages for API key issues</li>
+<li><strong>Model Availability:</strong> Fallback strategies for model unavailability</li>
+</ul>
+<h4 id="data-processing-errors_1">Data Processing Errors</h4>
+<ul>
+<li><strong>Malformed Papers:</strong> Skip papers with missing required fields</li>
+<li><strong>Text Encoding Issues:</strong> UTF-8 handling for international content</li>
+<li><strong>JSON Parsing Errors:</strong> Robust handling of malformed input data</li>
+<li><strong>File System Errors:</strong> Directory creation and permission handling</li>
+</ul>
+<h4 id="ai-assessment-errors">AI Assessment Errors</h4>
+<ul>
+<li><strong>Incomplete Responses:</strong> Validation of structured output completeness</li>
+<li><strong>Model Errors:</strong> Comprehensive exception handling for API failures</li>
+<li><strong>Content Length Issues:</strong> Automatic truncation for oversized papers</li>
+<li><strong>Prompt Injection:</strong> Safe handling of paper content in prompts</li>
+</ul>
+<h4 id="console-output-examples_2">Console Output Examples</h4>
+<pre><code>Loading prompt...
+Loading papers from JSON...
+Loaded 1247 papers from obtained_lit.json
+Results will be saved to: output/screening_results_20231201_143022.jsonl
+
+Loading previously processed papers...
+Found 342 previously processed papers
+
+Start screening 1247 papers...
+Processing: 100%|████████████| 905/905 [2:34:17&lt;00:00, 10.25s/it]
+
+==================================================
+SCREENING COMPLETE
+==================================================
+Successfully screened: 847/1247 papers
+Skipped (year filters): 156 papers
+Skipped (text filters): 89 papers
+Skipped (duplicates): 155 papers
+
+All results saved to: output/screening_results_20231201_143022.jsonl
+</code></pre>
+<h3 id="file-structure-requirements_4">File Structure Requirements</h3>
+<pre><code>CHITCHAT
+├── docs/
+│   └── prompt/
+│       └── paper_screening_prompt.txt           # AI screening instructions
+├── output/
+│   ├── obtained_lit.json                        # Input (from web_scrape.py)
+│   ├── screening_results_20231201_143022.jsonl  # Output (timestamped)
+│   ├── screening_results_20231202_091534.jsonl  # Additional runs
+│   └── ...
+├── src/
+│   └── screen_papers.py
+└── logs/                                        # Optional logging
+    └── screening.log
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="openai-integration">OpenAI Integration</h3>
+<h4 id="structured-output-configuration">Structured Output Configuration</h4>
+<pre><code class="language-python">completion = client.beta.chat.completions.parse(
+    model=&quot;gpt-5&quot;,              # High-capability model for analysis
+    messages=[
+        {
+            &quot;role&quot;: &quot;system&quot;, 
+            &quot;content&quot;: &quot;Expert research paper screener providing objective assessments&quot;
+        },
+        {
+            &quot;role&quot;: &quot;user&quot;,
+            &quot;content&quot;: full_prompt
+        }
+    ],
+    response_format=PaperScreening,   # Structured Pydantic model
+    temperature=0.3                   # Low temperature for consistency
+)
+</code></pre>
+<h4 id="cost-management-strategies">Cost Management Strategies</h4>
+<ul>
+<li><strong>Text Truncation:</strong> 60,000 character limit per paper</li>
+<li><strong>Efficient Prompting:</strong> Focused prompts minimize token usage</li>
+<li><strong>Batch Processing:</strong> Process papers sequentially to avoid rate limits</li>
+<li><strong>Incremental Saving:</strong> Immediate result persistence prevents re-processing</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="integration-workflow_3">Integration Workflow</h2>
+<p>This script completes the research automation pipeline:</p>
+<ol>
+<li><strong>Step 1:</strong> <code>boolean_combinations.py</code> - Generate basic Boolean combinations</li>
+<li><strong>Step 2:</strong> <code>unique_boolean_combinations.py</code> - Create research-focused combinations  </li>
+<li><strong>Step 3:</strong> <code>arxiv_paper_search.py</code> - Execute arXiv-specific searches</li>
+<li><strong>Step 4:</strong> <code>web_scrape.py</code> - multi-repository collection</li>
+<li><strong>Step 5:</strong> <code>screen_papers.py</code> - <strong>AI-based systematic screening and prioritization</strong></li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="performance-considerations_2">Performance Considerations</h3>
+<h4 id="processing-efficiency_1">Processing Efficiency</h4>
+<ul>
+<li><strong>Incremental Processing:</strong> Results saved immediately to prevent data loss</li>
+<li><strong>Duplicate Prevention:</strong> Efficient cross-session tracking prevents re-processing</li>
+<li><strong>Memory Management:</strong> Streaming processing avoids memory overload</li>
+<li><strong>Progress Tracking:</strong> Real-time feedback with progress bars</li>
+</ul>
+<h4 id="cost-optimization">Cost Optimization</h4>
+<ul>
+<li><strong>Text Truncation:</strong> Limits API costs while preserving content quality</li>
+<li><strong>Quality Pre-Filtering:</strong> Reduces API calls on low-quality papers</li>
+<li><strong>Efficient Prompting:</strong> Optimized prompts minimize token usage</li>
+<li><strong>Structured Output:</strong> Eliminates parsing overhead and errors</li>
+</ul>
+<h4 id="scalability-factors_2">Scalability Factors</h4>
+<ul>
+<li><strong>Large Collections:</strong> Handles thousands of papers efficiently  </li>
+<li><strong>Cross-Session Processing:</strong> Resume capability for long-running tasks</li>
+<li><strong>Error Recovery:</strong> Continues processing despite individual failures</li>
+<li><strong>Parallel Processing:</strong> Sequential processing respects API rate limits</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="customization-options_3">Customization Options</h3>
+<h4 id="assessment-criteria-modification">Assessment Criteria Modification</h4>
+<pre><code class="language-python"># Modify Pydantic models to add new assessment dimensions
+class CustomTechnicalScope(TechnicalScope):
+    addresses_domain_specific_data: bool = Field(description=&quot;Domain-specific focus&quot;)
+    uses_synthetic_data: bool = Field(description=&quot;Synthetic data generation&quot;)
+</code></pre>
+<h4 id="priority-logic-customization">Priority Logic Customization</h4>
+<pre><code class="language-python"># Custom priority assignment based on specific research needs
+def custom_priority_logic(screening: PaperScreening) -&gt; PriorityLevel:
+    if screening.technical_scope.addresses_llm_data_collection:
+        if screening.humanitarian_principles.humanity_score &gt;= 2:
+            return PriorityLevel.HIGH
+    return PriorityLevel.MEDIUM
+</code></pre>
+<h4 id="filtering-criteria-adjustment">Filtering Criteria Adjustment</h4>
+<pre><code class="language-python"># Modify filtering thresholds
+MIN_YEAR = 2021              # More recent papers only
+MIN_TEXT_LENGTH = 1000       # Longer papers only
+MIN_CITATION_COUNT = 5       # Higher impact papers only
+</code></pre>
+<h3 id="technical-implementation-notes_2">Technical Implementation Notes</h3>
+<ul>
+<li><strong>Pydantic Validation:</strong> Ensures structured output consistency and type safety</li>
+<li><strong>JSONL Format:</strong> Enables streaming processing and easy data manipulation</li>
+<li><strong>UTF-8 Encoding:</strong> Full international character support</li>
+<li><strong>Error Resilience:</strong> Comprehensive exception handling prevents data loss</li>
+<li><strong>API Integration:</strong> Beta structured output features for reliable parsing</li>
+<li><strong>Cross-Platform:</strong> Works on Windows, macOS, and Linux environments</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h1 id="running">Running</h1>
+<hr />
+<h2 id="shell-scripts">Shell Scripts</h2>
+<h3 id="overview_5">Overview</h3>
+<p>This bash script provides automated environment setup and execution for the AI-powered research paper screening system. It handles dependency installation, API key management, and secure execution of the screening process with comprehensive error checking and validation.</p>
+<h3 id="data-flow_5">Data Flow</h3>
+<pre><code>prompt.txt + papers.json → Environment Setup → screen_papers.py → screening_results.jsonl
+</code></pre>
+<p><strong>Input Directory:</strong> Current working directory<br />
+<strong>Input Format:</strong> Text prompt file + JSON paper collection<br />
+<strong>Process:</strong> Dependency installation, API key loading, Python script execution<br />
+<strong>Output:</strong> Timestamped JSONL file with screening results<br />
+<strong>Output Directory:</strong> <code>./output/</code><br />
+<strong>Output Format:</strong> JSONL with structured screening assessments</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="script-features">Script Features</h3>
+<h4 id="core-functionality">Core Functionality</h4>
+<ul>
+<li><strong>Automated Dependency Installation:</strong> Installs all required Python packages</li>
+<li><strong>Secure API Key Management:</strong> Loads OpenAI API key from external file</li>
+<li><strong>Comprehensive Validation:</strong> Checks all inputs before execution</li>
+<li><strong>Error Handling:</strong> Detailed error codes and messages for debugging</li>
+<li><strong>Environment Configuration:</strong> Sets up proper Python environment</li>
+</ul>
+<h4 id="security-features">Security Features</h4>
+<ul>
+<li><strong>API Key File Protection:</strong> Keeps API keys out of command line and environment</li>
+<li><strong>Input Validation:</strong> Verifies all required files exist before processing</li>
+<li><strong>Secure Key Loading:</strong> Strips whitespace and validates non-empty keys</li>
+<li><strong>Clean Environment:</strong> Proper variable export and cleanup</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="usage_5">Usage</h3>
+<h4 id="basic-usage_3">Basic Usage</h4>
+<pre><code class="language-bash"># Make script executable
+chmod +x screen_papers.sh
+
+# Run screening with prompt and papers
+./screen_papers.sh screening_prompt.txt obtained_lit.json
+</code></pre>
+<h4 id="directory-structure-setup">Directory Structure Setup</h4>
+<pre><code class="language-bash"># Expected file structure
+chitchat/ # Refine
+├── screen_papers.sh
+├── screen_papers.py
+├── openai_key.txt              # Your OpenAI API key
+├── screening_prompt.txt        # Screening instructions
+├── obtained_lit.json          # Papers to screen
+└── output/                     # Generated results
+</code></pre>
+<h4 id="api-key-file-setup">API Key File Setup</h4>
+<pre><code class="language-bash"># Create API key file (one-time setup)
+echo &quot;sk-your-openai-api-key-here&quot; &gt; openai_key.txt
+
+# Verify key file (should show your key)
+cat openai_key.txt
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="input-requirements">Input Requirements</h3>
+<h4 id="command-line-arguments">Command Line Arguments</h4>
+<pre><code class="language-bash">./screen_papers.sh &lt;path-to-prompt.txt&gt; &lt;path-to-papers.json&gt;
+</code></pre>
+<p><strong>Required Arguments:</strong>
+1. <strong>Prompt File:</strong> Text file containing screening instructions for AI
+2. <strong>Papers JSON:</strong> JSON file with paper collection from web scraping</p>
+<h4 id="file-dependencies">File Dependencies</h4>
+<ul>
+<li><strong><code>screen_papers.py</code>:</strong> Main Python screening script</li>
+<li><strong><code>openai_key.txt</code>:</strong> File containing OpenAI API key</li>
+<li><strong>Prompt file:</strong> Custom screening instructions</li>
+<li><strong>Papers JSON:</strong> Literature collection to be screened</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="environment-setup">Environment Setup</h3>
+<h4 id="python-dependencies-installed">Python Dependencies Installed</h4>
+<pre><code class="language-bash">pip install --upgrade pip
+pip install \
+    openai \
+    pypdf2 \
+    pydantic \
+    tqdm
+</code></pre>
+<p><strong>Package Functions:</strong>
+- <strong><code>openai</code>:</strong> AI-powered structured assessment
+- <strong><code>pypdf2</code>:</strong> PDF text extraction capabilities
+- <strong><code>pydantic</code>:</strong> Structured data validation models
+- <strong><code>tqdm</code>:</strong> Progress bar visualization</p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="working-directory">Working Directory</h3>
+<pre><code class="language-bash">cd /mloscratch/users/username/chitchat/CHITCHAT
+</code></pre>
+<p><strong>Note:</strong> Script changes to specific working directory for execution</p>
+<h3 id="error-handling-exit-codes">Error Handling &amp; Exit Codes</h3>
+<h4 id="exit-code-reference">Exit Code Reference</h4>
+<ul>
+<li><strong>Exit 1:</strong> Incorrect number of command line arguments</li>
+<li><strong>Exit 2:</strong> Python script <code>screen_papers.py</code> not found</li>
+<li><strong>Exit 3:</strong> Prompt file not found</li>
+<li><strong>Exit 4:</strong> Papers JSON file not found</li>
+<li><strong>Exit 5:</strong> API key file not found</li>
+<li><strong>Exit 6:</strong> API key file is empty</li>
+</ul>
+<h4 id="error-message-examples">Error Message Examples</h4>
+<pre><code class="language-bash"># Incorrect usage
+$ ./screen_papers.sh
+Usage: ./screen_papers.sh &lt;path-to-prompt.txt&gt; &lt;path-to-papers.json&gt;
+
+# Missing files
+$ ./screen_papers.sh missing.txt papers.json
+Error: Prompt file 'missing.txt' not found.
+
+# Missing API key
+$ ./screen_papers.sh prompt.txt papers.json
+Error: API key file 'openai_key.txt' not found.
+Please create a file named 'openai_key.txt' containing your OpenAI API key.
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="security-considerations">Security Considerations</h3>
+<h4 id="api-key-management">API Key Management</h4>
+<ul>
+<li><strong>File-Based Storage:</strong> Keeps API keys out of command line history</li>
+<li><strong>Whitespace Cleaning:</strong> Removes trailing newlines and carriage returns</li>
+<li><strong>Validation:</strong> Ensures non-empty key before proceeding</li>
+<li><strong>Environment Export:</strong> Properly exports key for Python script access</li>
+</ul>
+<h4 id="input-validation">Input Validation</h4>
+<ul>
+<li><strong>File Existence Checks:</strong> Verifies all required files before execution</li>
+<li><strong>Script Validation:</strong> Ensures Python script is available</li>
+<li><strong>Argument Count:</strong> Validates correct number of parameters</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="processing-workflow_2">Processing Workflow</h3>
+<h4 id="phase-1-argument-validation">Phase 1: Argument Validation</h4>
+<ol>
+<li><strong>Count Check:</strong> Ensure exactly 2 arguments provided</li>
+<li><strong>Assignment:</strong> Store prompt file and papers JSON paths</li>
+<li><strong>Usage Display:</strong> Show correct usage on argument errors</li>
+</ol>
+<h4 id="phase-2-file-validation">Phase 2: File Validation</h4>
+<ol>
+<li><strong>Python Script Check:</strong> Verify <code>screen_papers.py</code> exists</li>
+<li><strong>Input File Verification:</strong> Confirm prompt and papers files exist</li>
+<li><strong>API Key File Check:</strong> Validate API key file presence and content</li>
+</ol>
+<h4 id="phase-3-environment-setup">Phase 3: Environment Setup</h4>
+<ol>
+<li><strong>Pip Upgrade:</strong> Update package manager to latest version</li>
+<li><strong>Dependency Installation:</strong> Install all required Python packages</li>
+<li><strong>API Key Loading:</strong> Read and clean API key from file</li>
+<li><strong>Environment Export:</strong> Make API key available to Python script</li>
+</ol>
+<h4 id="phase-4-script-execution">Phase 4: Script Execution</h4>
+<ol>
+<li><strong>Status Display:</strong> Show execution parameters</li>
+<li><strong>Python Invocation:</strong> Run screening script with arguments</li>
+<li><strong>Completion Message:</strong> Confirm successful execution</li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="customization-options_4">Customization Options</h3>
+<h4 id="api-key-file-location">API Key File Location</h4>
+<pre><code class="language-bash"># Modify API_KEY_FILE variable
+API_KEY_FILE=&quot;path/to/your/api_key.txt&quot;
+</code></pre>
+<h4 id="working-directory_1">Working Directory</h4>
+<pre><code class="language-bash"># Change working directory
+cd /your/project/directory
+</code></pre>
+<h4 id="additional-dependencies">Additional Dependencies</h4>
+<pre><code class="language-bash"># Add more Python packages
+pip install \
+    openai \
+    pypdf2 \
+    pydantic \
+    tqdm \
+    your-additional-package
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="troubleshooting-guide">Troubleshooting Guide</h3>
+<h4 id="common-issues">Common Issues</h4>
+<h5 id="permission-denied">Permission Denied</h5>
+<pre><code class="language-bash"># Make script executable
+chmod +x screen_papers.sh
+</code></pre>
+<h5 id="api-key-issues">API Key Issues</h5>
+<pre><code class="language-bash"># Check API key file
+cat openai_key.txt
+
+# Recreate API key file
+echo &quot;sk-your-actual-key&quot; &gt; openai_key.txt
+</code></pre>
+<h5 id="python-environment-issues">Python Environment Issues</h5>
+<pre><code class="language-bash"># Check Python version
+python3 --version
+
+# Manual dependency installation
+pip3 install openai pydantic tqdm pypdf2
+</code></pre>
+<h5 id="file-path-issues">File Path Issues</h5>
+<pre><code class="language-bash"># Use absolute paths if needed
+./screen_papers.sh /full/path/to/prompt.txt /full/path/to/papers.json
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="integration-with-paper-screening-pipeline">Integration with Paper Screening Pipeline</h3>
+<h4 id="pipeline-position">Pipeline Position</h4>
+<p>This script serves as the <strong>execution wrapper</strong> for the final step in the research automation pipeline:</p>
+<ol>
+<li>Boolean combinations generation</li>
+<li>Unique combinations creation  </li>
+<li>ArXiv paper search</li>
+<li>Multi-repository web scraping</li>
+<li><strong>Shell script execution</strong> → AI-powered screening</li>
+</ol>
+<h4 id="execution-flow">Execution Flow</h4>
+<pre><code class="language-bash"># Previous steps generate these files:
+# - obtained_lit.json (from web scraping)
+# - screening_prompt.txt (custom screening instructions)
+
+# This script executes:
+./screen_papers.sh screening_prompt.txt obtained_lit.json
+
+# Generates:
+# - output/screening_results_TIMESTAMP.jsonl
+</code></pre>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="best-practices">Best Practices</h3>
+<h4 id="security-best-practices">Security Best Practices</h4>
+<ul>
+<li><strong>API Key Protection:</strong> Never commit API key files to version control</li>
+<li><strong>File Permissions:</strong> Restrict access to API key file (chmod 600)</li>
+<li><strong>Key Rotation:</strong> Regularly rotate OpenAI API keys</li>
+<li><strong>Environment Isolation:</strong> Use virtual environments for Python dependencies</li>
+</ul>
+<h4 id="operational-best-practices">Operational Best Practices</h4>
+<ul>
+<li><strong>Backup Strategy:</strong> Backup screening results before re-running</li>
+<li><strong>Progress Monitoring:</strong> Monitor script output for errors or issues</li>
+<li><strong>Resource Management:</strong> Ensure sufficient disk space for results</li>
+<li><strong>Cost Monitoring:</strong> Track OpenAI API usage and costs</li>
+</ul>
+<h4 id="development-best-practices">Development Best Practices</h4>
+<ul>
+<li><strong>Version Control:</strong> Track script changes and improvements</li>
+<li><strong>Documentation:</strong> Maintain clear documentation for team use</li>
+<li><strong>Testing:</strong> Test with small paper sets before full runs</li>
+<li><strong>Error Logging:</strong> Capture and analyze error patterns</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<h3 id="performance-considerations_3">Performance Considerations</h3>
+<h4 id="resource-requirements">Resource Requirements</h4>
+<ul>
+<li><strong>Memory:</strong> Sufficient RAM for Python dependencies and paper processing</li>
+<li><strong>Storage:</strong> Adequate disk space for screening results</li>
+<li><strong>Network:</strong> Stable internet connection for OpenAI API calls</li>
+<li><strong>CPU:</strong> Moderate processing power for JSON manipulation</li>
+</ul>
+<h4 id="optimization-tips">Optimization Tips</h4>
+<ul>
+<li><strong>Batch Size:</strong> Process papers in manageable batches</li>
+<li><strong>Monitoring:</strong> Use progress indicators to track completion</li>
+<li><strong>Parallel Processing:</strong> Consider multiple script instances for large datasets</li>
+<li><strong>Cost Control:</strong> Monitor API usage to manage costs</li>
+</ul>
+<h3 id="technical-implementation-notes_3">Technical Implementation Notes</h3>
+<ul>
+<li><strong>Bash Best Practices:</strong> Uses <code>set -euo pipefail</code> for strict error handling</li>
+<li><strong>Cross-Platform:</strong> Compatible with Unix-like systems (Linux, macOS)</li>
+<li><strong>Environment Management:</strong> Proper variable scoping and cleanup</li>
+<li><strong>Process Control:</strong> Clean script termination on errors</li>
+<li><strong>Logging:</strong> Comprehensive status messages throughout execution</li>
+</ul>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h2 id="running-locally">Running Locally</h2>
+<hr />
+<h2 id="running-on-rcp">Running on RCP</h2>
+<h3 id="setting-up-rcp">Setting up RCP</h3>
+<p>Before setting up the RCP, contact the project lead to be added to the RCP(Research Computing Platform).
+<a href="https://github.com/MichelDucartier/rcp-docker-images/blob/master/LIGHT_README.md">Click here to learn about setting up RCP</a></p>
+<h3 id="run-as-an-rcp-job">Run as an RCP job</h3>
+<ol>
+<li>Run the <code>web_scrape.sh</code> or <code>screen_papers.sh</code> script from RCP.</li>
+<li>The script to run the <code>web_scrape.sh</code> script on RCP looks like this (change USER):</li>
+</ol>
+<pre><code>runai submit \
+  --name paper-scraping \
+  --image registry.rcp.epfl.ch/multimeditron/basic:latest-USER \
+  --pvc light-scratch:/mloscratch \ # &lt;- CAN ALSO BE LIGHTSCRATCH
+  --large-shm \
+  -e NAS_HOME=/mloscratch/users/USER \
+  -e HF_API_KEY_FILE_AT=/mloscratch/users/USER/keys/hf_key.txt \
+  -e WANDB_API_KEY_FILE_AT=/mloscratch/users/USER/keys/wandb_key.txt \
+  -e GITCONFIG_AT=/mloscratch/users/USER/.gitconfig \
+  -e GIT_CREDENTIALS_AT=/mloscratch/users/USER/.git-credentials \
+  -e VSCODE_CONFIG_AT=/mloscratch/users/USER/.vscode-server \
+  --backoff-limit 0 \
+  --run-as-gid 84257 \
+  --gpu 0 \
+  --command -- &quot;/mloscratch/users/USER/CHITCHAT/web_scrape.sh&quot; \
+                &quot;/mloscratch/users/USER/CHITCHAT/output/unique_boolean_combinations.json&quot;
+</code></pre>
+<ol>
+<li>For <code>screen_papers.sh</code> you need to add a file <code>openai_key.txt</code> with an openai api key.</li>
+</ol>
+<h2 id="run-using-the-command-line">Run using the command line</h2>
+<ol>
+<li>Add OpenAI API key with <code>export OPENAI_API_KEY="your-api-key-here"</code></li>
+<li>Run the script with <code>python3 screen_papers.py path/to/paper_screening_prompt.txt path/to/papers.json</code></li>
+</ol>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h1 id="script-breakdown">Script Breakdown</h1>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+<hr />
+<h1 id="contributing">Contributing</h1>
+<p>We welcome contributions!❤️ </p>
+<p>If you're part of the main project team, kindly reach out to <strong>David</strong>, <strong>Tim</strong>, or <strong>Fiifi</strong> to join the Slack channel.  </p>
+<h2 id="how-to-contribute">How to Contribute</h2>
+<ol>
+<li><strong>Check Issues</strong>  </li>
+<li>Review the <a href="./issues">GitHub Issues</a> and pick one you'd like to work on.  </li>
+<li>
+<p>If you encounter a new problem, <a href="./issues/new">open a new issue</a> with clear details.  </p>
+</li>
+<li>
+<p><strong>Get Approval</strong>  </p>
+</li>
+<li>
+<p>Wait for project maintainers to approve or assign the issue before starting.  </p>
+</li>
+<li>
+<p><strong>Make Changes</strong>  </p>
+</li>
+<li>Fork the repository.  </li>
+<li>Create a new branch for your changes.  </li>
+<li>
+<p>Implement and test your fix or feature.  </p>
+</li>
+<li>
+<p><strong>Submit a Pull Request (PR)</strong>  </p>
+</li>
+<li>Open a PR describing the problem and your solution.  </li>
+<li>Link the related issue in your PR description.  </li>
+</ol>
+<p><strong>Notes</strong> 
+- PRs should be small, focused, and easy to review.<br />
+- Communication is encouraged—ask questions on Slack if you're unsure.  </p>
+<p align="right">[<a href="#technical-report-top">back to top</a>]</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../about/" class="md-footer__link md-footer__link--prev" aria-label="Previous: About">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                About
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../litlens-module/" class="md-footer__link md-footer__link--next" aria-label="Next: Litlens">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Litlens
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

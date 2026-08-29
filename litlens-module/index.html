@@ -1,0 +1,2172 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../Technical-Report/">
+      
+      
+        <link rel="next" href="../paper-discovery-module/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Litlens - CHITCHAT documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#litlens-literature-analytics-visualization-module-design-spec" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CHITCHAT documentation" class="md-header__button md-logo" aria-label="CHITCHAT documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CHITCHAT documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Litlens
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5M7 15a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  About
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Technical-Report/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Technical
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Litlens
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../paper-discovery-module/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Paper
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CHITCHAT documentation" class="md-nav__button md-logo" aria-label="CHITCHAT documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CHITCHAT documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Technical-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Litlens
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Litlens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-litlens-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What LitLens does
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What LitLens does">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-three-sub-modules-pick-what-you-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Three sub-modules (pick what you need)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-public-api-surface-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Public API surface (recommended)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Public API surface (recommended)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-python-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Python library
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-http-service-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 HTTP service (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-data-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Data contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Data contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-paper-input-same-as-paper-discovery-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Paper (input — same as paper-discovery output)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-boolean-bucket-definitions-input-for-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Boolean bucket definitions (input for cloud)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-screening-result-input-for-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Screening result (input for scope)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-litlenscloud-design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. litlens.cloud — design details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. litlens.cloud — design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stopwords-allowlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stopwords / allowlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nltk-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NLTK setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#match-semantics-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Match semantics — important
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Knobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-litlensscope-design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. litlens.scope — design details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. litlens.scope — design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flattening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flattening
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plots-produced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plots produced
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defensive-plotting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defensive plotting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema-agnostic-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema-agnostic mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-litlenscorpus-design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. litlens.corpus — design details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. litlens.corpus — design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plots-produced-from-web_scrape_analysispy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plots produced (from web_scrape_analysis.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-derivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source derivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#year-coercion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Year coercion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dependencies-minimum-viable-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dependencies (minimum viable port)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-suggested-file-layout-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Suggested file layout in the consumer repo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-output-conventions-consistency-across-sub-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Output conventions (consistency across sub-modules)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-configuration-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Configuration knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-errors-edge-cases-things-that-bite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Errors, edge cases, things that bite
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-extension-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Extension points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-integration-checklist-for-the-assistant-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Integration checklist (for the assistant in the consumer repo)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-reference-source-files-in-chitchat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Reference: source files in CHITCHAT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-why-litlens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Why "LitLens"?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../paper-discovery-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-litlens-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What LitLens does
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What LitLens does">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-three-sub-modules-pick-what-you-need" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Three sub-modules (pick what you need)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-public-api-surface-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Public API surface (recommended)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Public API surface (recommended)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-python-library" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Python library
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-http-service-optional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 HTTP service (optional)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-data-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Data contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Data contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-paper-input-same-as-paper-discovery-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Paper (input — same as paper-discovery output)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-boolean-bucket-definitions-input-for-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Boolean bucket definitions (input for cloud)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-screening-result-input-for-scope" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Screening result (input for scope)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#44-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.4 Outputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-litlenscloud-design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. litlens.cloud — design details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. litlens.cloud — design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#components" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Components
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stopwords-allowlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stopwords / allowlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nltk-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NLTK setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#match-semantics-important" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Match semantics — important
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Knobs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-litlensscope-design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. litlens.scope — design details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. litlens.scope — design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flattening" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flattening
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#plots-produced" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plots produced
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#defensive-plotting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Defensive plotting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#schema-agnostic-mode" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schema-agnostic mode
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-litlenscorpus-design-details" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. litlens.corpus — design details
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="7. litlens.corpus — design details">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#plots-produced-from-web_scrape_analysispy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plots produced (from web_scrape_analysis.py)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#source-derivation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Source derivation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#year-coercion" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Year coercion
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dependencies-minimum-viable-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dependencies (minimum viable port)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-suggested-file-layout-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Suggested file layout in the consumer repo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-output-conventions-consistency-across-sub-modules" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Output conventions (consistency across sub-modules)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-configuration-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Configuration knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-errors-edge-cases-things-that-bite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Errors, edge cases, things that bite
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-extension-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Extension points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-integration-checklist-for-the-assistant-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Integration checklist (for the assistant in the consumer repo)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#15-reference-source-files-in-chitchat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        15. Reference: source files in CHITCHAT
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#16-why-litlens" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        16. Why "LitLens"?
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="litlens-literature-analytics-visualization-module-design-spec">LitLens — Literature Analytics &amp; Visualization Module — Design Spec</h1>
+<blockquote>
+<p><strong>Codename: LitLens.</strong> A literature-analytics lens — point it at a corpus of screened papers and it produces word clouds, screening dashboards, and per-source/per-topic plots.</p>
+<p><strong>Purpose of this document.</strong> Design-spec / integration brief for an AI coding assistant (e.g. Claude) working in <em>another</em> codebase. Use it as the source of truth for porting the analytics layer out of CHITCHAT into a reusable module. The originating source files live in this repo under <code>analysis/</code>.</p>
+</blockquote>
+<hr />
+<h2 id="1-what-litlens-does">1. What LitLens does</h2>
+<p>Given a corpus of papers (<code>Paper[]</code>) and — optionally — a corresponding set of structured screening results, LitLens produces:</p>
+<ol>
+<li><strong>Word clouds + frequency charts</strong> per topical bucket, defined by boolean expressions.</li>
+<li><strong>Screening dashboards</strong> — priority distribution, publication timeline, technical-scope coverage, humanitarian-principle radar, methodology vs. ethics scatter.</li>
+<li><strong>Source / venue / year analytics</strong> for raw discovery corpora (before screening).</li>
+<li><strong>Static PNGs + interactive HTML</strong> side by side, plus a CSV/JSON summary.</li>
+</ol>
+<p>LitLens is <strong>post-pipeline</strong>. It does not call any external API, does not download anything, and is fully reproducible from local JSON/JSONL inputs.</p>
+<h3 id="when-to-use-it">When to use it</h3>
+<ul>
+<li>You already have a <code>papers.json</code> (e.g. from the paper-discovery module).</li>
+<li>You optionally also have a screening output (per-paper structured scoring).</li>
+<li>You want figures to put in a report, a dashboard, or a slide deck.</li>
+</ul>
+<h3 id="when-not-to-use-it">When NOT to use it</h3>
+<ul>
+<li>For live, interactive exploration of a million-paper corpus → use a real BI tool, not LitLens.</li>
+<li>For statistical hypothesis testing → LitLens is descriptive; bring your own stats layer.</li>
+</ul>
+<hr />
+<h2 id="2-three-sub-modules-pick-what-you-need">2. Three sub-modules (pick what you need)</h2>
+<p>LitLens is a <strong>family of three independent analyzers</strong>. The consumer codebase can install all or some.</p>
+<pre><code>                ┌─────────────────────────────────────────────────────┐
+                │                       LitLens                       │
+                ├──────────────────┬──────────────────┬───────────────┤
+                │ litlens.cloud    │ litlens.scope    │ litlens.corpus│
+                │ (word clouds)    │ (screening dash) │ (raw corpus)  │
+                ├──────────────────┼──────────────────┼───────────────┤
+   inputs       │ papers.json      │ screening.jsonl  │ papers.json   │
+                │ + boolean        │                  │ + (opt)       │
+                │   buckets        │                  │   boolean     │
+                ├──────────────────┼──────────────────┼───────────────┤
+   outputs      │ N×wordcloud.png  │ priority.png,    │ source/year/  │
+                │ N×freq_chart.png │ timeline.html,   │ venue plots   │
+                │ summary.csv      │ dashboard.html   │ network graphs│
+                └──────────────────┴──────────────────┴───────────────┘
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Sub-module</th>
+<th>Source today (CHITCHAT)</th>
+<th>Inputs</th>
+<th>Outputs</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>litlens.cloud</code></td>
+<td><code>analysis/word_cloud_analysis.py</code></td>
+<td><code>papers.json</code> + <code>boolean_combinations.json</code></td>
+<td>N word-clouds + freq charts + summary</td>
+</tr>
+<tr>
+<td><code>litlens.scope</code></td>
+<td><code>analysis/paper_analysis.py</code></td>
+<td><code>screening_results.jsonl</code></td>
+<td>Priority/timeline/heatmap/radar + dashboard</td>
+</tr>
+<tr>
+<td><code>litlens.corpus</code></td>
+<td><code>analysis/web_scrape_analysis.py</code></td>
+<td><code>papers.json</code> (+ optional <code>unique_boolean_*.json</code>)</td>
+<td>Source/year/venue plots</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-public-api-surface-recommended">3. Public API surface (recommended)</h2>
+<h3 id="31-python-library">3.1 Python library</h3>
+<pre><code class="language-python">from litlens import cloud, scope, corpus
+
+# --- 3.1.1 Word clouds per boolean bucket ---
+cloud.run(
+    papers_path=&quot;output/papers.json&quot;,
+    boolean_buckets_path=&quot;data/boolean_combinations.json&quot;,
+    screening_path=None,                 # optional, used to filter to screened-in
+    output_dir=&quot;reports/wordclouds/&quot;,
+    top_n_words=100,
+    min_word_length=3,
+)
+
+# --- 3.1.2 Screening-results dashboard ---
+scope.run(
+    screening_jsonl=&quot;output/screening_results_2026-05-22.jsonl&quot;,
+    output_dir=&quot;reports/screening/&quot;,
+    interactive=True,                    # also emit Plotly HTML
+)
+
+# --- 3.1.3 Raw-corpus analytics (pre-screening) ---
+corpus.run(
+    papers_path=&quot;output/papers.json&quot;,
+    boolean_combinations_path=&quot;data/unique_boolean_combinations.json&quot;,
+    output_dir=&quot;reports/corpus/&quot;,
+)
+</code></pre>
+<p>Each <code>run()</code> returns a <code>RunResult</code> containing the output directory and a manifest of generated artifacts (paths + types). Programmatic consumers can use the manifest to embed plots in HTML reports.</p>
+<h3 id="32-cli">3.2 CLI</h3>
+<pre><code>litlens cloud   --papers papers.json --buckets boolean_combinations.json --out reports/wc/
+litlens scope   --screening screening.jsonl --out reports/screen/
+litlens corpus  --papers papers.json --out reports/corpus/
+litlens all     --papers papers.json --screening screening.jsonl --out reports/
+</code></pre>
+<h3 id="33-http-service-optional">3.3 HTTP service (optional)</h3>
+<p>If wired up: each endpoint accepts an input artifact (uploaded JSON/JSONL) and returns a job-id; the job's result is a zip of PNGs+HTML+CSV.</p>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Body</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/v1/cloud</code></td>
+<td>multipart (papers, buckets)</td>
+<td><code>{job_id}</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/v1/scope</code></td>
+<td>multipart (screening.jsonl)</td>
+<td><code>{job_id}</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/v1/corpus</code></td>
+<td>multipart (papers, boolean opts)</td>
+<td><code>{job_id}</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/v1/jobs/{id}</code></td>
+<td>—</td>
+<td>status + zip URL when done</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-data-contracts">4. Data contracts</h2>
+<h3 id="41-paper-input-same-as-paper-discovery-output">4.1 <code>Paper</code> (input — same as paper-discovery output)</h3>
+<pre><code class="language-jsonc">{
+  &quot;title&quot;:          &quot;string | null&quot;,
+  &quot;authors&quot;:        &quot;string, comma-separated | null&quot;,
+  &quot;url&quot;:            &quot;string | null&quot;,
+  &quot;abstract&quot;:       &quot;string | null&quot;,
+  &quot;year&quot;:           &quot;int | null&quot;,
+  &quot;extracted_text&quot;: &quot;string | null&quot;
+}
+</code></pre>
+<h3 id="42-boolean-bucket-definitions-input-for-cloud">4.2 Boolean bucket definitions (input for <code>cloud</code>)</h3>
+<pre><code class="language-jsonc">[
+  { &quot;WORD&quot;: &quot;Foundation model&quot;,
+    &quot;boolean_combination&quot;: &quot;(\&quot;foundation model\&quot; OR \&quot;LLM\&quot; OR \&quot;GPT\&quot;)&quot; }
+]
+</code></pre>
+<blockquote>
+<p><strong>Note.</strong> <code>cloud</code> uses <strong>per-WORD</strong> OR-buckets (one bucket per row, one PNG per bucket). <code>corpus</code> can optionally use <strong>category-level</strong> <code>unique_boolean_combinations.json</code> (<code>Combination_title</code> + AND of OR-groups) for cross-cutting analytics.</p>
+</blockquote>
+<h3 id="43-screening-result-input-for-scope">4.3 Screening result (input for <code>scope</code>)</h3>
+<p>JSONL, one paper per line. Shape (from CHITCHAT's <code>src/screen_papers.py</code>):</p>
+<pre><code class="language-jsonc">{
+  &quot;title&quot;:            &quot;...&quot;,
+  &quot;final_priority&quot;:   &quot;INCLUDE | EXCLUDE | MAYBE | UNKNOWN&quot;,
+  &quot;original_metadata&quot;:{ &quot;year&quot;: 2024, &quot;authors&quot;: &quot;...&quot; },
+  &quot;screening_results&quot;:{
+    &quot;priority_level&quot;:         &quot;P0 | P1 | P2 | P3&quot;,
+    &quot;publication_quality&quot;:    { &quot;venue_name&quot;: &quot;...&quot;, &quot;is_top_tier_venue&quot;: bool,
+                                &quot;publication_year&quot;: int, &quot;citation_count&quot;: int,
+                                &quot;is_recent_promising&quot;: bool, &quot;full_text_english&quot;: bool },
+    &quot;technical_scope&quot;:        { &quot;addresses_llm_data_collection&quot;: bool,
+                                &quot;addresses_text_corpus_creation&quot;: bool,
+                                &quot;addresses_web_scraping_nlp&quot;: bool,
+                                &quot;addresses_multilingual_compilation&quot;: bool },
+    &quot;ethical_flags&quot;:          { &quot;focuses_only_on_performance&quot;: bool,
+                                &quot;disregards_ethical_principles&quot;: bool,
+                                &quot;missing_ethical_approval&quot;: bool,
+                                &quot;violates_humanitarian_principles&quot;: bool },
+    &quot;humanitarian_principles&quot;:{ &quot;humanity_score&quot;: int, &quot;impartiality_score&quot;: int,
+                                &quot;independence_score&quot;: int, &quot;neutrality_score&quot;: int },
+    &quot;methodology_contributions&quot;:{ &quot;novel_methodology&quot;: bool, &quot;systematic_evaluation&quot;: bool,
+                                  &quot;reproducible_implementation&quot;: bool },
+    &quot;ethical_contributions&quot;:  { &quot;explicit_framework&quot;: bool, &quot;empirical_bias_analysis&quot;: bool,
+                                &quot;harm_mitigation_strategies&quot;: bool,
+                                &quot;policy_recommendations&quot;: bool, &quot;acknowledges_tensions&quot;: bool }
+  }
+}
+</code></pre>
+<blockquote>
+<p><strong>Schema-agnostic mode (recommended for porting).</strong> Hardcoding CHITCHAT's exact screening schema makes LitLens brittle in other contexts. Implement an <strong>adapter</strong> layer: a user-supplied function <code>flatten(record) -&gt; dict</code> so any screening shape can feed <code>scope</code>. Ship the CHITCHAT flattener as the default but pluggable.</p>
+</blockquote>
+<h3 id="44-outputs">4.4 Outputs</h3>
+<p>All sub-modules write to <code>output_dir/</code> with this convention:</p>
+<pre><code>output_dir/
+├── manifest.json                # list of artifacts produced
+├── *.png                        # static plots
+├── *.html                       # interactive Plotly plots
+├── *.csv                        # tabular summaries
+└── analysis_report.md           # human-readable summary (scope only)
+</code></pre>
+<p><code>manifest.json</code> is the programmatic surface — never rely on listing the directory.</p>
+<hr />
+<h2 id="5-litlenscloud-design-details">5. <code>litlens.cloud</code> — design details</h2>
+<p>Pipeline:</p>
+<pre><code>  papers.json  ────┐
+                   │
+  boolean_buckets ─┴──▶  BooleanSearchEngine.match
+                                  │
+                                  ▼
+                        bucket → [paper, paper, ...]
+                                  │
+                                  ▼
+                        TextPreprocessor.extract_meaningful_words
+                                  │
+                                  ▼
+                        Counter → top-N word frequencies
+                                  │
+                                  ▼
+                       WordCloud + barh frequency chart + CSV
+</code></pre>
+<h3 id="components">Components</h3>
+<table>
+<thead>
+<tr>
+<th>Class</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>BooleanSearchEngine</code></td>
+<td>Parse <code>(A OR B OR C)</code> expressions; case-insensitive substring match against <code>title + abstract + extracted_text</code>.</td>
+</tr>
+<tr>
+<td><code>PaperBucketing</code></td>
+<td>Apply each bucket's expression across the corpus; a paper can land in multiple buckets.</td>
+</tr>
+<tr>
+<td><code>TextPreprocessor</code></td>
+<td>Lowercase, strip URLs/emails/punctuation, tokenize, POS-tag, drop stopwords, drop generic-academic words, allowlist technical terms.</td>
+</tr>
+<tr>
+<td><code>WordCloudGenerator</code></td>
+<td>Render WordCloud + matplotlib bar chart per bucket.</td>
+</tr>
+<tr>
+<td><code>WordCloudAnalyzer</code></td>
+<td>Orchestrator.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="stopwords-allowlist">Stopwords / allowlist</h3>
+<p>The CHITCHAT preprocessor ships a <strong>very large</strong> custom stopword set (~600 entries) covering generic academic vocabulary (<code>paper</code>, <code>study</code>, <code>framework</code>, …), modal verbs, ordinals, time words. It also ships a <strong>technical-term allowlist</strong> that bypasses POS filtering so terms like <code>nlp</code>, <code>ai</code>, <code>transformer</code> survive.</p>
+<blockquote>
+<p><strong>Port these as data, not code.</strong> Ship them as <code>stopwords_extra.txt</code> and <code>technical_terms.txt</code>. The consumer can override either without forking the module.</p>
+</blockquote>
+<h3 id="nltk-setup">NLTK setup</h3>
+<p>The module needs <code>punkt</code>, <code>punkt_tab</code>, <code>stopwords</code>, <code>averaged_perceptron_tagger</code> (and <code>_eng</code> on newer NLTK). On import, attempt download with <code>nltk.download(..., quiet=True)</code> and <strong>fall back to regex tokenization</strong> if NLTK fails. Never let a missing NLTK resource crash the module.</p>
+<h3 id="match-semantics-important">Match semantics — important</h3>
+<p>Bucket matching is currently <strong>OR-only substring</strong> — the expression <code>(A OR B)</code> matches if any term appears in concatenated <code>title+abstract+extracted_text</code>. The code does <strong>not</strong> implement <code>AND</code> / <code>NOT</code> for bucketing even though the boolean strings may contain them. If the consumer needs full boolean evaluation, plug in a real expression parser (e.g. <code>pyparsing</code>); otherwise document the limitation prominently.</p>
+<h3 id="knobs">Knobs</h3>
+<table>
+<thead>
+<tr>
+<th>Knob</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>top_n_words</code></td>
+<td>100</td>
+<td>per bucket</td>
+</tr>
+<tr>
+<td><code>min_word_length</code></td>
+<td>3</td>
+<td>drop 1-2 char tokens</td>
+</tr>
+<tr>
+<td><code>top_n_bars</code></td>
+<td>20</td>
+<td>how many words in the bar chart</td>
+</tr>
+<tr>
+<td><code>wordcloud_size</code></td>
+<td>1200×800</td>
+<td>render resolution</td>
+</tr>
+<tr>
+<td><code>colormap</code></td>
+<td>viridis</td>
+<td>matplotlib name</td>
+</tr>
+<tr>
+<td><code>colorblind_safe</code></td>
+<td>False</td>
+<td>when true, force a CB-safe palette</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="6-litlensscope-design-details">6. <code>litlens.scope</code> — design details</h2>
+<p>Operates on a <strong>flattened DataFrame</strong> built from the screening JSONL.</p>
+<h3 id="flattening">Flattening</h3>
+<p>Walk each <code>screening_results</code> sub-object and project nested booleans/ints into a flat row. The CHITCHAT implementation is in <code>paper_analysis.flatten_screening_data</code>. Derived columns:</p>
+<ul>
+<li><code>method_score</code>         = sum of methodology booleans</li>
+<li><code>ethical_score</code>        = sum of ethical contributions booleans</li>
+<li><code>total_humanitarian_score</code> = sum of the four humanitarian-principle integer scores</li>
+</ul>
+<h3 id="plots-produced">Plots produced</h3>
+<table>
+<thead>
+<tr>
+<th>Function</th>
+<th>Static PNG</th>
+<th>Interactive HTML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>plot_priority_distribution</code></td>
+<td><code>priority_distribution.png</code></td>
+<td><code>priority_distribution_interactive.html</code></td>
+</tr>
+<tr>
+<td><code>plot_publication_analysis</code></td>
+<td><code>publication_analysis.png</code></td>
+<td><code>publication_timeline_interactive.html</code></td>
+</tr>
+<tr>
+<td><code>plot_technical_scope_analysis</code></td>
+<td><code>technical_scope_analysis.png</code></td>
+<td><code>technical_scope_sunburst.html</code></td>
+</tr>
+<tr>
+<td><code>plot_humanitarian_scores</code></td>
+<td><code>humanitarian_analysis.png</code></td>
+<td><code>humanitarian_radar.html</code></td>
+</tr>
+<tr>
+<td><code>plot_methodology_contributions</code></td>
+<td><code>contributions_analysis.png</code></td>
+<td><code>contributions_bubble.html</code></td>
+</tr>
+<tr>
+<td><code>plot_comprehensive_dashboard</code></td>
+<td>—</td>
+<td><code>comprehensive_dashboard.html</code> (3×2 multi-panel)</td>
+</tr>
+<tr>
+<td><code>generate_summary_stats</code></td>
+<td><code>summary_statistics.json</code>, <code>analysis_report.md</code></td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="defensive-plotting">Defensive plotting</h3>
+<p>Every plot must gracefully handle:
+- <strong>Empty filtered subsets</strong> (e.g. no papers with <code>publication_year &gt; 0</code>). The CHITCHAT code annotates the axes with "No valid X data" rather than throwing.
+- <strong>Mono-class data</strong> (e.g. all <code>is_top_tier_venue=False</code>). Don't show a "True" slice with zero.
+- <strong>NaN in numeric scores</strong> — use <code>pd.notna</code> checks before formatting in the markdown report.</p>
+<p>Keep these guards in any port. They are the difference between a polished module and a fragile one.</p>
+<h3 id="schema-agnostic-mode">Schema-agnostic mode</h3>
+<p>If the consumer's screening schema differs, accept <code>flatten: Callable[[dict], dict]</code> as a parameter and dispatch to it instead of the built-in flattener. The plot functions only need the <strong>derived flat columns</strong> they read (document each plot's required columns).</p>
+<hr />
+<h2 id="7-litlenscorpus-design-details">7. <code>litlens.corpus</code> — design details</h2>
+<p>Operates on the <strong>raw discovery output</strong> (no screening required). Useful sanity-check / EDA before running a screening pass.</p>
+<h3 id="plots-produced-from-web_scrape_analysispy">Plots produced (from <code>web_scrape_analysis.py</code>)</h3>
+<ul>
+<li>Papers per source (<code>url</code> → domain → source name).</li>
+<li>Papers per year (line + histogram), with optional smoothing.</li>
+<li>Top-N venues / domains.</li>
+<li>Author counts and co-authorship combinations (<code>itertools.combinations</code>).</li>
+<li>Boolean-category coverage heatmap (how many papers match each <code>Combination_title</code>).</li>
+<li>Interactive sunburst: <code>source → year → category</code>.</li>
+</ul>
+<h3 id="source-derivation">Source derivation</h3>
+<p><code>_extract_source(url)</code> does dynamic domain → friendly-name mapping. Externalize the mapping as a JSON file so consumers can rename / re-bucket sources without code changes.</p>
+<h3 id="year-coercion">Year coercion</h3>
+<p>Already messy across the four sources (int / string / date-prefix). Reuse a shared <code>coerce_year(value) -&gt; int | None</code> helper across <code>corpus</code> and <code>scope</code>.</p>
+<hr />
+<h2 id="8-dependencies-minimum-viable-port">8. Dependencies (minimum viable port)</h2>
+<pre><code>matplotlib   &gt;= 3.8
+seaborn      &gt;= 0.13
+plotly       &gt;= 5.20
+pandas       &gt;= 2.3
+numpy        &gt;= 2.0
+wordcloud    &gt;= 1.9       # cloud only
+nltk         &gt;= 3.9       # cloud only
+jsonlines    &gt;= 4.0       # scope only
+</code></pre>
+<p><strong>Drop when porting:</strong> all CHITCHAT screening / discovery deps (openai, PyPDF2, scholarly, selenium, fitz). LitLens is pure analytics.</p>
+<hr />
+<h2 id="9-suggested-file-layout-in-the-consumer-repo">9. Suggested file layout in the consumer repo</h2>
+<pre><code>litlens/
+├── __init__.py              # re-exports cloud.run, scope.run, corpus.run, RunResult
+├── config.py                # dataclass: paths, knobs, color palette
+├── io.py                    # papers/screening loaders + manifest writer
+├── flatten.py               # default screening flattener (CHITCHAT shape) + adapter protocol
+├── text/
+│   ├── __init__.py
+│   ├── boolean_match.py     # BooleanSearchEngine
+│   ├── preprocess.py        # TextPreprocessor + NLTK bootstrap
+│   ├── stopwords_extra.txt  # data file
+│   └── technical_terms.txt  # data file
+├── cloud/
+│   ├── __init__.py          # run()
+│   ├── bucketing.py
+│   └── render.py            # WordCloudGenerator
+├── scope/
+│   ├── __init__.py          # run()
+│   ├── plots.py             # the 6 plot_* functions
+│   └── report.py            # generate_summary_stats / markdown report
+├── corpus/
+│   ├── __init__.py          # run()
+│   ├── analyzer.py
+│   └── source_map.json      # domain → source friendly name
+├── cli.py                   # `litlens` entrypoint with sub-commands
+└── service/                 # optional FastAPI wrapper
+</code></pre>
+<hr />
+<h2 id="10-output-conventions-consistency-across-sub-modules">10. Output conventions (consistency across sub-modules)</h2>
+<ul>
+<li><strong>Static images</strong>: PNG at 300 dpi, <code>bbox_inches='tight'</code>, white facecolor.</li>
+<li><strong>Interactive plots</strong>: Plotly HTML, self-contained (<code>include_plotlyjs='cdn'</code>).</li>
+<li><strong>Tables</strong>: CSV + JSON pair where it makes sense.</li>
+<li><strong>Markdown report</strong>: only <code>scope</code> writes one — <code>analysis_report.md</code> with priority distribution, technical-scope coverage, humanitarian averages.</li>
+<li><strong>Manifest</strong>: every <code>run()</code> writes <code>manifest.json</code>:
+  <code>jsonc
+  {
+    "module": "scope",
+    "generated_at": "2026-05-22T14:03:11Z",
+    "inputs": { "screening_jsonl": "..." },
+    "artifacts": [
+      {"path": "priority_distribution.png",     "kind": "image/png"},
+      {"path": "priority_distribution_interactive.html", "kind": "text/html"},
+      ...
+    ]
+  }</code></li>
+</ul>
+<hr />
+<h2 id="11-configuration-knobs">11. Configuration knobs</h2>
+<p>Centralize in a <code>LitLensConfig</code> dataclass. Each <code>run()</code> accepts an instance or overrides as kwargs.</p>
+<table>
+<thead>
+<tr>
+<th>Knob</th>
+<th>Default</th>
+<th>Used by</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dpi</code></td>
+<td>300</td>
+<td>all</td>
+<td>static images</td>
+</tr>
+<tr>
+<td><code>figsize_default</code></td>
+<td>(12, 8)</td>
+<td>all</td>
+<td></td>
+</tr>
+<tr>
+<td><code>colormap</code></td>
+<td>viridis</td>
+<td>cloud</td>
+<td>wordcloud + bars</td>
+</tr>
+<tr>
+<td><code>palette</code></td>
+<td>husl</td>
+<td>scope, corpus</td>
+<td>seaborn</td>
+</tr>
+<tr>
+<td><code>colorblind_safe</code></td>
+<td>False</td>
+<td>all</td>
+<td>force CB-safe palette</td>
+</tr>
+<tr>
+<td><code>top_n_words</code></td>
+<td>100</td>
+<td>cloud</td>
+<td>per bucket</td>
+</tr>
+<tr>
+<td><code>min_word_length</code></td>
+<td>3</td>
+<td>cloud</td>
+<td></td>
+</tr>
+<tr>
+<td><code>min_papers_per_bucket</code></td>
+<td>1</td>
+<td>cloud</td>
+<td>skip tiny buckets</td>
+</tr>
+<tr>
+<td><code>interactive</code></td>
+<td>True</td>
+<td>scope, corpus</td>
+<td>emit Plotly HTML</td>
+</tr>
+<tr>
+<td><code>write_manifest</code></td>
+<td>True</td>
+<td>all</td>
+<td></td>
+</tr>
+<tr>
+<td><code>stopwords_extra_path</code></td>
+<td>bundled</td>
+<td>cloud</td>
+<td>override custom list</td>
+</tr>
+<tr>
+<td><code>technical_terms_path</code></td>
+<td>bundled</td>
+<td>cloud</td>
+<td>override allowlist</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="12-errors-edge-cases-things-that-bite">12. Errors, edge cases, things that bite</h2>
+<ol>
+<li><strong>NLTK resource missing.</strong> Wrap <code>pos_tag</code> / <code>word_tokenize</code> in try/except; fall back to regex <code>\b[a-zA-Z]+\b</code>. Never crash on <code>LookupError</code>.</li>
+<li><strong>Empty bucket.</strong> Don't emit empty PNGs; log a warning and skip. Reflect in manifest as <code>"skipped": true</code>.</li>
+<li><strong>Single-class boolean column.</strong> <code>seaborn.barplot</code> warns if a class is absent; build <code>labels</code>/<code>values</code> only from present classes (see <code>plot_publication_analysis</code> for the pattern).</li>
+<li><strong>No valid years.</strong> <code>df[df['publication_year'] &gt; 0]</code> may be empty; annotate the axis instead of plotting nothing.</li>
+<li><strong>JSON vs JSONL.</strong> <code>corpus</code> reads <code>json.load</code> (single array); <code>scope</code> reads JSON-Lines. Don't mix.</li>
+<li><strong>Plotly font size on Windows.</strong> Default Plotly font may render poorly in some Windows browsers — set an explicit font family in the layout.</li>
+<li><strong>Stopwords list drift.</strong> The CHITCHAT custom stopword set is opinionated for AI/humanitarian literature. Externalize it (§9) so other domains can swap.</li>
+<li><strong>Boolean expressions with AND/NOT.</strong> <code>BooleanSearchEngine</code> silently treats them as OR-only. Document this loudly or upgrade the parser.</li>
+<li><strong><code>is_top_tier_venue</code> etc. are bools, not nullable.</strong> If your screening can produce <code>null</code>, coerce to <code>False</code> (or to a third "unknown" category) before plotting.</li>
+<li><strong>Plot subdirectories.</strong> Don't create per-bucket subdirs — flatten with <code>_make_safe_filename</code> so manifests stay simple.</li>
+</ol>
+<hr />
+<h2 id="13-extension-points">13. Extension points</h2>
+<ul>
+<li><strong>New plot.</strong> Drop a <code>plot_xyz(df, output_dir)</code> into <code>scope/plots.py</code> and register it in <code>scope.run</code>'s plot list.</li>
+<li><strong>Custom screening schema.</strong> Pass <code>flatten=my_flattener</code> into <code>scope.run</code>. The flattener must produce the columns referenced by whichever plots the consumer enables.</li>
+<li><strong>New analyzer.</strong> Add a <code>litlens.&lt;name&gt;/</code> sibling with the same <code>run()</code> contract; plug into <code>cli.py</code>.</li>
+<li><strong>Theming.</strong> Replace the default palette/colormap via <code>LitLensConfig</code>. Provide a <code>colorblind_safe=True</code> shortcut.</li>
+<li><strong>Embedding into a Jupyter notebook.</strong> Each <code>plot_*</code> function should return the <code>Figure</code> <em>and</em> save to disk. Today the CHITCHAT versions only save — refactor on port.</li>
+<li><strong>Per-paper drill-through.</strong> Add <code>--include-paper-ids</code> so interactive plots' hover-data include the source paper IDs for downstream linking.</li>
+</ul>
+<hr />
+<h2 id="14-integration-checklist-for-the-assistant-in-the-consumer-repo">14. Integration checklist (for the assistant in the consumer repo)</h2>
+<ul>
+<li>[ ] Decide which of the three sub-modules the host project actually needs; skip the others.</li>
+<li>[ ] Copy <code>analysis/word_cloud_analysis.py</code> → <code>litlens/cloud/</code> (split into <code>bucketing.py</code>, <code>render.py</code>, plus shared <code>text/</code>).</li>
+<li>[ ] Copy <code>analysis/paper_analysis.py</code> → <code>litlens/scope/</code>. Split the six <code>plot_*</code> functions into <code>plots.py</code> and the report builder into <code>report.py</code>.</li>
+<li>[ ] Copy <code>analysis/web_scrape_analysis.py</code> → <code>litlens/corpus/</code>.</li>
+<li>[ ] Externalize the <strong>stopwords list, technical-term allowlist, and source domain map</strong> as data files in the package.</li>
+<li>[ ] Externalize the <strong>CHITCHAT-specific screening schema</strong> by introducing the <code>flatten</code> adapter (§4.3).</li>
+<li>[ ] Replace all hardcoded <code>output_dir = "analysis/plots/..."</code> strings with <code>config.output_dir</code>.</li>
+<li>[ ] Refactor each <code>plot_*</code> to return its <code>Figure</code> and accept a <code>config</code> arg, in addition to writing to disk.</li>
+<li>[ ] Add <code>manifest.json</code> emission at the end of each <code>run()</code>.</li>
+<li>[ ] Add <code>litlens</code> CLI with <code>cloud</code> / <code>scope</code> / <code>corpus</code> / <code>all</code> sub-commands.</li>
+<li>[ ] Write one smoke test per sub-module with a tiny synthetic dataset.</li>
+<li>[ ] If running headless, set the matplotlib backend to <code>Agg</code> at module init.</li>
+</ul>
+<hr />
+<h2 id="15-reference-source-files-in-chitchat">15. Reference: source files in CHITCHAT</h2>
+<table>
+<thead>
+<tr>
+<th>Source file (CHITCHAT)</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>analysis/word_cloud_analysis.py</code></td>
+<td><code>litlens/cloud/*</code>, <code>litlens/text/*</code></td>
+</tr>
+<tr>
+<td><code>analysis/paper_analysis.py</code></td>
+<td><code>litlens/scope/plots.py</code>, <code>scope/report.py</code></td>
+</tr>
+<tr>
+<td><code>analysis/web_scrape_analysis.py</code></td>
+<td><code>litlens/corpus/analyzer.py</code></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="16-why-litlens">16. Why "LitLens"?</h2>
+<p>Same idea as a camera lens: point it at a literature corpus and it brings the salient structure into focus — what's there, what's missing, what got prioritized, what got dropped. Three lenses (<code>cloud</code>, <code>scope</code>, <code>corpus</code>) for three focal lengths.</p>
+<p>End of spec.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../Technical-Report/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Technical">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Technical
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../paper-discovery-module/" class="md-footer__link md-footer__link--next" aria-label="Next: Paper">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                Paper
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

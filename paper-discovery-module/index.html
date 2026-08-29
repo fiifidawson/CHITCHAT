@@ -1,0 +1,1663 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../litlens-module/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/favicon.ico">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Paper - CHITCHAT documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#paper-discovery-module-design-spec" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="CHITCHAT documentation" class="md-header__button md-logo" aria-label="CHITCHAT documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            CHITCHAT documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Paper
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4a5 5 0 0 0 5-5 5 5 0 0 0-5-5"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5m0 8a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="indigo"  aria-label="Switch to system preference"  type="radio" name="__palette" id="__palette_2">
+    
+      <label class="md-header__button md-icon" title="Switch to system preference" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 7H7a5 5 0 0 0-5 5 5 5 0 0 0 5 5h10a5 5 0 0 0 5-5 5 5 0 0 0-5-5M7 15a3 3 0 0 1-3-3 3 3 0 0 1 3-3 3 3 0 0 1 3 3 3 3 0 0 1-3 3"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../about/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  About
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../Technical-Report/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Technical
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../litlens-module/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Litlens
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Paper
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="CHITCHAT documentation" class="md-nav__button md-logo" aria-label="CHITCHAT documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    CHITCHAT documentation
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../about/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../Technical-Report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Technical
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../litlens-module/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Litlens
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Paper
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-this-module-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What this module does
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What this module does">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pipeline-data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Pipeline (data flow)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-public-api-surface-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Public API surface (recommended)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Public API surface (recommended)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-python-library-primary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Python library (primary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-http-service-optional-wrapper-recommended-if-multiple-consumer-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 HTTP service (optional wrapper — recommended if multiple consumer apps)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-data-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Data contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Data contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Inputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-intermediate-artifact-categoryquery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Intermediate artifact — CategoryQuery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-output-paper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Output — Paper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-source-adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Source adapters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Source adapters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adapter-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-boolean-query-handling-per-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Boolean query handling per source
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-pdf-download-text-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. PDF download &amp; text extraction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dependencies-minimum-viable-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dependencies (minimum viable port)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-suggested-file-layout-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Suggested file layout in the consumer repo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-configuration-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Configuration knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-errors-edge-cases-things-that-bite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Errors, edge cases, things that bite
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-extension-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Extension points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-integration-checklist-for-the-assistant-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Integration checklist (for the assistant in the consumer repo)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-reference-source-files-in-chitchat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Reference: source files in CHITCHAT
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-what-this-module-does" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. What this module does
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. What this module does">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#when-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#when-not-to-use-it" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        When NOT to use it
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-pipeline-data-flow" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Pipeline (data flow)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-public-api-surface-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Public API surface (recommended)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Public API surface (recommended)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-python-library-primary" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Python library (primary)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-cli" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 CLI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#33-http-service-optional-wrapper-recommended-if-multiple-consumer-apps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.3 HTTP service (optional wrapper — recommended if multiple consumer apps)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-data-contracts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Data contracts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Data contracts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-inputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Inputs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-intermediate-artifact-categoryquery" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Intermediate artifact — CategoryQuery
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-output-paper" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Output — Paper
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-source-adapters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Source adapters
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Source adapters">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adapter-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adapter contract
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-boolean-query-handling-per-source" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Boolean query handling per source
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-pdf-download-text-extraction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. PDF download &amp; text extraction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-dependencies-minimum-viable-port" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Dependencies (minimum viable port)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-suggested-file-layout-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Suggested file layout in the consumer repo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-configuration-knobs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Configuration knobs
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-errors-edge-cases-things-that-bite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. Errors, edge cases, things that bite
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#12-extension-points" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        12. Extension points
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#13-integration-checklist-for-the-assistant-in-the-consumer-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        13. Integration checklist (for the assistant in the consumer repo)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#14-reference-source-files-in-chitchat" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        14. Reference: source files in CHITCHAT
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="paper-discovery-module-design-spec">Paper Discovery Module — Design Spec</h1>
+<blockquote>
+<p><strong>Purpose of this document.</strong> This is a <strong>design-spec / integration brief</strong> for an AI coding assistant (e.g. Claude) working in <em>another</em> codebase. It tells the assistant exactly what to lift out of CHITCHAT, how the pieces fit together, what the public surface should look like, and where the rough edges are. Implement the module in the consumer repo by following this doc end-to-end; the source files referenced are in this repo under <code>src/</code>.</p>
+</blockquote>
+<hr />
+<h2 id="1-what-this-module-does">1. What this module does</h2>
+<p>A standalone, reusable component that turns a <strong>flat list of domain keywords + synonyms</strong> into a <strong>deduplicated list of research papers</strong> (with metadata + extracted full text) by:</p>
+<ol>
+<li>Expanding each keyword into an <code>OR</code>-group of quoted synonyms ("Boolean expansion").</li>
+<li>Composing keyword groups into N category-level <code>AND</code>-queries.</li>
+<li>Federating each query across multiple academic repositories (OpenAlex, Europe PMC, arXiv, Google Scholar).</li>
+<li>Downloading any reachable PDFs and extracting their text.</li>
+<li>Returning a single normalized JSON list.</li>
+</ol>
+<p>It has <strong>no opinion about what comes next</strong> (screening, ranking, embedding, citation graph, …). The output is a clean <code>Paper[]</code> schema that any downstream consumer can use.</p>
+<h3 id="when-to-use-it">When to use it</h3>
+<ul>
+<li>You have a domain ontology (CSV/JSON of <code>WORD</code>, <code>SYNONYMS</code>) and want literature on it.</li>
+<li>You want to abstract away the four different repository APIs and their quirks.</li>
+<li>You want PDF text where available, but graceful degradation (abstract-only) where not.</li>
+</ul>
+<h3 id="when-not-to-use-it">When NOT to use it</h3>
+<ul>
+<li>Single-keyword searches → call the repository API directly.</li>
+<li>Real-time / sub-second search → this module batches and rate-limits, expect minutes per category.</li>
+<li>Citation-graph traversal → out of scope.</li>
+</ul>
+<hr />
+<h2 id="2-pipeline-data-flow">2. Pipeline (data flow)</h2>
+<pre><code>            synonyms.csv / structure.json
+                       │
+                       ▼
+   ┌───────────────────────────────────────┐
+   │  STAGE 1 — Boolean Query Builder      │   (deterministic, offline)
+   │                                       │
+   │   per-WORD  OR-group of &quot;synonym&quot;s    │  → boolean_combinations.json
+   │   per-category  AND of OR-groups      │  → unique_boolean_combinations.json
+   └───────────────────────────────────────┘
+                       │
+                       ▼
+   ┌───────────────────────────────────────┐
+   │  STAGE 2 — Multi-Source Paper Fetch   │   (network, rate-limited)
+   │                                       │
+   │   dispatcher → OpenAlex                │
+   │              → Europe PMC              │
+   │              → arXiv                   │
+   │              → Google Scholar          │
+   │   ↓                                    │
+   │   PDF download → text extraction       │
+   └───────────────────────────────────────┘
+                       │
+                       ▼
+                  papers.json
+</code></pre>
+<p>The two stages are <strong>independently usable</strong>. Stage 1 produces a portable artifact (the query JSON) that can be inspected, version-controlled, or fed into any other search tool.</p>
+<hr />
+<h2 id="3-public-api-surface-recommended">3. Public API surface (recommended)</h2>
+<p>The module ships <strong>three calling layers</strong> — pick whichever fits the host codebase:</p>
+<h3 id="31-python-library-primary">3.1 Python library (primary)</h3>
+<pre><code class="language-python">from paper_discovery import (
+    build_boolean_queries,        # Stage 1
+    discover_papers,              # Stage 1 + Stage 2 end-to-end
+    search_source,                # Stage 2 only, single source
+    search_all_sources,           # Stage 2 only, fan-out
+)
+
+# Stage 1 only — pure, offline, deterministic.
+queries: list[CategoryQuery] = build_boolean_queries(
+    synonyms=[{&quot;WORD&quot;: &quot;Foundation model&quot;,
+               &quot;SYNONYMS AND NEAR SYNONYMS&quot;: &quot;LLM, large language model, GPT&quot;}],
+    categories={
+        &quot;Broad Foundational Search&quot;: [&quot;Foundation model&quot;, &quot;Machine Learning&quot;],
+        &quot;Humanitarian Search&quot;:       [&quot;Humanitarian &amp; Crisis Response&quot;, ...],
+    },
+)
+# → [{&quot;Combination_title&quot;: &quot;...&quot;, &quot;boolean_combination&quot;: '(&quot;LLM&quot; OR ...) AND (...)'}]
+
+# Stage 2 only — given a query, fetch papers from one source.
+papers = search_source(query='(&quot;LLM&quot; OR &quot;GPT&quot;) AND &quot;humanitarian&quot;',
+                       source=&quot;openalex&quot;,
+                       max_pages=5)
+
+# End-to-end.
+papers = discover_papers(
+    synonyms_path=&quot;data/synonyms.csv&quot;,
+    categories=CATEGORY_MAP,
+    sources=[&quot;openalex&quot;, &quot;europepmc&quot;, &quot;arxiv&quot;],   # google_scholar opt-in
+    download_pdfs=True,
+    out_path=&quot;output/papers.json&quot;,
+)
+</code></pre>
+<h3 id="32-cli">3.2 CLI</h3>
+<pre><code>paper-discovery build-queries  --in synonyms.csv  --categories categories.json  --out queries.json
+paper-discovery fetch          --queries queries.json --sources openalex,europepmc  --out papers.json
+paper-discovery run            --in synonyms.csv  --categories categories.json  --out papers.json
+</code></pre>
+<h3 id="33-http-service-optional-wrapper-recommended-if-multiple-consumer-apps">3.3 HTTP service (optional wrapper — recommended if multiple consumer apps)</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Path</th>
+<th>Body / Query</th>
+<th>Returns</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST</td>
+<td><code>/v1/boolean-queries</code></td>
+<td><code>{ synonyms, categories }</code></td>
+<td><code>CategoryQuery[]</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/v1/papers</code></td>
+<td><code>{ query, sources, max_pages?, download_pdfs? }</code></td>
+<td><code>Paper[]</code></td>
+</tr>
+<tr>
+<td>POST</td>
+<td><code>/v1/search</code></td>
+<td><code>{ synonyms, categories, sources, download_pdfs? }</code></td>
+<td><code>Paper[]</code> (full run)</td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/v1/sources</code></td>
+<td>—</td>
+<td><code>SourceDescriptor[]</code></td>
+</tr>
+<tr>
+<td>GET</td>
+<td><code>/v1/healthz</code></td>
+<td>—</td>
+<td><code>{status, sources}</code></td>
+</tr>
+</tbody>
+</table>
+<p>Long-running calls (<code>/v1/papers</code>, <code>/v1/search</code>) should be <strong>async with a job-id</strong>; clients poll <code>/v1/jobs/{id}</code>. A full multi-category run is minutes-to-hours.</p>
+<hr />
+<h2 id="4-data-contracts">4. Data contracts</h2>
+<h3 id="41-inputs">4.1 Inputs</h3>
+<p><strong>Synonym table</strong> — flat list of <code>{WORD, SYNONYMS}</code>. Origin format is open: CSV, Google Sheet export, JSON. The module needs only these two columns.</p>
+<pre><code class="language-jsonc">[
+  { &quot;WORD&quot;: &quot;Foundation model&quot;,
+    &quot;SYNONYMS AND NEAR SYNONYMS&quot;: &quot;LLM, large language model, GPT, foundation model&quot; },
+  { &quot;WORD&quot;: &quot;Humanitarian &amp; Crisis Response&quot;,
+    &quot;SYNONYMS AND NEAR SYNONYMS&quot;: &quot;humanitarian aid, disaster response, crisis intervention&quot; }
+]
+</code></pre>
+<blockquote>
+<p><strong>Note.</strong> The exact header <code>"SYNONYMS AND NEAR SYNONYMS"</code> is a CHITCHAT artifact; in a clean port, rename to <code>synonyms</code> and accept comma- <em>or</em> semicolon-separated values.</p>
+</blockquote>
+<p><strong>Category map</strong> — name → ordered list of <code>WORD</code> keys from the synonym table. Keys missing from the synonym table are dropped with a warning (do <strong>not</strong> fail the run).</p>
+<pre><code class="language-jsonc">{
+  &quot;Broad Foundational Search&quot;: [
+      &quot;Foundation model&quot;, &quot;Artificial Intelligence System&quot;,
+      &quot;Machine Learning&quot;, &quot;Deep Learning&quot;
+  ],
+  &quot;Humanitarian &amp; Social Impact Search&quot;: [
+      &quot;Humanitarian &amp; Crisis Response&quot;, &quot;Core Humanitarian Principles&quot;, ...
+  ]
+}
+</code></pre>
+<h3 id="42-intermediate-artifact-categoryquery">4.2 Intermediate artifact — <code>CategoryQuery</code></h3>
+<p>Produced by Stage 1, consumed by Stage 2. <strong>This is the stable contract</strong> between the two stages; keep it boring.</p>
+<pre><code class="language-jsonc">{
+  &quot;Combination_title&quot;:    &quot;Humanitarian &amp; Social Impact Search&quot;,
+  &quot;boolean_combination&quot;:  &quot;(\&quot;Foundation model\&quot; OR \&quot;LLM\&quot;) AND (\&quot;humanitarian aid\&quot; OR ...)&quot;
+}
+</code></pre>
+<h3 id="43-output-paper">4.3 Output — <code>Paper</code></h3>
+<pre><code class="language-jsonc">{
+  &quot;title&quot;:          &quot;string | null&quot;,
+  &quot;authors&quot;:        &quot;string, comma-separated | null&quot;,
+  &quot;url&quot;:            &quot;string (landing page or PDF) | null&quot;,
+  &quot;abstract&quot;:       &quot;string | null&quot;,
+  &quot;year&quot;:           &quot;int | null&quot;,
+  &quot;extracted_text&quot;: &quot;string (full PDF text) | null&quot;,
+  &quot;source&quot;:         &quot;openalex | europepmc | arxiv | google_scholar&quot;,
+  &quot;search_category&quot;:&quot;string (which CategoryQuery surfaced it)&quot;
+}
+</code></pre>
+<p>Fields are nullable on purpose — sources differ in what they return, and the consumer must tolerate gaps. <strong>Do not invent defaults</strong>; <code>null</code> means "we don't know."</p>
+<hr />
+<h2 id="5-source-adapters">5. Source adapters</h2>
+<p>Each adapter is a function with the signature:</p>
+<pre><code class="language-python">def search_&lt;source&gt;(query: str, **kwargs) -&gt; list[Paper]: ...
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Endpoint</th>
+<th>Auth</th>
+<th>Pagination</th>
+<th>Rate-limit</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenAlex</td>
+<td><code>https://api.openalex.org/works</code></td>
+<td>none</td>
+<td>cursor (<code>*</code>)</td>
+<td>~1 req/s polite</td>
+<td>Inverted-index abstracts must be rebuilt (<code>_rebuild_abstract</code>). PDF URL in <code>primary_location.pdf_url</code>.</td>
+</tr>
+<tr>
+<td>Europe PMC</td>
+<td><code>https://www.ebi.ac.uk/europepmc/webservices/rest/search</code></td>
+<td>none</td>
+<td>cursorMark</td>
+<td>~1 req/s</td>
+<td><code>resultType=core</code> is required for abstracts. Year may be under <code>journalInfo</code> or <code>bookOrReportDetails</code>.</td>
+</tr>
+<tr>
+<td>arXiv</td>
+<td><code>http://export.arxiv.org/api/query</code></td>
+<td>none</td>
+<td><code>start</code>/<code>max_results</code></td>
+<td><strong>1 req / 3 s</strong> (strict)</td>
+<td>Atom XML. Boolean must be <strong>simplified</strong> to a few terms (see §6).</td>
+</tr>
+<tr>
+<td>Google Scholar</td>
+<td>via <code>scholarly</code> library</td>
+<td>none, fragile</td>
+<td>library-managed</td>
+<td>aggressive throttling, captchas</td>
+<td>Treat as best-effort, <strong>opt-in</strong>, may fail.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="adapter-contract">Adapter contract</h3>
+<ul>
+<li><strong>Never raise on a remote error.</strong> Log + return <code>[]</code>.</li>
+<li><strong>Always normalize</strong> to the <code>Paper</code> schema before returning.</li>
+<li><strong>Skip PDF download</strong> if <code>download_pdfs=False</code>. Adapters must respect this flag.</li>
+<li><strong>Failures are per-paper.</strong> A broken PDF doesn't kill the rest of the result set.</li>
+</ul>
+<hr />
+<h2 id="6-boolean-query-handling-per-source">6. Boolean query handling per source</h2>
+<p>OpenAlex and Europe PMC understand rich boolean expressions natively. <strong>arXiv does not</strong> — its query language is term-based and chokes on long <code>OR</code>-chains. The arXiv adapter therefore performs a <strong>simplification step</strong>:</p>
+<ol>
+<li>Extract all double-quoted terms from the boolean string.</li>
+<li>Take the top N (default 8) most-specific terms.</li>
+<li>Emit a small set of <code>all:"&lt;term&gt;"</code> and <code>all:"&lt;t1&gt;" AND all:"&lt;t2&gt;"</code> queries.</li>
+<li>Optionally add a category-tag query (<code>cat:cs.LG</code>, etc.) keyed off the <code>Combination_title</code>.</li>
+</ol>
+<blockquote>
+<p><strong>Implementation note.</strong> The CHITCHAT code (<code>src/api/arxiv_paper_search.py</code>) hardcodes a <code>category_mappings</code> dict mapping category-title substrings to arXiv <code>cat:</code> codes. In a port, <strong>lift this into config</strong> (<code>arxiv_category_map.json</code>) so the consumer can customize without code changes.</p>
+</blockquote>
+<p>Google Scholar accepts the raw boolean string but the <code>scholarly</code> library applies its own escaping. Don't pre-quote.</p>
+<hr />
+<h2 id="7-pdf-download-text-extraction">7. PDF download &amp; text extraction</h2>
+<p>Two helpers, both lifted from <code>src/api/web_scrape.py</code>:</p>
+<pre><code class="language-python">download_research_paper(url: str, save_dir: str = &quot;research_paper_downloads&quot;) -&gt; str | None
+extract_paper_text(pdf_path: str) -&gt; str
+</code></pre>
+<p><code>download_research_paper</code> is <strong>deliberately generic</strong>:
+1. <code>GET</code> the URL with a <code>Mozilla/5.0</code> UA.
+2. If <code>Content-Type</code> includes <code>pdf</code> or the URL ends in <code>.pdf</code>, stream to disk.
+3. Otherwise parse HTML with BeautifulSoup, find the first <code>&lt;a href&gt;</code> whose href ends in <code>.pdf</code> / contains <code>/pdf</code> / <code>/epdf</code>, follow it, stream that.
+4. Return path or <code>None</code>. <strong>Never throws.</strong></p>
+<p><code>extract_paper_text</code> uses <strong>PyPDF2</strong> with two safety nets:
+- Validates the <code>%PDF-</code> magic header.
+- Pads a missing <code>%%EOF</code> marker (some publishers serve truncated files).
+- Wraps in <code>BytesIO(strict=False)</code> to tolerate slightly malformed PDFs.</p>
+<blockquote>
+<p><strong>Carryover quirk.</strong> The CHITCHAT requirements pin both <code>PyMuPDF</code> (<code>fitz</code>) and <code>PyPDF2</code>; only PyPDF2 is actually used in <code>extract_paper_text</code>. Drop the <code>fitz</code> import unless you intend to add OCR / image extraction.</p>
+</blockquote>
+<p>PDFs are written to disk so that the consumer can also feed them to other text extractors (e.g. GROBID, unstructured.io) without re-downloading. <strong>Keep this behavior</strong> — it is load-bearing for downstream pipelines.</p>
+<hr />
+<h2 id="8-dependencies-minimum-viable-port">8. Dependencies (minimum viable port)</h2>
+<pre><code>requests &gt;= 2.32
+beautifulsoup4 &gt;= 4.13
+PyPDF2 &gt;= 3.0
+scholarly &gt;= 1.7        # only if google_scholar source enabled
+pydantic &gt;= 2.11        # for typed inputs/outputs (recommended)
+</code></pre>
+<p><strong>Drop from CHITCHAT requirements.txt when porting:</strong> <code>fitz</code> / <code>PyMuPDF</code> (unused), <code>selenium</code>, <code>nipype</code>, <code>nibabel</code>, <code>sphinx*</code>, <code>bibtexparser</code>, <code>pandas</code> (Stage 2 doesn't need it), <code>openai</code> (that belongs to the screening module, not this one).</p>
+<hr />
+<h2 id="9-suggested-file-layout-in-the-consumer-repo">9. Suggested file layout in the consumer repo</h2>
+<pre><code>paper_discovery/
+├── __init__.py              # re-exports public API
+├── boolean/
+│   ├── __init__.py
+│   ├── builder.py           # build_boolean_queries (was boolean_combinations.py)
+│   └── composer.py          # category × AND composition (was unique_boolean_combinations.py)
+├── sources/
+│   ├── __init__.py
+│   ├── base.py              # Source protocol / abstract adapter
+│   ├── openalex.py
+│   ├── europepmc.py
+│   ├── arxiv.py             # contains the simplification step
+│   └── google_scholar.py
+├── pdf/
+│   ├── __init__.py
+│   ├── download.py          # download_research_paper
+│   └── extract.py           # extract_paper_text
+├── schema.py                # Pydantic models: Paper, CategoryQuery, SourceDescriptor
+├── pipeline.py              # discover_papers (end-to-end orchestrator)
+├── cli.py                   # paper-discovery CLI entrypoint
+└── service/                 # optional HTTP wrapper
+    ├── app.py               # FastAPI
+    └── jobs.py              # background-task queue
+</code></pre>
+<hr />
+<h2 id="10-configuration-knobs">10. Configuration knobs</h2>
+<p>Expose as constructor args / env vars — <strong>do not hardcode</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Knob</th>
+<th>Default</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RATE_LIMIT_OPENALEX</code></td>
+<td>1.0 s</td>
+<td>between pages</td>
+</tr>
+<tr>
+<td><code>RATE_LIMIT_EUROPEPMC</code></td>
+<td>1.0 s</td>
+<td>between pages</td>
+</tr>
+<tr>
+<td><code>RATE_LIMIT_ARXIV</code></td>
+<td>3.0 s</td>
+<td>between <strong>queries</strong> — arXiv ToS, do not lower</td>
+</tr>
+<tr>
+<td><code>MAX_PAGES_PER_QUERY</code></td>
+<td><code>None</code></td>
+<td><code>None</code> = paginate to end</td>
+</tr>
+<tr>
+<td><code>MAX_RESULTS_PER_QUERY</code></td>
+<td>200</td>
+<td>OpenAlex hard cap; Europe PMC up to 1000</td>
+</tr>
+<tr>
+<td><code>PDF_DOWNLOAD_DIR</code></td>
+<td><code>./pdf_cache</code></td>
+<td>reused across runs — content-addressed names recommended</td>
+</tr>
+<tr>
+<td><code>USER_AGENT</code></td>
+<td><code>Mozilla/5.0</code></td>
+<td>be polite; set to <code>&lt;your-app&gt;/&lt;version&gt; (&lt;email&gt;)</code></td>
+</tr>
+<tr>
+<td><code>ENABLE_GOOGLE_SCHOLAR</code></td>
+<td><code>False</code></td>
+<td>rate-limited, captcha-prone</td>
+</tr>
+<tr>
+<td><code>DEDUPE_KEY</code></td>
+<td><code>title.lower()</code></td>
+<td>replace with DOI when both available</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="11-errors-edge-cases-things-that-bite">11. Errors, edge cases, things that bite</h2>
+<ol>
+<li><strong>arXiv 3-second rule.</strong> Going below 3 s/req gets the IP banned for hours. The <code>time.sleep(3)</code> in the loop is not optional.</li>
+<li><strong>Inverted-index abstracts.</strong> OpenAlex returns abstracts as <code>{token: [positions]}</code> not strings. Use <code>_rebuild_abstract</code> <em>or</em> skip the abstract.</li>
+<li><strong>Europe PMC paywalled PDFs.</strong> The URL in <code>fullTextUrlList</code> may 200 with a paywall HTML page. The PDF extractor will fail; <strong>catch and store <code>extracted_text=None</code></strong>, do not crash.</li>
+<li><strong>Empty <code>key_terms</code> after simplification.</strong> If a category has only multi-word terms, the arXiv <code>_extract_key_terms_from_boolean</code> filter (drops <code>or/and/the/for/with/data</code>) can return <code>[]</code>. Log + skip rather than firing a useless <code>all:"data"</code> query.</li>
+<li><strong>Google Scholar captcha.</strong> <code>scholarly</code> will silently start returning empty results. Detect zero-yield runs and surface a warning to the caller.</li>
+<li><strong>PDF magic-byte check.</strong> A file starting with <code>&lt;!doctype html&gt;</code> is the most common failure mode (HTTP 200 + HTML error page). The header check in <code>extract_paper_text</code> already handles it.</li>
+<li><strong>Missing category keys.</strong> If a category lists a key not in the synonym table, log a warning and continue with the keys that <em>are</em> present — never silently drop the whole category.</li>
+<li><strong>Year coercion.</strong> OpenAlex returns <code>int</code>, Europe PMC returns string, arXiv returns date-prefix. Normalize to <code>int | None</code>.</li>
+</ol>
+<hr />
+<h2 id="12-extension-points">12. Extension points</h2>
+<p>Designed-in seams; the consumer codebase is expected to plug things in here:</p>
+<ul>
+<li><strong>New source adapter.</strong> Implement the <code>Source</code> protocol (<code>search(query, **kw) -&gt; list[Paper]</code>) and register it in <code>sources/__init__.py</code>. The pipeline picks it up by name.</li>
+<li><strong>Custom dedupe.</strong> Replace the <code>DEDUPE_KEY</code> callable. Recommended: <code>(doi or normalize(title), year)</code>.</li>
+<li><strong>Post-fetch hooks.</strong> Allow the consumer to pass <code>on_paper: Callable[[Paper], Paper]</code> for enrichment (DOI lookup, citation count, embedding, etc.).</li>
+<li><strong>Cache layer.</strong> Stage 1 is pure; cache it by <code>hash(synonyms + categories)</code>. Stage 2 is expensive; cache by <code>hash(query + source)</code>.</li>
+<li><strong>Telemetry.</strong> Emit one structured log per <code>(source, query)</code> pair: <code>{source, query, pages, papers, pdfs_attempted, pdfs_extracted, elapsed_s}</code>. Used to find dead repositories.</li>
+</ul>
+<hr />
+<h2 id="13-integration-checklist-for-the-assistant-in-the-consumer-repo">13. Integration checklist (for the assistant in the consumer repo)</h2>
+<ul>
+<li>[ ] Copy <code>src/boolean/*.py</code> and <code>src/api/*.py</code> into <code>paper_discovery/</code> per the layout in §9.</li>
+<li>[ ] Rewrite the file-path-based helpers (<code>generate_boolean_combinations(input_file, output_file)</code>) into <strong>pure functions</strong> that take/return Python objects; keep the file-IO wrappers as thin CLI shims.</li>
+<li>[ ] Replace <code>print(...)</code> debug calls with <code>logging.getLogger(__name__)</code> and let the host app configure handlers.</li>
+<li>[ ] Add Pydantic models in <code>schema.py</code> matching §4.</li>
+<li>[ ] Lift the <code>predefined_combinations</code> dict out of <code>UniqueBooleanCombinationsGenerator.__init__</code> into a caller-provided argument (it is domain config, not library code).</li>
+<li>[ ] Lift the arXiv <code>category_mappings</code> dict into a JSON config file.</li>
+<li>[ ] Add a <code>Source</code> Protocol; convert each <code>search_*</code> function into an adapter class.</li>
+<li>[ ] Write one happy-path integration test per source, with mocked HTTP.</li>
+<li>[ ] Decide whether to ship the HTTP service wrapper (§3.3) or only the library (§3.1) — depends on how many apps need it.</li>
+</ul>
+<hr />
+<h2 id="14-reference-source-files-in-chitchat">14. Reference: source files in CHITCHAT</h2>
+<table>
+<thead>
+<tr>
+<th>Source file (CHITCHAT)</th>
+<th>Maps to</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>src/boolean/boolean_combinations.py</code></td>
+<td><code>paper_discovery/boolean/builder.py</code></td>
+</tr>
+<tr>
+<td><code>src/boolean/unique_boolean_combinations.py</code></td>
+<td><code>paper_discovery/boolean/composer.py</code></td>
+</tr>
+<tr>
+<td><code>src/boolean/csv_to_json.py</code></td>
+<td><code>paper_discovery/io.py</code> (synonym loader)</td>
+</tr>
+<tr>
+<td><code>src/api/web_scrape.py</code> → <code>search_openalex</code></td>
+<td><code>paper_discovery/sources/openalex.py</code></td>
+</tr>
+<tr>
+<td><code>src/api/web_scrape.py</code> → <code>search_europepmc</code></td>
+<td><code>paper_discovery/sources/europepmc.py</code></td>
+</tr>
+<tr>
+<td><code>src/api/web_scrape.py</code> → <code>search_google_scholar_scholarly</code></td>
+<td><code>paper_discovery/sources/google_scholar.py</code></td>
+</tr>
+<tr>
+<td><code>src/api/web_scrape.py</code> → <code>download_research_paper</code>, <code>extract_paper_text</code></td>
+<td><code>paper_discovery/pdf/{download,extract}.py</code></td>
+</tr>
+<tr>
+<td><code>src/api/arxiv_paper_search.py</code></td>
+<td><code>paper_discovery/sources/arxiv.py</code></td>
+</tr>
+</tbody>
+</table>
+<p>End of spec.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../litlens-module/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Litlens">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                Litlens
+              </div>
+            </div>
+          </a>
+        
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["announce.dismiss", "content.action.edit", "content.action.view", "content.code.annotate", "content.code.copy", "content.tooltips", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.share", "search.suggest", "toc.follow"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
