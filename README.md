@@ -117,4 +117,9 @@ This project is led by the following researchers:
 ---
 
 # License
+
+The source code in this repository is licensed under the **Apache License 2.0** — see [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+Note that the code licence does not extend to third-party material this pipeline retrieves. Bibliographic metadata, abstracts and extracted document text collected from arXiv, OpenAlex, Europe PMC and Google Scholar remain the property of their respective rights holders and are not relicensed here. If you redistribute outputs of this pipeline, you are responsible for complying with the terms of the originating repository and of the underlying publications.
+
 <p align="right">[<a href="#readme-top">back to top</a>]</p>

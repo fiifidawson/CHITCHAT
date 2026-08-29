@@ -409,7 +409,7 @@ def get_arxiv_results(path_to_unique_boolean_combinations):
     """
     try:
         # Import your existing arXiv search function
-        from src.api.arxiv_paper_search import search_arxiv_papers
+        from legacy.src.api.arxiv_paper_search import search_arxiv_papers
         import json
         import os
         
