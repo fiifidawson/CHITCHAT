@@ -1,0 +1,130 @@
+{#-
+  Landing-page template.
+
+  Material renders page content inside a fixed-width column. A hero has to sit
+  outside it to go full-bleed, so it is injected into the `tabs` block — which
+  lands directly under the header, above the content grid. Everything below the
+  hero is ordinary page content from docs/index.md.
+
+  Applied via `template: home.html` in that page's front matter.
+-#}
+{% extends "main.html" %}
+
+{% block tabs %}
+  {{ super() }}
+
+  <section class="chit-hero">
+    <div class="chit-hero__inner md-grid">
+
+      <div class="chit-hero__copy">
+        <p class="chit-hero__eyebrow">LiGHT Lab, EPFL &middot; in collaboration with the ICRC</p>
+
+        <h1 class="chit-hero__title">
+          The literature review,<br>written down as code.
+        </h1>
+
+        <p class="chit-hero__lede">
+          CHITCHAT turns a curated vocabulary of research concepts into a screened,
+          deduplicated corpus of papers on interpretable, transparent and
+          humanitarian-aligned conversational AI &mdash; and makes every step of how it
+          got there something you can read.
+        </p>
+
+        <p class="chit-hero__actions">
+          <a href="{{ 'getting-started/' | url }}" class="md-button md-button--primary">
+            Get started
+          </a>
+          <a href="{{ 'pipeline/' | url }}" class="md-button">
+            How it works
+          </a>
+        </p>
+      </div>
+
+      <div class="chit-hero__art" aria-hidden="true">
+        {#- Scattered literature, focused through a lens, into a ranked few. -#}
+        <svg viewBox="0 0 560 380" role="img" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="chit-lens" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%"   stop-color="#9BD0F7" stop-opacity=".45"/>
+              <stop offset="100%" stop-color="#54A4E4" stop-opacity=".12"/>
+            </linearGradient>
+            <radialGradient id="chit-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%"   stop-color="#9BD0F7" stop-opacity=".40"/>
+              <stop offset="100%" stop-color="#9BD0F7" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <circle cx="286" cy="190" r="150" fill="url(#chit-glow)"/>
+
+          {#- The scattered corpus. -#}
+          <g class="chit-art__papers">
+            <g transform="translate(14,40)   rotate(-9)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(70,18)   rotate(6)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(24,116)  rotate(4)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(86,96)   rotate(-12)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(6,196)   rotate(10)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(74,182)  rotate(-4)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(32,274)  rotate(-7)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(94,262)  rotate(8)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(140,60)  rotate(-3)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(148,150) rotate(11)"><rect width="34" height="44" rx="3"/></g>
+            <g transform="translate(136,240) rotate(-6)"><rect width="34" height="44" rx="3"/></g>
+          </g>
+
+          {#- Converging through the aperture. -#}
+          <g class="chit-art__rays">
+            <path d="M188 74  C 236 120, 262 160, 286 190"/>
+            <path d="M192 166 C 236 176, 258 184, 286 190"/>
+            <path d="M184 256 C 234 236, 260 214, 286 190"/>
+            <path d="M176 118 C 230 146, 258 170, 286 190"/>
+            <path d="M178 212 C 232 204, 258 198, 286 190"/>
+          </g>
+
+          {#- The lens. -#}
+          <path class="chit-art__lens"
+                d="M286 78 C 340 126, 340 254, 286 302 C 232 254, 232 126, 286 78 Z"
+                fill="url(#chit-lens)"/>
+          <path class="chit-art__lens-spine" d="M286 92 L286 288"/>
+
+          {#- Emerging ranked, with a priority band each. -#}
+          <g class="chit-art__rays">
+            <path d="M286 190 C 322 186, 348 140, 380 126"/>
+            <path d="M286 190 C 326 190, 350 190, 380 190"/>
+            <path d="M286 190 C 322 194, 348 240, 380 254"/>
+          </g>
+
+          <g class="chit-art__results">
+            <g transform="translate(384,104)">
+              <rect width="164" height="44" rx="6"/>
+              <rect class="chit-art__bar chit-art__bar--high" x="12" y="14" width="5" height="16" rx="2.5"/>
+              <rect class="chit-art__line" x="28" y="14" width="104" height="5" rx="2.5"/>
+              <rect class="chit-art__line chit-art__line--dim" x="28" y="26" width="66" height="4" rx="2"/>
+            </g>
+            <g transform="translate(384,168)">
+              <rect width="164" height="44" rx="6"/>
+              <rect class="chit-art__bar chit-art__bar--med" x="12" y="14" width="5" height="16" rx="2.5"/>
+              <rect class="chit-art__line" x="28" y="14" width="88" height="5" rx="2.5"/>
+              <rect class="chit-art__line chit-art__line--dim" x="28" y="26" width="54" height="4" rx="2"/>
+            </g>
+            <g transform="translate(384,232)">
+              <rect width="164" height="44" rx="6"/>
+              <rect class="chit-art__bar chit-art__bar--low" x="12" y="14" width="5" height="16" rx="2.5"/>
+              <rect class="chit-art__line" x="28" y="14" width="96" height="5" rx="2.5"/>
+              <rect class="chit-art__line chit-art__line--dim" x="28" y="26" width="42" height="4" rx="2"/>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+    </div>
+
+    <div class="chit-hero__strip">
+      <div class="md-grid chit-hero__strip-inner">
+        <div><strong>4</strong><span>academic repositories</span></div>
+        <div><strong>8</strong><span>research categories</span></div>
+        <div><strong>6</strong><span>reproducible stages</span></div>
+        <div><strong>0</strong><span>hidden steps</span></div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,59 +1,201 @@
-site_name: CHITCHAT documentation
-nav:
-  - Home: index.md
-  - About: about.md
-  - Technical: Technical-Report.md
-  - Litlens: litlens-module.md
-  - Paper: paper-discovery-module.md
+# ---------------------------------------------------------------------------
+# CHITCHAT documentation — MkDocs + Material for MkDocs
+#
+#   uv sync               # docs deps live in pyproject.toml [dependency-groups]
+#   mkdocs serve          # live preview on http://127.0.0.1:8000
+#   mkdocs build --strict # what CI runs; warnings become errors
+# ---------------------------------------------------------------------------
+
+site_name: CHITCHAT
+site_url: https://fiifidawson.github.io/CHITCHAT/
+site_description: >-
+  A reproducible, auditable literature-review pipeline for interpretable and
+  transparent humanitarian alignment in conversational AI. From the LiGHT Lab
+  at EPFL, in collaboration with the ICRC.
+site_author: The CHITCHAT Authors
+copyright: >-
+  Copyright &copy; 2025–2026 The CHITCHAT Authors
+
+repo_url: https://github.com/fiifidawson/CHITCHAT
+repo_name: fiifidawson/CHITCHAT
+edit_uri: edit/main/docs/
+
+# The failure mode this site is most exposed to is a link that dies when a
+# page moves. Surface those at build time rather than in someone's browser.
+# A contributor note, not a page: kept next to the assets it describes.
+exclude_docs: |
+  assets/diagrams/README.md
+
+validation:
+  omitted_files: warn
+  absolute_links: warn
+  unrecognized_links: warn
+  anchors: warn
+
 theme:
   name: material
+  custom_dir: overrides       # full-bleed landing hero; see overrides/home.html
+  language: en
+  logo: assets/logo-mark.png    # square 128x128 — the wide wordmark squashes here
+  favicon: assets/favicon.png   # Material accepts PNG; no .ico needed
+  icon:
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    view: material/eye
   features:
     - announce.dismiss
     - content.action.edit
     - content.action.view
     - content.code.annotate
     - content.code.copy
-    # - content.code.select
-    # - content.footnote.tooltips
-    # - content.tabs.link
+    - content.tabs.link
     - content.tooltips
-    # - header.autohide
-    # - navigation.expand
     - navigation.footer
     - navigation.indexes
-    # - navigation.instant
-    # - navigation.instant.prefetch
-    # - navigation.instant.progress
-    # - navigation.prune
+    - navigation.instant
+    - navigation.instant.progress
+    - navigation.path
     - navigation.sections
     - navigation.tabs
-    # - navigation.tabs.sticky
     - navigation.top
     - navigation.tracking
     - search.highlight
     - search.share
     - search.suggest
     - toc.follow
+  # Light is the default on first visit, deliberately. There is no `media:`
+  # key on either entry: with one, Material selects whichever palette matches
+  # the visitor's OS setting, so anyone on a dark desktop would land on slate.
+  # Without it, Material's findIndex finds no match, returns -1, and the clamp
+  # in its palette JS falls back to index 0 -- this first entry. Do not add
+  # `media:` back unless you want the OS preference to win again.
+  #
+  # A returning visitor's own toggle choice still wins: it is read from
+  # localStorage (`__palette`) before this fallback is consulted.
   palette:
-    - media: "(prefers-color-scheme)"
+    - scheme: default           # light
+      primary: custom           # real values in docs/stylesheets/extra.css
+      accent: custom
       toggle:
-        icon: material/link
-        name: Switch to light mode
-    - media: "(prefers-color-scheme: light)"
-      scheme: default
-      primary: indigo
-      accent: indigo
-      toggle:
-        icon: material/toggle-switch
+        icon: material/weather-night
         name: Switch to dark mode
-    - media: "(prefers-color-scheme: dark)"
-      scheme: slate
-      primary: black
-      accent: indigo
+    - scheme: slate             # dark
+      primary: custom
+      accent: custom
       toggle:
-        icon: material/toggle-switch-off
-        name: Switch to system preference
+        icon: material/weather-sunny
+        name: Switch to light mode
   font:
-    text: Roboto
-    code: Roboto Mono
-  favicon: assets/favicon.ico
+    text: Inter
+    code: JetBrains Mono
+
+extra_css:
+  - stylesheets/extra.css
+
+plugins:
+  - search                      # bundled with mkdocs-material
+  - tags                        # bundled
+  - redirects:                  # pip package: mkdocs-redirects
+      redirect_maps:
+        'Technical-Report.md': 'pipeline/index.md'
+        'about.md': 'project/about.md'
+        'litlens-module.md': 'modules/litlens.md'
+        'paper-discovery-module.md': 'modules/paper-discovery.md'
+  # - social                    # bundled, but `mkdocs-material[imaging]` needs a
+  #                             # system Cairo — hard build failure on Windows.
+  #                             # Enable CI-only:  enabled: !ENV [CI, false]
+  # - git-revision-date-localized
+  #                             # separate package AND needs a git repo; raises
+  #                             # GitCommandError today. Unblock after `git init`.
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/fiifidawson/CHITCHAT
+      name: CHITCHAT on GitHub
+    - icon: material/school
+      link: https://www.epfl.ch/labs/light/
+      name: LiGHT Lab, EPFL
+
+nav:
+  - Home: index.md
+
+  - Getting Started:
+      - getting-started/index.md
+      - Installation: getting-started/installation.md
+      - Quickstart: getting-started/quickstart.md
+      - Configuration: getting-started/configuration.md
+      - Project layout: getting-started/project-layout.md
+
+  - Pipeline:
+      - pipeline/index.md
+      - Stages:
+          - 1. Boolean combinations: pipeline/boolean-combinations.md
+          - 2. Unique combinations: pipeline/unique-combinations.md
+          - 3. arXiv search: pipeline/arxiv-search.md
+          - 4. Multi-repository search: pipeline/multi-repository-search.md
+          - 5. Screening: pipeline/screening.md
+          - 6. Analysis: pipeline/analysis.md
+      - Running the pipeline: pipeline/running.md
+
+  - Modules:
+      - modules/index.md
+      - Paper Discovery: modules/paper-discovery.md
+      - LitLens: modules/litlens.md
+      - Screening schema: modules/screening-schema.md
+
+  - Humani-T:
+      - humani-t/index.md
+      - Web deployment: humani-t/web.md
+      - Local deployment: humani-t/local.md
+
+  - Project:
+      - project/about.md
+      - Research: project/research.md
+      - Limitations & intended use: project/limitations.md
+      - Contributing: project/contributing.md
+      - Governance: project/governance.md
+      - Citation: project/citation.md
+      - Roadmap: project/roadmap.md
+      - Changelog: project/changelog.md
+      - Licence: project/license.md
