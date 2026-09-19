@@ -1,84 +1,58 @@
-acres==0.5.0
-alabaster==1.0.0
-annotated-types==0.7.0
-anyio==4.9.0
-arrow==1.3.0
-attrs==25.3.0
-babel==2.17.0
-beautifulsoup4==4.13.4
-bibtexparser==1.4.3
-bs4==0.0.2
-certifi==2025.7.14
-cffi==1.17.1
-charset-normalizer==3.4.2
-ci-info==0.3.0
-click==8.2.2
-colorama==0.4.6
-configobj==5.0.9
-configparser==7.2.0
-Deprecated==1.2.18
-distro==1.9.0
-docutils==0.21.2
-etelemetry==0.3.1
-fake-useragent==2.2.0
-filelock==3.18.0
-fitz==0.0.1.dev2
-free_proxy==1.1.3
-h11==0.16.0
-httpcore==1.0.9
-httplib2==0.22.0
-httpx==0.28.1
-idna==3.10
-imagesize==1.4.1
-Jinja2==3.1.6
-jiter==0.10.0
-looseversion==1.3.0
-lxml==6.0.0
-MarkupSafe==3.0.2
-networkx==3.5
-nibabel==5.3.2
-nipype==1.10.0
-numpy==2.3.2
-openai==1.98.0
-outcome==1.3.0.post0
-packaging==25.0
-pandas==2.3.1
-pathlib==1.0.1
-prov==2.1.1
-puremagic==1.30
-pycparser==2.22
-pydantic==2.11.7
-pydantic_core==2.33.2
-pydot==4.0.1
-Pygments==2.19.2
-pyparsing==3.2.3
-PyPDF2==3.0.1
-PySocks==1.7.1
-python-dateutil==2.9.0.post0
-python-dotenv==1.1.1
-pytz==2025.2
-pyxnat==1.6.3
-rdflib==7.1.4
-requests==2.32.4
-roman-numerals-py==3.1.0
-scholarly==1.7.11
-scipy==1.16.1
-selenium==4.34.2
-simplejson==3.20.1
-six==1.17.0
-sniffio==1.3.1
-snowballstemmer==3.0.1
-sortedcontainers==2.4.0
-soupsieve==2.7
-tqdm==4.67.1
-traits==7.0.2
-trio==0.30.0
-trio-websocket==0.12.2
-types-python-dateutil==2.9.0.20250708
-typing-inspection==0.4.1
-typing_extensions==4.14.1
-tzdata==2025.2
-urllib3==2.5.0
-websocket-client==1.8.0
-wrapt==1.17.2
-wsproto==1.2.0
+# CHITCHAT pipeline dependencies.
+#
+# Hand-curated DIRECT dependencies only. This replaces a raw `pip freeze` that
+# did not install a working environment: it pinned `pathlib==1.0.1` (a PyPI
+# backport that shadows the stdlib module and breaks on Python 3), the
+# `bs4==0.0.2` dummy package, a `configparser` backport that shadows the
+# stdlib, and an unrelated neuroimaging stack (nipype, nibabel, pyxnat, prov,
+# traits), while omitting six packages the code actually imports.
+#
+# Transitive dependencies are resolved by pip and deliberately not listed here.
+# Every entry below is imported somewhere in the tree; the comments say where.
+#
+#     pip install -r requirements.txt
+#
+# The documentation toolchain is NOT here. It lives in the `docs` dependency
+# group in pyproject.toml -- see docs/project/contributing.md.
+#
+# Resolves and installs on Python 3.10 (.python-version). On 3.10 the resolver
+# selects the last 3.10-compatible pandas/numpy/matplotlib; moving to 3.12+
+# would pick up the current major releases.
+
+# --- Screening -- legacy/src/screen_papers.py -------------------------------
+# Uses client.beta.chat.completions.parse(...) with a pydantic response_format.
+# That call still exists and accepts the same arguments in openai 3.x, so the
+# cap is the next major rather than <2.
+openai>=1.98,<4
+pydantic>=2.11,<3
+tqdm>=4.67,<5
+
+# --- Discovery and scraping -- legacy/src/api/ ------------------------------
+requests>=2.32,<3
+beautifulsoup4>=4.13,<5
+scholarly>=1.7.11,<2
+# Constraint on a transitive dep, not a direct import. scholarly 1.7.11 asks
+# for `bibtexparser` unpinned but imports `bibtexparser.bibdatabase`, which
+# bibtexparser 2.x removed -- so an unconstrained resolve installs 2.x and
+# `import scholarly` dies with ModuleNotFoundError. The old freeze only worked
+# because it happened to pin 1.4.3. Remove this when scholarly supports 2.x.
+bibtexparser>=1.4,<2
+# web_scrape.py does `import fitz`, which is PyMuPDF. A separate, unrelated
+# package literally named `fitz` exists on PyPI -- installing that one is the
+# documented mistake, not the fix.
+PyMuPDF>=1.24,<2
+# PyPDF2 is end-of-life upstream (succeeded by `pypdf`). Kept because the code
+# does `import PyPDF2`; switching is a code change, not a pin change.
+PyPDF2>=3.0.1,<4
+
+# --- Analysis and figures -- legacy/analysis/ -------------------------------
+pandas>=2.2,<4
+numpy>=1.26,<3
+matplotlib>=3.8,<4
+seaborn>=0.13,<0.14
+plotly>=5.20,<8
+jsonlines>=4,<5
+# nltk fetches its own corpora at runtime (punkt, stopwords, POS tagger) via
+# download_nltk_data() in word_cloud_analysis.py -- needs network on first run.
+nltk>=3.9,<4
+wordcloud>=1.9.3,<2
