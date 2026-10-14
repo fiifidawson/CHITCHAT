@@ -28,3 +28,8 @@ def paper_id(paper: dict[str, Any]) -> str:
 def doc_id(path: Path) -> str:
     """`doc:<hash>` of the file's bytes."""
     return f"doc:{_sha16(path.read_bytes())}"
+
+
+def assign_tags(ids: list[str], prefix: str) -> dict[str, str]:
+    """Short citation tags (`P0001`, `D0001`...) in a stable order: sorted by id."""
+    return {item: f"{prefix}{n:04d}" for n, item in enumerate(sorted(set(ids)), 1)}

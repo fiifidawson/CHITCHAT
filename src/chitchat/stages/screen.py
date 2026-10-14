@@ -25,14 +25,11 @@ from chitchat.screening.schema import (
     screening_model,
 )
 from chitchat.screening.store import ScreeningStore, redecide
+from chitchat.stages import StageError
 
 log = logging.getLogger(__name__)
 
 METADATA_FIELDS = ("year", "doi", "url", "source", "authors", "pdf_status", "search_category")
-
-
-class StageError(RuntimeError):
-    """A stage can't run, e.g. its input is missing."""
 
 
 class Screener:

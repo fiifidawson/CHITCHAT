@@ -20,7 +20,7 @@ It is a research project of the LiGHT lab at EPFL, with the ICRC.
 | 3 | `ingest` | Reads your own documents from `my_docs/` | `raw/docs.jsonl` |
 | 4 | `sanitize` | Masks personal data. No LLM. | `papers.sanitized.jsonl`, `docs.sanitized.jsonl`, `privacy_report.json` |
 | 5 | `screen` | An LLM answers your criteria. Rules decide the label. | `screening.jsonl` |
-| 6 | `export` | Dataset and PRISMA report (coming next) | `dataset.jsonl`, `dataset.csv`, `prisma.md` |
+| 6 | `export` | Dataset, source tags and PRISMA report | `dataset.jsonl`, `dataset.csv`, `sources.json`, `prisma.md` |
 | 7 | `index` | Indexes the included papers (coming next) | Milvus collection |
 | – | `ask` | Answers a question with `[P0001]` citations (coming next) | `answers.jsonl` |
 
@@ -63,6 +63,10 @@ uv run chitchat run -c configs/pipeline.smoke.yaml --stages sanitize
 # 5. AI screening. Needs OPENAI_API_KEY. Only sanitized text is sent.
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
 #    -> runs/smoke/screening.jsonl
+
+# 6. Dataset and PRISMA report. Open dataset.csv in Excel.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages export
+#    -> runs/smoke/dataset.csv, dataset.jsonl, sources.json, prisma.md
 ```
 
 Or run them all at once:
@@ -77,8 +81,9 @@ Useful after screening:
 # Rerun screen: finished papers are reused. Refused, invalid and failed ones are retried.
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
 
-# Changed only the `decision` rules? Recompute labels with no LLM calls.
+# Changed only the `decision` rules? Recompute labels with no LLM calls, then rebuild the report.
 uv run chitchat run -c configs/pipeline.smoke.yaml --redecide
+uv run chitchat report -c configs/pipeline.smoke.yaml
 ```
 
 Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.

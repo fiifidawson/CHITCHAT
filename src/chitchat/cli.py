@@ -52,6 +52,12 @@ def _screen(cfg: PipelineConfig, run: RunDir) -> None:
     run_screen(cfg, run)
 
 
+def _export(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.export import run_export
+
+    run_export(cfg, run)
+
+
 # Stages in run order.
 STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
     "queries": _queries,
@@ -59,6 +65,7 @@ STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
     "ingest": _ingest,
     "sanitize": _sanitize,
     "screen": _screen,
+    "export": _export,
 }
 
 
@@ -109,10 +116,20 @@ def run(
     ] = False,
 ) -> None:
     """Run pipeline stages."""
-    from chitchat.screening.criteria import CriteriaError
-    from chitchat.stages.screen import StageError, run_screen
+    _run_stages(config, _parse_stages(stages), redecide=redecide)
 
-    selected = _parse_stages(stages)
+
+@app.command()
+def report(config: ConfigOption = Path("pipeline.yaml")) -> None:
+    """Rebuild dataset.jsonl, dataset.csv and the PRISMA report from the run files."""
+    _run_stages(config, ["export"])
+
+
+def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
+    from chitchat.screening.criteria import CriteriaError
+    from chitchat.stages import StageError
+    from chitchat.stages.screen import run_screen
+
     cfg = _load(config)
     run_dir = RunDir(cfg.run_root)
     run_dir.root.mkdir(parents=True, exist_ok=True)
@@ -120,7 +137,7 @@ def run(
         if redecide:
             run_screen(cfg, run_dir, redecide_only=True)
             return
-        for name in selected:
+        for name in names:
             log.info("== %s ==", name)
             STAGES[name](cfg, run_dir)
             run_dir.mark_done(name)
