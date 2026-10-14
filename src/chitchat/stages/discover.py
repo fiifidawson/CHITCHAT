@@ -12,6 +12,9 @@ from chitchat.run_dir import RunDir
 
 log = logging.getLogger(__name__)
 
+# OpenAlex rejects longer searches (HTTP 400) unless you have a paid API key.
+OPENALEX_MAX_CHARS = 1500
+
 
 def _key(value: Any) -> str:
     """Plain string for an enum or str key."""
@@ -53,23 +56,58 @@ def _load_discovery_config(cfg: PipelineConfig, run: RunDir) -> Any:
     return disc
 
 
-def run_queries(cfg: PipelineConfig, run: RunDir) -> list[dict[str, str]]:
-    """Build the boolean queries offline and save them. No network calls."""
+def _build_queries(disc: Any) -> list[dict[str, str]]:
+    """The boolean query per category, as mmore builds it. Offline."""
     import yaml
     from mmore.paper_discovery.boolean import build_boolean_queries, load_synonyms
 
-    disc = _load_discovery_config(cfg, run)
     synonyms = load_synonyms(disc.synonyms_path)
     with open(disc.categories_path, encoding="utf-8") as f:
         categories = yaml.safe_load(f)["categories"]
-    queries = [
+    return [
         {"category": q.combination_title, "query": q.boolean_combination}
         for q in build_boolean_queries(synonyms, categories)
     ]
+
+
+def too_long_for_openalex(queries: list[dict[str, str]], sources: list[str]) -> list[str]:
+    """Categories whose query OpenAlex will reject. Empty if OpenAlex is not a source."""
+    if "openalex" not in sources:
+        return []
+    return [q["category"] for q in queries if len(q["query"]) > OPENALEX_MAX_CHARS]
+
+
+def _warn_long_queries(queries: list[dict[str, str]], sources: list[str]) -> None:
+    long = too_long_for_openalex(queries, sources)
+    if long:
+        log.warning(
+            "OpenAlex will return nothing for %d of %d categories: their queries are over "
+            "%d characters (%s). Europe PMC and arXiv still run. "
+            "Shorten the synonyms or categories to include OpenAlex.",
+            len(long),
+            len(queries),
+            OPENALEX_MAX_CHARS,
+            ", ".join(long),
+        )
+
+
+def quiet_mupdf() -> None:
+    """MuPDF prints a line for each odd PDF instruction it skips. The text is still read."""
+    import pymupdf
+
+    pymupdf.TOOLS.mupdf_display_errors(False)
+    pymupdf.TOOLS.mupdf_display_warnings(False)
+
+
+def run_queries(cfg: PipelineConfig, run: RunDir) -> list[dict[str, str]]:
+    """Build the boolean queries offline and save them. No network calls."""
+    disc = _load_discovery_config(cfg, run)
+    queries = _build_queries(disc)
     write_json(run.queries, queries)
     for q in queries:
         groups = q["query"].count(" AND ") + 1
         log.info("  %s: %d groups, %d characters", q["category"], groups, len(q["query"]))
+    _warn_long_queries(queries, disc.sources)
     log.info("Wrote %d boolean queries to %s", len(queries), run.queries)
     return queries
 
@@ -79,6 +117,8 @@ def run_discover(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
 
     disc = _load_discovery_config(cfg, run)
     run.raw.mkdir(parents=True, exist_ok=True)
+    _warn_long_queries(_build_queries(disc), disc.sources)
+    quiet_mupdf()
 
     pipeline = PaperDiscoveryPipeline(disc)
     papers = pipeline.run()

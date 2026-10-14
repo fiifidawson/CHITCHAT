@@ -41,6 +41,10 @@ def run_ingest(cfg: PipelineConfig, run: RunDir) -> int:
 
     from mmore.run_process import merged_results_path, process
 
+    from chitchat.stages.discover import quiet_mupdf
+
+    quiet_mupdf()
+
     out = run.docs_process
     process_config = {
         "data_path": str(folder),

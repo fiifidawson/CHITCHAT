@@ -9,7 +9,7 @@ from types import SimpleNamespace
 import pytest
 import yaml
 
-from chitchat.stages.discover import discovery_stats
+from chitchat.stages.discover import OPENALEX_MAX_CHARS, discovery_stats, too_long_for_openalex
 
 REPO = Path(__file__).resolve().parents[1]
 
@@ -50,3 +50,12 @@ def test_categories_reference_known_words(filename: str, n: int) -> None:
     for name, keys in categories["categories"].items():
         missing = [k for k in keys if k.lower() not in words]
         assert not missing, f"{name}: {missing}"
+
+
+def test_too_long_for_openalex() -> None:
+    queries = [
+        {"category": "short", "query": "x" * OPENALEX_MAX_CHARS},
+        {"category": "long", "query": "x" * (OPENALEX_MAX_CHARS + 1)},
+    ]
+    assert too_long_for_openalex(queries, ["openalex", "arxiv"]) == ["long"]
+    assert too_long_for_openalex(queries, ["arxiv", "europepmc"]) == []
