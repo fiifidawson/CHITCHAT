@@ -1,0 +1,19 @@
+# Discovery for a ~30-paper test run: at most 6 papers x 3 sources x 2 categories = 36.
+# Paths are relative to this file.
+synonyms_path: synonyms.jsonl
+categories_path: categories.smoke.yaml
+output_file: papers.jsonl
+
+sources: [openalex, europepmc, arxiv]
+max_pages: 1
+max_results: 6
+
+download_pdfs: true
+pdf_dir: pdfs
+pdf_extractor: fast
+pdf_timeout: 30
+force_redownload: false
+
+arxiv_category_map:
+  Consent: cs.CY
+arxiv_enable_pair_query: true

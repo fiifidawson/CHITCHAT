@@ -1,0 +1,39 @@
+# A test run of about 30 papers (at most 36 before duplicates are removed).
+#   uv run chitchat run -c configs/pipeline.smoke30.yaml
+# Paths are relative to this file's folder (configs/).
+
+run_name: smoke30
+runs_dir: ../runs
+
+discovery:
+  config: discovery/discovery.smoke30.yaml
+
+own_documents:
+  folder: ../my_docs/
+  fast: true
+
+privacy:
+  sanitize_config: sanitize.yaml
+  before_screening: true
+  rag_privacy_config: rag_privacy.yaml
+
+screening:
+  criteria: criteria.example.yaml
+  llm:
+    llm_name: gpt-4o-mini
+    temperature: 0
+  min_year: 2020
+  min_chars: 500
+  max_chars: 60000
+  use_abstract_if_no_text: true
+  max_concurrency: 4
+
+index:
+  db_uri: http://127.0.0.1:19530         # Milvus in Docker. Linux/macOS can use ../runs/{run_name}/milvus.db
+  db_name: review
+  collection: smoke30
+
+ask:
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }
+  k: 6
+  reranker: null                         # skip the reranker download in tests

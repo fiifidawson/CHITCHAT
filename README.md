@@ -61,6 +61,8 @@ docker compose ps                         # wait until milvus-standalone is "hea
 
 The first `index` and `ask` download embedding models from Hugging Face (about 1 GB).
 
+All commands on one page: [COMMANDS.md](COMMANDS.md).
+
 ## Step by step: smoke test
 
 The smoke config searches 2 categories with 3 results per source, so up to 18 papers.
@@ -125,6 +127,9 @@ uv run chitchat report -c configs/pipeline.smoke.yaml
 ```
 
 Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
+
+For about 20 or 30 papers, use `configs/pipeline.smoke20.yaml` or `configs/pipeline.smoke30.yaml` with the same commands.
+Outputs go to `runs/smoke20/` or `runs/smoke30/`.
 
 ## Full run
 
