@@ -2,9 +2,7 @@
 
 *ArCHitectures for Interpretable & Transparent Continuous Humanitarian Alignment in chatbot Technologies*
 
-CHITCHAT is a literature-review pipeline built on [mmore](https://github.com/EPFLiGHT/mmore).
-It finds papers, adds your own documents, removes personal data, screens papers with an LLM,
-and lets you ask questions with cited answers.
+CHITCHAT is a literature-review pipeline built on [mmore](https://github.com/EPFLiGHT/mmore). It finds papers, adds your own documents, removes personal data, screens papers with an LLM, and lets you ask questions with cited answers.
 
 It is a research project of the LiGHT lab at EPFL, with the ICRC.
 
@@ -38,8 +36,7 @@ uv run python -m spacy download en_core_web_lg    # needed by the sanitize stage
 cp .env.example .env                              # then add OPENAI_API_KEY
 ```
 
-A key already set in your shell or Windows environment wins over `.env`.
-`chitchat` warns you when the two differ.
+A key already set in your shell or Windows environment wins over `.env`. `chitchat` warns you when the two differ.
 
 ### Milvus (for `index` and `ask`)
 
@@ -61,12 +58,11 @@ docker compose ps                         # wait until milvus-standalone is "hea
 
 The first `index` and `ask` download embedding models from Hugging Face (about 1 GB).
 
-All commands on one page: [COMMANDS.md](COMMANDS.md).
+All commands on one page: [COMMANDS.md](COMMANDS.md). What each stage does, skips and reuses: [PIPELINE.md](PIPELINE.md).
 
 ## Step by step: smoke test
 
-The smoke config searches 2 categories with 3 results per source, so up to 18 papers.
-Outputs go to `runs/smoke/`. Run the steps one at a time and look at each output.
+The smoke config searches 2 categories with 3 results per source, so up to 18 papers. Outputs go to `runs/smoke/`. Run the steps one at a time and look at each output.
 
 ```bash
 # 1. Boolean queries (offline). Check the AND/OR groups.
@@ -106,8 +102,7 @@ uv run chitchat ask -c configs/pipeline.smoke.yaml --review "..."       # check 
 uv run chitchat status -c configs/pipeline.smoke.yaml
 ```
 
-Privacy mode can mistake a product or project name for a person and mask it in your question.
-`ask` then shows the question it actually sent. Rephrase it ("the MoodSmith system") or use `--no-privacy`.
+Privacy mode can mistake a product or project name for a person and mask it in your question. `ask` then shows the question it actually sent. Rephrase it ("the MoodSmith system") or use `--no-privacy`.
 
 Or run them all at once:
 
@@ -128,8 +123,7 @@ uv run chitchat report -c configs/pipeline.smoke.yaml
 
 Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
 
-For about 20 or 30 papers, use `configs/pipeline.smoke20.yaml` or `configs/pipeline.smoke30.yaml` with the same commands.
-Outputs go to `runs/smoke20/` or `runs/smoke30/`.
+For about 20 or 30 papers, use `configs/pipeline.smoke20.yaml` or `configs/pipeline.smoke30.yaml` with the same commands. Outputs go to `runs/smoke20/` or `runs/smoke30/`.
 
 ## Full run
 
@@ -140,8 +134,7 @@ uv run chitchat status
 uv run chitchat ask "your question"
 ```
 
-Papers that could not be downloaded are listed in `runs/<run>/raw/papers_failed_pdfs.csv`.
-Save a PDF at its `save_as` path and rerun `discover` to pick it up.
+Papers that could not be downloaded are listed in `runs/<run>/raw/papers_failed_pdfs.csv`. Save a PDF at its `save_as` path and rerun `discover` to pick it up.
 
 ## Configuration
 
@@ -166,11 +159,9 @@ Save a PDF at its `save_as` path and rerun `discover` to pick it up.
 ## Known limits
 
 - **PDFs:** publishers refuse many downloads, even with a subscription. Use the manual-download list from `discover`.
-- **Masking:** it lowers risk but does not guarantee anonymity. Indirect identifiers can remain.
-  The leakage check in `configs/rag_privacy.yaml` looks for this, but it is off by default because it costs extra LLM calls.
+- **Masking:** it lowers risk but does not guarantee anonymity. Indirect identifiers can remain. The leakage check in `configs/rag_privacy.yaml` looks for this, but it is off by default because it costs extra LLM calls.
 - **Screening:** it is an aid, not a final decision. Check the evidence quotes. Screenings from an abstract alone are weaker.
-- **Costs:** screening makes one LLM call per paper, plus one more for extraction on papers that are not excluded.
-  Each question costs one answer call. The leakage check adds 5 or more calls per question when on.
+- **Costs:** screening makes one LLM call per paper, plus one more for extraction on papers that are not excluded. Each question costs one answer call. The leakage check adds 5 or more calls per question when on.
 - **Windows:** Milvus needs Docker.
 
 ## Development
@@ -183,8 +174,7 @@ uv run pytest
 
 These tests need no network, models or API keys.
 
-A tiny real run (arXiv, 3 papers) is marked `slow` and skipped by default.
-It uses your API key and Milvus when they are available:
+A tiny real run (arXiv, 3 papers) is marked `slow` and skipped by default. It uses your API key and Milvus when they are available:
 
 ```bash
 uv run pytest -m slow
@@ -206,5 +196,4 @@ uv run pytest -m slow
 The code is under the Apache License 2.0. See [LICENSE](LICENSE) and [NOTICE](NOTICE).
 
 > [!CAUTION]
-> The licence does not cover the papers and metadata the pipeline retrieves.
-> They belong to their rights holders. If you share pipeline outputs, follow the terms of each source.
+> The licence does not cover the papers and metadata the pipeline retrieves. They belong to their rights holders. If you share pipeline outputs, follow the terms of each source.
