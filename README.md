@@ -21,8 +21,8 @@ It is a research project of the LiGHT lab at EPFL, with the ICRC.
 | 4 | `sanitize` | Masks personal data. No LLM. | `papers.sanitized.jsonl`, `docs.sanitized.jsonl`, `privacy_report.json` |
 | 5 | `screen` | An LLM answers your criteria. Rules decide the label. | `screening.jsonl` |
 | 6 | `export` | Dataset, source tags and PRISMA report | `dataset.jsonl`, `dataset.csv`, `sources.json`, `prisma.md` |
-| 7 | `index` | Indexes the included papers (coming next) | Milvus collection |
-| – | `ask` | Answers a question with `[P0001]` citations (coming next) | `answers.jsonl` |
+| 7 | `index` | Chunks and indexes included papers and own documents | Milvus collection |
+| – | `ask` | Answers a question with `[P0001]` citations | `answers.jsonl` |
 
 The search terms and screening criteria come from the earlier version of this project, kept in [legacy/](legacy/).
 
@@ -67,6 +67,15 @@ uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
 # 6. Dataset and PRISMA report. Open dataset.csv in Excel.
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages export
 #    -> runs/smoke/dataset.csv, dataset.jsonl, sources.json, prisma.md
+
+# 7. Index included papers in Milvus (start Milvus first, see below)
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages index
+
+# 8. Ask a question. Answers cite [P0001] tags and list their sources.
+uv run chitchat ask -c configs/pipeline.smoke.yaml "What consent practices do the papers describe?"
+uv run chitchat ask -c configs/pipeline.smoke.yaml --no-privacy "..."   # skip privacy mode
+uv run chitchat ask -c configs/pipeline.smoke.yaml --review "..."       # check the context yourself first
+#    -> answers are logged in runs/smoke/answers.jsonl
 ```
 
 Or run them all at once:
@@ -87,6 +96,29 @@ uv run chitchat report -c configs/pipeline.smoke.yaml
 ```
 
 Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
+
+## Milvus
+
+The index needs Milvus.
+
+- **Linux and macOS:** nothing to install. Use a file, e.g. `db_uri: runs/{run_name}/milvus.db` (Milvus Lite).
+- **Windows:** Milvus Lite has no Windows build. Run Milvus in Docker:
+
+```powershell
+# Start Docker Desktop first. Then, in a folder outside the repo (PowerShell):
+mkdir $HOME\milvus; cd $HOME\milvus
+curl.exe -L https://github.com/milvus-io/milvus/releases/download/v2.6.6/milvus-standalone-docker-compose.yml -o docker-compose.yml
+docker compose up -d
+docker compose ps    # wait until milvus-standalone is "healthy"
+```
+
+In PowerShell, plain `curl` is `Invoke-WebRequest` and rejects `-L`. Use `curl.exe`.
+
+Then set `db_uri: http://127.0.0.1:19530` in your pipeline file (the smoke config already does).
+The `index` stage creates the database (`db_name`) if it doesn't exist, and rebuilds the collection on each run.
+Stop Milvus with `docker compose down`.
+
+The first `index` and `ask` download embedding models from Hugging Face (about 1 GB in total).
 
 ## Full run
 

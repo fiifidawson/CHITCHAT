@@ -6,6 +6,7 @@ import logging
 import os
 import subprocess
 import sys
+import warnings
 from collections.abc import Callable
 from pathlib import Path
 from typing import Annotated, Any
@@ -16,6 +17,7 @@ from chitchat.config import ConfigError, PipelineConfig, load_pipeline_config
 from chitchat.run_dir import RunDir
 
 log = logging.getLogger("chitchat")
+
 
 app = typer.Typer(no_args_is_help=True, add_completion=False, help="Literature-review pipeline.")
 
@@ -58,6 +60,12 @@ def _export(cfg: PipelineConfig, run: RunDir) -> None:
     run_export(cfg, run)
 
 
+def _index(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.index import run_index
+
+    run_index(cfg, run)
+
+
 # Stages in run order.
 STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
     "queries": _queries,
@@ -66,6 +74,7 @@ STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
     "sanitize": _sanitize,
     "screen": _screen,
     "export": _export,
+    "index": _index,
 }
 
 
@@ -125,6 +134,31 @@ def report(config: ConfigOption = Path("pipeline.yaml")) -> None:
     _run_stages(config, ["export"])
 
 
+@app.command()
+def ask(
+    question: Annotated[str, typer.Argument(help="Your question.")],
+    config: ConfigOption = Path("pipeline.yaml"),
+    no_privacy: Annotated[
+        bool, typer.Option("--no-privacy", help="Skip mmore privacy mode.")
+    ] = False,
+    review: Annotated[
+        bool, typer.Option("--review", help="Check the sanitized context yourself before sending.")
+    ] = False,
+    k: Annotated[int | None, typer.Option(help="How many chunks to retrieve.")] = None,
+) -> None:
+    """Answer a question from the index, with [P0001] citations."""
+    from chitchat.ask import ask as run_ask
+    from chitchat.ask import render
+    from chitchat.stages import StageError
+
+    cfg = _load(config)
+    try:
+        result = run_ask(cfg, RunDir(cfg.run_root), question, not no_privacy, review, k)
+    except StageError as e:
+        raise _fail(str(e)) from None
+    typer.echo(render(result))
+
+
 def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
     from chitchat.screening.criteria import CriteriaError
     from chitchat.stages import StageError
@@ -146,13 +180,34 @@ def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
     log.info("Done. Outputs are in %s", run_dir.root)
 
 
+def _quiet_library_warnings() -> None:
+    """Hide library deprecation notices; they are not useful to someone running the pipeline."""
+    # langchain and langchain_core turn their notices back on when imported, so import them first.
+    import langchain  # noqa: F401
+    from langchain_core._api.deprecation import (
+        LangChainDeprecationWarning,
+        LangChainPendingDeprecationWarning,
+    )
+
+    for category in (
+        DeprecationWarning,
+        PendingDeprecationWarning,
+        FutureWarning,
+        LangChainDeprecationWarning,
+        LangChainPendingDeprecationWarning,
+    ):
+        warnings.filterwarnings("ignore", category=category)
+
+
 def main() -> None:
     # mmore sets chunk ids from hash(text). A fixed seed keeps them stable.
-    if os.environ.get("PYTHONHASHSEED") != "0":
-        env = {**os.environ, "PYTHONHASHSEED": "0"}
+    # UTF-8 mode: some libraries print emoji, which the Windows console code page can't encode.
+    if os.environ.get("PYTHONHASHSEED") != "0" or os.environ.get("PYTHONUTF8") != "1":
+        env = {**os.environ, "PYTHONHASHSEED": "0", "PYTHONUTF8": "1"}
         cmd = [sys.executable, "-m", "chitchat.cli", *sys.argv[1:]]
         raise SystemExit(subprocess.call(cmd, env=env))
 
+    _quiet_library_warnings()
     from dotenv import load_dotenv
 
     load_dotenv()

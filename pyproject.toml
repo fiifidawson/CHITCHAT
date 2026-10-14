@@ -36,6 +36,8 @@ allow-direct-references = true
 [tool.uv]
 # milvus-lite has no Windows build. On Windows, run Milvus in Docker (see README).
 override-dependencies = ["milvus-lite; sys_platform != 'win32'"]
+# mmore needs numpy<2 on Python < 3.12. pyarrow 22+ needs numpy 2 but doesn't declare it.
+constraint-dependencies = ["pyarrow<22"]
 
 # uv ignores a dependency's own [tool.uv.sources], so torch is routed here.
 [tool.uv.sources]
