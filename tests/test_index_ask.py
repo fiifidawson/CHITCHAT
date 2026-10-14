@@ -166,3 +166,18 @@ def test_question_masks_are_counted() -> None:
     text = render(format_result("q?", {"answer": "x", "privacy_report": report}, SOURCES))
     assert "question: 3 masked (PERSON 1, EMAIL_ADDRESS 1, PHONE_NUMBER 1)" in text
     assert "context: nothing masked" in text
+
+
+def test_uncited_answer_lists_retrieved_sources() -> None:
+    out = {"answer": "Written by [PERSON_2]. Contact: [EMAIL_ADDRESS_1].",
+           "docs": [_doc("P0001"), _doc("P0001")]}  # fmt: skip
+    text = render(format_result("q?", out, SOURCES))
+    assert "Sources (retrieved, not cited by the model):" in text
+    assert "[P0001] A (2024) https://doi.org/10.1/a" in text
+    assert "[PERSON_2]" in text  # masked tokens are not mistaken for tags
+    assert format_result("q?", out, SOURCES)["sources"] == []
+
+
+def test_nothing_retrieved() -> None:
+    text = render(format_result("q?", {"answer": "No idea.", "docs": []}, SOURCES))
+    assert "No sources: nothing was retrieved." in text

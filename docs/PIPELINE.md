@@ -204,15 +204,15 @@ uv run chitchat ask -c <config> --k 10 "question"
 4. **Prints:**
    - the answer;
    - the sources it cited: tag, title, year, DOI or link;
-   - a one-line privacy summary.
-   - If nothing was cited, it lists the papers it retrieved.
+   - if the model cited nothing, the papers it was given, under "Sources (retrieved, not cited by the model)";
+   - a one-line privacy summary: what was masked in your question and in the retrieved text.
 5. **Appends** the question, the answer and the sources to `answers.jsonl`.
 
 Things to know:
 
 - **Your question can be masked.** Privacy mode can mistake a product or project name for a person. When your question was changed, `ask` shows the version it sent. Rephrase it ("the MoodSmith system") or use `--no-privacy`.
 - **Aborted answers.** If the leakage check is on in `rag_privacy.yaml` and it fails, there is no answer. You'll see "the privacy check stopped it".
-- **"The context does not answer the question"** usually means none of the indexed papers covers it. The `Retrieved:` line shows what was searched.
+- **"The context does not answer the question"** usually means none of the indexed papers covers it. The sources list then shows what it was given.
 
 ## `chitchat status` and `chitchat report`
 

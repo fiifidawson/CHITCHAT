@@ -184,22 +184,24 @@ def ask(
     return result
 
 
+def _source_line(s: dict[str, Any]) -> str:
+    where = f"https://doi.org/{s['doi']}" if s.get("doi") else (s.get("url") or "")
+    year = f" ({s['year']})" if s.get("year") else ""
+    note = "" if s["known"] else "  (unknown tag)"
+    return f"  [{s['tag']}] {s.get('title') or ''}{year} {where}{note}".rstrip()
+
+
 def render(result: dict[str, Any]) -> str:
     lines = [result["answer"], ""]
     if result["sources"]:
         lines.append("Sources:")
-        for s in result["sources"]:
-            where = f"https://doi.org/{s['doi']}" if s.get("doi") else (s.get("url") or "")
-            year = f" ({s['year']})" if s.get("year") else ""
-            note = "" if s["known"] else "  (unknown tag)"
-            lines.append(f"  [{s['tag']}] {s.get('title') or ''}{year} {where}{note}".rstrip())
+        lines += [_source_line(s) for s in result["sources"]]
+    elif result["retrieved"] and not result["aborted"]:
+        # The model sometimes forgets to cite. Show what it was given, labelled as such.
+        lines.append("Sources (retrieved, not cited by the model):")
+        lines += [_source_line(s) for s in result["retrieved"]]
     elif not result["aborted"]:
-        lines.append("No sources cited.")
-        if result["retrieved"]:
-            tags = ", ".join(
-                f"[{s['tag']}] {s.get('title') or ''}".strip() for s in result["retrieved"]
-            )
-            lines.append(f"Retrieved: {tags}")
+        lines.append("No sources: nothing was retrieved.")
     summary = result["privacy_report_summary"]
     sent = (summary or {}).get("sanitized_query")
     if sent and sent.strip() != result["question"].strip():
