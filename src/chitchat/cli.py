@@ -217,7 +217,9 @@ def main() -> None:
         raise SystemExit(subprocess.call(cmd, env=env))
 
     _quiet_library_warnings()
-    logging.basicConfig(level=logging.WARNING, format="%(message)s")
+    from chitchat.ui import LateBoundStderr
+
+    logging.basicConfig(level=logging.WARNING, format="%(message)s", stream=LateBoundStderr())
     log.setLevel(logging.INFO)
     logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
 

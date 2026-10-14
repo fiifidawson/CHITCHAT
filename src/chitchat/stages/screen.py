@@ -169,36 +169,44 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
     model = cfg.screening.llm.llm_name
     done = store.done_ids(criteria.hash, model)
     todo = [p for p in papers if (p.get("paper_id") or paper_id(p)) not in done]
+    reused = len(papers) - len(todo)
     log.info(
-        "%d papers: %d already done, %d to screen with %s (%s)",
-        len(papers),
-        len(papers) - len(todo),
+        "Screening %d of %d papers with %s (criteria %s). %d reused from earlier runs.",
         len(todo),
+        len(papers),
         model,
         criteria.ref,
+        reused,
     )
     counts: Counter[str] = Counter()
     if not todo:
         return counts
 
+    from chitchat import ui
+
     chat_model, provider = build_chat_model(cfg.screening.llm)
     screener = Screener(criteria, cfg.screening, chat_model, provider, sanitized)
-    with ThreadPoolExecutor(max_workers=cfg.screening.max_concurrency) as pool:
+    records: list[dict] = []
+    with (
+        ThreadPoolExecutor(max_workers=cfg.screening.max_concurrency) as pool,
+        ui.screening_progress(len(todo), cfg.screening.min_year) as report,
+    ):
         futures = [pool.submit(screener.screen, p) for p in todo]
-        for n, future in enumerate(as_completed(futures), 1):
+        for future in as_completed(futures):
             try:
                 record = future.result()
             except FatalLLMError as e:
                 pool.shutdown(cancel_futures=True)
                 raise StageError(f"{e}{_key_hint(provider)} Finished papers are kept.") from None
             store.append(record)
+            records.append(record)
             counts[record["status"]] += 1
-            label = (record.get("decision") or {}).get("label") or record.get("skip_reason") or ""
-            log.info(
-                "  [%d/%d] %s %s: %s", n, len(todo), record["status"], label, record["title"][:70]
-            )
+            report(record)
 
-    log.info("Screening done: %s", dict(counts))
-    if counts["refused"] + counts["invalid"] + counts["error"]:
-        log.info("Failed papers are retried on the next run.")
+    ui.print_summary(
+        records,
+        reused,
+        title=f"Screening done · {model} · {criteria.ref}",
+        footer=f"Saved to {run.screening}. Next: the export stage builds dataset.csv and PRISMA.",
+    )
     return counts
