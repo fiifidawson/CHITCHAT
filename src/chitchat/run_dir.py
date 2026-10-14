@@ -14,6 +14,10 @@ from pathlib import Path
 class RunDir:
     root: Path
 
+    @property
+    def queries(self) -> Path:
+        return self.root / "queries.json"
+
     # Raw data. Never share this folder.
     @property
     def raw(self) -> Path:

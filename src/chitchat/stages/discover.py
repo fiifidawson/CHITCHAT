@@ -37,8 +37,9 @@ def _resolve(base: Path, value: str) -> str:
     return str(p if p.is_absolute() else (base / p).resolve())
 
 
-def run_discover(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
-    from mmore.paper_discovery import PaperDiscoveryConfig, PaperDiscoveryPipeline
+def _load_discovery_config(cfg: PipelineConfig, run: RunDir) -> Any:
+    """The mmore config, with its paths resolved and outputs moved into the run folder."""
+    from mmore.paper_discovery import PaperDiscoveryConfig
     from mmore.utils import load_config
 
     config_path = cfg.discovery.config
@@ -49,6 +50,34 @@ def run_discover(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
     disc.output_file = str(run.papers_raw)
     disc.pdf_dir = str(run.pdfs)
     disc.multimodal_output_file = None
+    return disc
+
+
+def run_queries(cfg: PipelineConfig, run: RunDir) -> list[dict[str, str]]:
+    """Build the boolean queries offline and save them. No network calls."""
+    import yaml
+    from mmore.paper_discovery.boolean import build_boolean_queries, load_synonyms
+
+    disc = _load_discovery_config(cfg, run)
+    synonyms = load_synonyms(disc.synonyms_path)
+    with open(disc.categories_path, encoding="utf-8") as f:
+        categories = yaml.safe_load(f)["categories"]
+    queries = [
+        {"category": q.combination_title, "query": q.boolean_combination}
+        for q in build_boolean_queries(synonyms, categories)
+    ]
+    write_json(run.queries, queries)
+    for q in queries:
+        groups = q["query"].count(" AND ") + 1
+        log.info("  %s: %d groups, %d characters", q["category"], groups, len(q["query"]))
+    log.info("Wrote %d boolean queries to %s", len(queries), run.queries)
+    return queries
+
+
+def run_discover(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
+    from mmore.paper_discovery import PaperDiscoveryPipeline
+
+    disc = _load_discovery_config(cfg, run)
     run.raw.mkdir(parents=True, exist_ok=True)
 
     pipeline = PaperDiscoveryPipeline(disc)

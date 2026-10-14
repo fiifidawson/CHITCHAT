@@ -6,6 +6,7 @@ from enum import StrEnum
 from pathlib import Path
 from types import SimpleNamespace
 
+import pytest
 import yaml
 
 from chitchat.stages.discover import discovery_stats
@@ -39,12 +40,13 @@ def test_discovery_stats_no_failures() -> None:
     assert discovery_stats(pipeline)["failed_list"] is None
 
 
-def test_categories_reference_known_words() -> None:
+@pytest.mark.parametrize(("filename", "n"), [("categories.yaml", 8), ("categories.smoke.yaml", 2)])
+def test_categories_reference_known_words(filename: str, n: int) -> None:
     folder = REPO / "configs" / "discovery"
     with open(folder / "synonyms.jsonl", encoding="utf-8") as f:
         words = {json.loads(line)["word"].lower() for line in f if line.strip()}
-    categories = yaml.safe_load((folder / "categories.yaml").read_text(encoding="utf-8"))
-    assert len(categories["categories"]) == 8
+    categories = yaml.safe_load((folder / filename).read_text(encoding="utf-8"))
+    assert len(categories["categories"]) == n
     for name, keys in categories["categories"].items():
         missing = [k for k in keys if k.lower() not in words]
         assert not missing, f"{name}: {missing}"

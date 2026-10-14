@@ -29,6 +29,15 @@ def test_example_config_loads(project: Path) -> None:
     assert cfg.screening.llm.to_mmore() == {"llm_name": "gpt-4o-mini", "temperature": 0}
 
 
+def test_smoke_config_loads_in_place() -> None:
+    repo = Path(__file__).resolve().parents[1]
+    cfg = load_pipeline_config(repo / "configs" / "pipeline.smoke.yaml")
+    assert cfg.run_root == repo / "runs" / "smoke"
+    assert cfg.discovery.config.name == "discovery.smoke.yaml"
+    disc = yaml.safe_load(cfg.discovery.config.read_text(encoding="utf-8"))
+    assert disc["max_results"] * len(disc["sources"]) <= 10
+
+
 def test_missing_file(tmp_path: Path) -> None:
     with pytest.raises(ConfigError, match="not found"):
         load_pipeline_config(tmp_path / "nope.yaml")

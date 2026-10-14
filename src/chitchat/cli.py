@@ -22,15 +22,43 @@ app = typer.Typer(no_args_is_help=True, add_completion=False, help="Literature-r
 ConfigOption = Annotated[Path, typer.Option("--config", "-c", help="Path to pipeline.yaml.")]
 
 
+def _queries(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.discover import run_queries
+
+    run_queries(cfg, run)
+
+
 def _discover(cfg: PipelineConfig, run: RunDir) -> None:
     from chitchat.stages.discover import run_discover
 
     run_discover(cfg, run)
 
 
+def _ingest(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.ingest import run_ingest
+
+    run_ingest(cfg, run)
+
+
+def _sanitize(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.sanitize import run_sanitize
+
+    run_sanitize(cfg, run)
+
+
+def _screen(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.screen import run_screen
+
+    run_screen(cfg, run)
+
+
 # Stages in run order.
 STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
+    "queries": _queries,
     "discover": _discover,
+    "ingest": _ingest,
+    "sanitize": _sanitize,
+    "screen": _screen,
 }
 
 
@@ -39,12 +67,23 @@ def _root() -> None:
     """Literature-review pipeline."""
 
 
+def _fail(message: str) -> typer.Exit:
+    typer.secho(message, fg=typer.colors.RED, err=True)
+    return typer.Exit(2)
+
+
 def _load(config: Path) -> PipelineConfig:
+    """Load and check every config file before any network or LLM call."""
+    from chitchat.screening.criteria import CriteriaError, load_criteria
+    from chitchat.stages.sanitize import load_sanitize_configs
+
     try:
-        return load_pipeline_config(config)
-    except ConfigError as e:
-        typer.secho(str(e), fg=typer.colors.RED, err=True)
-        raise typer.Exit(2) from None
+        cfg = load_pipeline_config(config)
+        load_criteria(cfg.screening.criteria)
+        load_sanitize_configs(cfg.privacy.sanitize_config)
+    except (ConfigError, CriteriaError) as e:
+        raise _fail(str(e)) from None
+    return cfg
 
 
 def _parse_stages(value: str | None) -> list[str]:
@@ -65,16 +104,28 @@ def run(
     stages: Annotated[
         str | None, typer.Option(help="Comma-separated stages to run. Default: all.")
     ] = None,
+    redecide: Annotated[
+        bool, typer.Option(help="Recompute labels from stored answers. No LLM calls.")
+    ] = False,
 ) -> None:
     """Run pipeline stages."""
+    from chitchat.screening.criteria import CriteriaError
+    from chitchat.stages.screen import StageError, run_screen
+
     selected = _parse_stages(stages)
     cfg = _load(config)
     run_dir = RunDir(cfg.run_root)
     run_dir.root.mkdir(parents=True, exist_ok=True)
-    for name in selected:
-        log.info("== %s ==", name)
-        STAGES[name](cfg, run_dir)
-        run_dir.mark_done(name)
+    try:
+        if redecide:
+            run_screen(cfg, run_dir, redecide_only=True)
+            return
+        for name in selected:
+            log.info("== %s ==", name)
+            STAGES[name](cfg, run_dir)
+            run_dir.mark_done(name)
+    except (ConfigError, CriteriaError, StageError) as e:
+        raise _fail(str(e)) from None
     log.info("Done. Outputs are in %s", run_dir.root)
 
 
@@ -88,7 +139,9 @@ def main() -> None:
     from dotenv import load_dotenv
 
     load_dotenv()
-    logging.basicConfig(level=logging.INFO, format="%(message)s")
+    logging.basicConfig(level=logging.WARNING, format="%(message)s")
+    log.setLevel(logging.INFO)
+    logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
     app()
 
 

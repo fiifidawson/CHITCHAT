@@ -15,13 +15,14 @@ It is a research project of the LiGHT lab at EPFL, with the ICRC.
 
 | # | Stage | What it does | Output in `runs/<run>/` |
 |---|---|---|---|
-| 1 | `discover` | Boolean search over OpenAlex, Europe PMC and arXiv, plus PDF download | `raw/papers.jsonl`, `raw/discovery_stats.json` |
-| 2 | `ingest` | Reads your own documents | `raw/docs.jsonl` |
-| 3 | `sanitize` | Masks personal data, with no LLM | `papers.sanitized.jsonl`, `docs.sanitized.jsonl` |
-| 4 | `screen` | An LLM answers your criteria. Rules decide. | `screening.jsonl` |
-| 5 | `export` | Dataset and PRISMA report | `dataset.jsonl`, `dataset.csv`, `prisma.md` |
-| 6 | `index` | Chunks and indexes the included papers | Milvus collection |
-| – | `ask` | Answers a question with `[P0001]` citations | `answers.jsonl` |
+| 1 | `queries` | Builds the boolean search from the synonyms and categories. Offline. | `queries.json` |
+| 2 | `discover` | Searches OpenAlex, Europe PMC and arXiv, and downloads PDFs | `raw/papers.jsonl`, `raw/discovery_stats.json` |
+| 3 | `ingest` | Reads your own documents from `my_docs/` | `raw/docs.jsonl` |
+| 4 | `sanitize` | Masks personal data. No LLM. | `papers.sanitized.jsonl`, `docs.sanitized.jsonl`, `privacy_report.json` |
+| 5 | `screen` | An LLM answers your criteria. Rules decide the label. | `screening.jsonl` |
+| 6 | `export` | Dataset and PRISMA report (coming next) | `dataset.jsonl`, `dataset.csv`, `prisma.md` |
+| 7 | `index` | Indexes the included papers (coming next) | Milvus collection |
+| – | `ask` | Answers a question with `[P0001]` citations (coming next) | `answers.jsonl` |
 
 The search terms and screening criteria come from the earlier version of this project, kept in [legacy/](legacy/).
 
@@ -32,20 +33,65 @@ You need Python 3.11+ and [uv](https://docs.astral.sh/uv/).
 ```bash
 git clone https://github.com/fiifidawson/CHITCHAT.git
 cd CHITCHAT
-uv sync
-uv run python -m spacy download en_core_web_lg
-cp .env.example .env              # then add your API key
+uv sync                                           # slow network? UV_HTTP_TIMEOUT=300 uv sync
+uv run python -m spacy download en_core_web_lg    # needed by the sanitize stage
+cp .env.example .env                              # then add OPENAI_API_KEY
 ```
 
-## Quick start
+## Step by step: smoke test
+
+The smoke config searches 2 categories with 3 results per source, so up to 18 papers.
+Outputs go to `runs/smoke/`. Run the steps one at a time and look at each output.
 
 ```bash
-cp configs/pipeline.example.yaml pipeline.yaml
-uv run chitchat run --stages discover
+# 1. Boolean queries (offline). Check the AND/OR groups.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages queries
+#    -> runs/smoke/queries.json
+
+# 2. Search the sources and download PDFs. Takes a few minutes.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages discover
+#    -> runs/smoke/raw/papers.jsonl, raw/discovery_stats.json, raw/papers_failed_pdfs.csv
+
+# 3. Optional: your own documents. Put files in my_docs/ first.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages ingest
+#    -> runs/smoke/raw/docs.jsonl
+
+# 4. Privacy: mask names, emails and phone numbers. No LLM, nothing leaves your machine.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages sanitize
+#    -> runs/smoke/papers.sanitized.jsonl, privacy_report.json
+
+# 5. AI screening. Needs OPENAI_API_KEY. Only sanitized text is sent.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
+#    -> runs/smoke/screening.jsonl
+```
+
+Or run them all at once:
+
+```bash
+uv run chitchat run -c configs/pipeline.smoke.yaml
+```
+
+Useful after screening:
+
+```bash
+# Rerun screen: finished papers are reused. Refused, invalid and failed ones are retried.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
+
+# Changed only the `decision` rules? Recompute labels with no LLM calls.
+uv run chitchat run -c configs/pipeline.smoke.yaml --redecide
+```
+
+Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
+
+## Full run
+
+```bash
+cp configs/pipeline.example.yaml pipeline.yaml    # edit it if needed
+uv run chitchat run                               # all stages, all 8 categories
 ```
 
 Papers that could not be downloaded are listed in `runs/<run>/raw/papers_failed_pdfs.csv`.
-Save a PDF at its `save_as` path and rerun to pick it up.
+Save a PDF at its `save_as` path and rerun `discover` to pick it up.
 
 ## Configuration
 
@@ -63,6 +109,9 @@ Save a PDF at its `save_as` path and rerun to pick it up.
 
 - Raw text stays in `runs/<run>/raw/`. Do not share that folder.
 - Everything else holds sanitized text only.
+- Papers and own documents use different entity lists. Papers keep places and dates, which are research content.
+- Authors cited in a paper's references are masked too. This is expected.
+- Masking lowers risk but does not guarantee anonymity.
 
 ## Development
 
