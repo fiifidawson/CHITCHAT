@@ -1,0 +1,17 @@
+# mmore privacy mode for `chitchat ask` (a top-level mmore PrivacyConfig).
+domain: global
+interactive: false              # `chitchat ask --review` turns on a human check
+detection:
+  engine: presidio
+  confidence_threshold: 0.7
+  entity_types: [PERSON, EMAIL_ADDRESS, PHONE_NUMBER]
+sanitization:
+  strategy: token_masking
+  consistency: true
+leakage_adversary:
+  enabled: false                # when on: 5+ LLM probes per question
+answer:
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }   # required: privacy mode answers with this LLM
+verifier:
+  checks: []                    # [] = no extra LLM calls
+  warn_threshold: 0.5

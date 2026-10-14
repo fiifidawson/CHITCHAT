@@ -187,5 +187,7 @@ legacy/output/obtained_lit.json
 legacy/output/obtained_lit_part_1.json
 legacy/analysis/graphs/
 
-# Material for MkDocs social-card cache
-.cache/
+# Pipeline runs. raw/ holds unsanitized text: never share it.
+runs/
+my_docs/
+*.db

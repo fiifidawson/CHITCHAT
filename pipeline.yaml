@@ -1,0 +1,43 @@
+# Copy this file to the repo root as pipeline.yaml, then edit it.
+#   cp configs/pipeline.example.yaml pipeline.yaml
+# Paths are relative to the folder this file is in.
+
+run_name: humanitarian-llm-2026       # outputs go to runs/<run_name>/
+runs_dir: runs
+
+discovery:
+  config: configs/discovery/discovery.yaml   # mmore PaperDiscoveryConfig
+
+own_documents:
+  folder: my_docs/                    # optional; ingest is skipped if it doesn't exist
+  fast: true                          # no OCR models
+
+privacy:
+  sanitize_config: configs/sanitize.yaml
+  before_screening: true              # sanitize paper text before the screening LLM sees it
+  rag_privacy_config: configs/rag_privacy.yaml   # null = no privacy mode when answering
+
+screening:
+  criteria: configs/criteria.example.yaml
+  llm:                                # mmore LLMConfig
+    llm_name: gpt-4o-mini
+    temperature: 0
+  min_year: 2020
+  min_chars: 500                      # applies to the text actually sent
+  max_chars: 60000                    # head + tail budget per paper
+  use_abstract_if_no_text: true
+  max_concurrency: 4
+
+index:
+  db_uri: runs/{run_name}/milvus.db   # Windows: http://127.0.0.1:19530 (Milvus in Docker)
+  db_name: review
+  collection: review
+  dense_model: sentence-transformers/all-MiniLM-L6-v2
+  sparse_model: splade
+  include_labels: [HIGH, MEDIUM, LOW]
+  include_own_documents: true
+
+ask:
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }   # used only when privacy mode is off
+  k: 6
+  reranker: BAAI/bge-reranker-base    # null to skip the download

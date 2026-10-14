@@ -1,0 +1,131 @@
+# Screening criteria, translated from legacy/documentation/prompt/paper_screening_prompt.txt.
+# Venue, citations and year are left out: they come from discovery, not the LLM.
+name: humanitarian-llm-data
+version: 1
+context: |
+  We are reviewing research on ethical data collection for large language models (LLMs),
+  seen through the humanitarian principles of humanity, impartiality, independence and neutrality.
+
+criteria:
+  # Technical scope
+  - id: llm_data_collection
+    question: >-
+      Does the paper address collecting or curating data for LLMs or NLP, such as training
+      data collection, text corpus creation, web scraping for NLP datasets, or multilingual
+      dataset compilation?
+    type: yes_no
+
+  # Ethical red flags
+  - id: performance_only
+    question: Does the paper focus only on model performance, with no discussion of ethics?
+    type: yes_no
+  - id: disregards_consent
+    question: Does the paper clearly disregard consent or privacy?
+    type: yes_no
+  - id: missing_irb_vulnerable
+    question: Does the paper work with vulnerable groups without reporting ethics (IRB) approval?
+    type: yes_no
+  - id: discriminatory_or_military
+    question: Does the paper use discriminatory algorithms or have a military purpose?
+    type: yes_no
+
+  # Humanitarian principles
+  - id: humanity
+    question: Does the paper address preventing harm through data collection?
+    type: score
+    scale:
+      0: No consideration of harm prevention
+      1: Acknowledges harm but offers limited solutions
+      2: Addresses harm with specific methods and safeguards
+      3: Explicitly focuses on harm prevention with comprehensive strategies
+  - id: impartiality
+    question: Does the paper consider fair representation across groups?
+    type: score
+    scale:
+      0: No consideration of fair representation
+      1: Mentions fairness but limited implementation
+      2: Addresses representation with some methodology
+      3: Systematic approach to equal treatment across all groups
+  - id: independence
+    question: Does the paper discuss autonomy from biasing influences?
+    type: score
+    scale:
+      0: No consideration of autonomy or independence
+      1: Acknowledges independence concerns but limited solutions
+      2: Addresses conflicts with clear mitigation strategies
+      3: Explicit methods for staying independent from external pressures
+  - id: neutrality
+    question: Does the paper address avoiding discriminatory data collection?
+    type: score
+    scale:
+      0: No consideration of neutrality
+      1: Mentions neutrality but limited implementation
+      2: Specific methods for avoiding discrimination
+      3: Comprehensive approach to neutral data collection
+
+  # Methodology contributions
+  - id: novel_methodology
+    question: Does the paper provide a novel data collection methodology?
+    type: yes_no
+  - id: systematic_evaluation
+    question: Does the paper offer a systematic evaluation or comparative analysis?
+    type: yes_no
+  - id: reproducible
+    question: Does the paper include enough implementation detail to reproduce it?
+    type: yes_no
+
+  # Ethical analysis contributions
+  - id: ethical_framework
+    question: >-
+      Does the paper use an explicit ethical or legal framework or principles? Technical terms
+      with an ethical side count, such as safety, explainability, transparency or bias.
+    type: yes_no
+  - id: bias_analysis
+    question: Does the paper contain an empirical analysis of bias in data?
+    type: yes_no
+  - id: harm_mitigation
+    question: Does the paper propose concrete harm mitigation strategies?
+    type: yes_no
+  - id: policy_recommendations
+    question: Does the paper give policy or data governance recommendations?
+    type: yes_no
+  - id: ethical_tradeoffs
+    question: Does the paper acknowledge ethical tensions and trade-offs?
+    type: yes_no
+
+# First matching rule wins. All conditions in one rule must hold.
+# Several rules with the same label act as "or".
+decision:
+  - label: EXCLUDE
+    when: [llm_data_collection == no]
+  - label: EXCLUDE
+    when: [disregards_consent == yes]
+  - label: EXCLUDE
+    when: [discriminatory_or_military == yes]
+  # HIGH: strong in both methodology and ethics.
+  - label: HIGH
+    when: [novel_methodology == yes, harm_mitigation == yes, humanity >= 2]
+  # MEDIUM: strong in methodology or ethics.
+  - label: MEDIUM
+    when: [novel_methodology == yes]
+  - label: MEDIUM
+    when: [ethical_framework == yes, harm_mitigation == yes]
+  - label: MEDIUM
+    when: [humanity >= 2]
+  # LOW: passes the basic checks but adds little.
+  - label: LOW
+
+# Asked only for papers that are not EXCLUDE.
+extract:
+  - id: datasets
+    question: Which datasets does the paper use or release?
+    type: list
+  - id: data_sources
+    question: Where does the data come from (for example web crawl, social media, surveys)?
+    type: list
+  - id: languages
+    question: Which languages does the data cover?
+    type: list
+  - id: consent_approach
+    question: How does the paper handle consent from the people in the data?
+    type: text

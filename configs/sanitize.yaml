@@ -1,0 +1,15 @@
+# Standalone sanitizing with mmore privacy agents.
+# Every field below is set, so no LLM is called and nothing prompts.
+domain: global                  # global | healthcare | humanitarian
+interactive: false
+detection:
+  engine: presidio              # presidio (spaCy) or gliner (HF model, heavier)
+  confidence_threshold: 0.7
+  # Papers: a narrow list. Masking LOCATION or DATE_TIME would remove research content.
+  entity_types_papers: [PERSON, EMAIL_ADDRESS, PHONE_NUMBER, US_SSN]
+  # Own documents: the broader mmore default.
+  entity_types_own_documents:
+    [PERSON, PHONE_NUMBER, EMAIL_ADDRESS, MRN, DATE_TIME, LOCATION, US_SSN, INSURANCE_ID]
+sanitization:
+  strategy: token_masking       # PERSON -> [PERSON_1]; the same value gets the same token
+  consistency: true
