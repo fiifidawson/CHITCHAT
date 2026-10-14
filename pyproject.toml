@@ -1,50 +1,66 @@
 [project]
 name = "chitchat"
 version = "0.1.0"
-description = "Add your description here"
+description = "Literature-review pipeline: discover, sanitize, screen, export, index and ask, built on mmore."
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = []
-
-# Documentation toolchain (MkDocs + Material for MkDocs).
-#
-# This group is the single source of truth for the docs dependencies; there is
-# deliberately no requirements-docs.txt. Install it with either:
-#     uv sync                     # `docs` is a default group, see [tool.uv]
-#     pip install --group docs    # needs pip >= 25.1
-#
-# Then build the docs locally with `mkdocs serve`.
-[dependency-groups]
-docs = [
-    # The mkdocs<2 cap is deliberate. MkDocs 2.0 removes the plugin system and
-    # rewrites the theming system, and Material for MkDocs does not follow it.
-    # mkdocs-material 9.x already caps mkdocs<2 transitively; the pin is
-    # repeated here so the constraint stays visible if that ever changes.
-    # See https://squidfunk.github.io/mkdocs-material/blog/2026/02/18/mkdocs-2.0/
-    "mkdocs>=1.6,<2",
-    "mkdocs-material==9.7.7",
-
-    # Keeps the pre-revamp URLs (Technical-Report.md, about.md, the two module
-    # specs) resolving after the 2024-page split. See the redirect_maps in
-    # mkdocs.yml. Note that 1.2.3 pulls in `properdocs` transitively and emits a
-    # MkDocs-2.0 advocacy banner at build time. Two separate banners, two
-    # separate switches: NO_MKDOCS_2_WARNING silences Material's, and
-    # DISABLE_MKDOCS_2_WARNING silences the one from mkdocs-redirects. CI sets
-    # both; neither changes the build output.
-    "mkdocs-redirects>=1.2,<2",
+license = "Apache-2.0"
+requires-python = ">=3.11"
+dependencies = [
+    # Owner's fork with the Paper Discovery fixes not yet merged upstream (EPFLiGHT/mmore#367).
+    "mmore[paper_discovery,rag,api,privacy,tui,cpu] @ git+https://github.com/fiifidawson/mmore.git@086c005",
+    "pydantic>=2",
+    "python-dotenv>=1.0",
+    "pyyaml>=6.0",
+    "typer>=0.12",
 ]
 
-# --- Deferred, deliberately -------------------------------------------------
-# Social cards. Bundled with mkdocs-material, but the imaging extra needs a
-# system Cairo, which is not present on a default Windows box and fails the
-# build hard. Enable once the build is Linux-CI-only.
-#     mkdocs-material[imaging]==9.7.7
-#
-# Page revision dates. Needs a git repository with real history; set
-# fetch-depth: 0 in the CI checkout before enabling.
-#     mkdocs-git-revision-date-localized-plugin>=1.2,<2
+[project.scripts]
+chitchat = "chitchat.cli:main"
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/chitchat"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
 
 [tool.uv]
-# Make a bare `uv sync` install the docs group, so the documented one-liner
-# works without extra flags.
-default-groups = ["docs"]
+# milvus-lite has no Windows build. On Windows, run Milvus in Docker (see README).
+override-dependencies = ["milvus-lite; sys_platform != 'win32'"]
+# mmore needs numpy<2 on Python < 3.12. pyarrow 22+ needs numpy 2 but doesn't declare it.
+constraint-dependencies = ["pyarrow<22"]
+
+# uv ignores a dependency's own [tool.uv.sources], so torch is routed here.
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-m 'not slow'"
+markers = ["slow: needs network, models or API keys"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["legacy"]
+
+[tool.ruff.format]
+exclude = ["*.md"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "SIM"]

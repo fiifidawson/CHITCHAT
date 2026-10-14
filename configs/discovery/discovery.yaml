@@ -1,0 +1,28 @@
+# mmore Paper Discovery config (PaperDiscoveryConfig).
+# Paths are relative to this file.
+# chitchat replaces output_file and pdf_dir with paths inside runs/<run>/raw/.
+synonyms_path: synonyms.jsonl
+categories_path: categories.yaml
+output_file: papers.jsonl
+
+sources: [openalex, europepmc, arxiv]   # add google_scholar only with mmore[google_scholar]
+max_pages: 2
+max_results: 25                         # per source, per category
+
+download_pdfs: true
+pdf_dir: pdfs
+pdf_extractor: fast                     # fast (PyMuPDF) | full (marker + surya, needs a GPU)
+pdf_timeout: 30
+force_redownload: false
+# pdf_proxy_prefix: "https://ezproxy.example.edu"
+
+# A category whose name contains the key also searches that arXiv category.
+arxiv_category_map:
+  Foundational: cs.LG
+  Humanitarian: cs.CY
+  Inclusion: cs.CY
+  Transparency: cs.CY
+  Harm: cs.CY
+  Consent: cs.CY
+  Environmental: cs.CY
+arxiv_enable_pair_query: true

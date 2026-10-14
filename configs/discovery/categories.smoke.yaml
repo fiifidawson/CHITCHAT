@@ -1,0 +1,11 @@
+# Two categories for quick tests. See categories.yaml for the full search.
+categories:
+  Control, Consent & Personal Data Rights:
+    - Rights & Data Protection Frameworks
+    - General Data Collection & Dataset Creation
+
+  Consent, Agency & Participatory AI:
+    - Human Rights & Advocacy
+    - Organizations & Frameworks
+    - Key Actions & Interventions
+    - Social Good & Impact

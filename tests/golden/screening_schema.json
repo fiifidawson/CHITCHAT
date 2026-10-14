@@ -1,0 +1,534 @@
+{
+  "$defs": {
+    "BiasAnalysisAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper contain an empirical analysis of bias in data?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "BiasAnalysisAnswer",
+      "type": "object"
+    },
+    "DiscriminatoryOrMilitaryAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper use discriminatory algorithms or have a military purpose?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "DiscriminatoryOrMilitaryAnswer",
+      "type": "object"
+    },
+    "DisregardsConsentAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper clearly disregard consent or privacy?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "DisregardsConsentAnswer",
+      "type": "object"
+    },
+    "EthicalFrameworkAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper use an explicit ethical or legal framework or principles? Technical terms with an ethical side count, such as safety, explainability, transparency or bias.",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "EthicalFrameworkAnswer",
+      "type": "object"
+    },
+    "EthicalTradeoffsAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper acknowledge ethical tensions and trade-offs?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "EthicalTradeoffsAnswer",
+      "type": "object"
+    },
+    "HarmMitigationAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper propose concrete harm mitigation strategies?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "HarmMitigationAnswer",
+      "type": "object"
+    },
+    "HumanityAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper address preventing harm through data collection? Scale: 0 = No consideration of harm prevention; 1 = Acknowledges harm but offers limited solutions; 2 = Addresses harm with specific methods and safeguards; 3 = Explicitly focuses on harm prevention with comprehensive strategies.",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "HumanityAnswer",
+      "type": "object"
+    },
+    "ImpartialityAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper consider fair representation across groups? Scale: 0 = No consideration of fair representation; 1 = Mentions fairness but limited implementation; 2 = Addresses representation with some methodology; 3 = Systematic approach to equal treatment across all groups.",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "ImpartialityAnswer",
+      "type": "object"
+    },
+    "IndependenceAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper discuss autonomy from biasing influences? Scale: 0 = No consideration of autonomy or independence; 1 = Acknowledges independence concerns but limited solutions; 2 = Addresses conflicts with clear mitigation strategies; 3 = Explicit methods for staying independent from external pressures.",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "IndependenceAnswer",
+      "type": "object"
+    },
+    "LlmDataCollectionAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper address collecting or curating data for LLMs or NLP, such as training data collection, text corpus creation, web scraping for NLP datasets, or multilingual dataset compilation?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "LlmDataCollectionAnswer",
+      "type": "object"
+    },
+    "MissingIrbVulnerableAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper work with vulnerable groups without reporting ethics (IRB) approval?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "MissingIrbVulnerableAnswer",
+      "type": "object"
+    },
+    "NeutralityAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper address avoiding discriminatory data collection? Scale: 0 = No consideration of neutrality; 1 = Mentions neutrality but limited implementation; 2 = Specific methods for avoiding discrimination; 3 = Comprehensive approach to neutral data collection.",
+          "enum": [
+            "0",
+            "1",
+            "2",
+            "3",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "NeutralityAnswer",
+      "type": "object"
+    },
+    "NovelMethodologyAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper provide a novel data collection methodology?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "NovelMethodologyAnswer",
+      "type": "object"
+    },
+    "PerformanceOnlyAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper focus only on model performance, with no discussion of ethics?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "PerformanceOnlyAnswer",
+      "type": "object"
+    },
+    "PolicyRecommendationsAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper give policy or data governance recommendations?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "PolicyRecommendationsAnswer",
+      "type": "object"
+    },
+    "ReproducibleAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper include enough implementation detail to reproduce it?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "ReproducibleAnswer",
+      "type": "object"
+    },
+    "SystematicEvaluationAnswer": {
+      "properties": {
+        "answer": {
+          "description": "Does the paper offer a systematic evaluation or comparative analysis?",
+          "enum": [
+            "yes",
+            "no",
+            "unclear"
+          ],
+          "title": "Answer",
+          "type": "string"
+        },
+        "evidence": {
+          "description": "A short quote from the paper, under 300 characters. Empty when unclear.",
+          "title": "Evidence",
+          "type": "string"
+        }
+      },
+      "required": [
+        "answer",
+        "evidence"
+      ],
+      "title": "SystematicEvaluationAnswer",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "llm_data_collection": {
+      "$ref": "#/$defs/LlmDataCollectionAnswer",
+      "description": "Does the paper address collecting or curating data for LLMs or NLP, such as training data collection, text corpus creation, web scraping for NLP datasets, or multilingual dataset compilation?"
+    },
+    "performance_only": {
+      "$ref": "#/$defs/PerformanceOnlyAnswer",
+      "description": "Does the paper focus only on model performance, with no discussion of ethics?"
+    },
+    "disregards_consent": {
+      "$ref": "#/$defs/DisregardsConsentAnswer",
+      "description": "Does the paper clearly disregard consent or privacy?"
+    },
+    "missing_irb_vulnerable": {
+      "$ref": "#/$defs/MissingIrbVulnerableAnswer",
+      "description": "Does the paper work with vulnerable groups without reporting ethics (IRB) approval?"
+    },
+    "discriminatory_or_military": {
+      "$ref": "#/$defs/DiscriminatoryOrMilitaryAnswer",
+      "description": "Does the paper use discriminatory algorithms or have a military purpose?"
+    },
+    "humanity": {
+      "$ref": "#/$defs/HumanityAnswer",
+      "description": "Does the paper address preventing harm through data collection? Scale: 0 = No consideration of harm prevention; 1 = Acknowledges harm but offers limited solutions; 2 = Addresses harm with specific methods and safeguards; 3 = Explicitly focuses on harm prevention with comprehensive strategies."
+    },
+    "impartiality": {
+      "$ref": "#/$defs/ImpartialityAnswer",
+      "description": "Does the paper consider fair representation across groups? Scale: 0 = No consideration of fair representation; 1 = Mentions fairness but limited implementation; 2 = Addresses representation with some methodology; 3 = Systematic approach to equal treatment across all groups."
+    },
+    "independence": {
+      "$ref": "#/$defs/IndependenceAnswer",
+      "description": "Does the paper discuss autonomy from biasing influences? Scale: 0 = No consideration of autonomy or independence; 1 = Acknowledges independence concerns but limited solutions; 2 = Addresses conflicts with clear mitigation strategies; 3 = Explicit methods for staying independent from external pressures."
+    },
+    "neutrality": {
+      "$ref": "#/$defs/NeutralityAnswer",
+      "description": "Does the paper address avoiding discriminatory data collection? Scale: 0 = No consideration of neutrality; 1 = Mentions neutrality but limited implementation; 2 = Specific methods for avoiding discrimination; 3 = Comprehensive approach to neutral data collection."
+    },
+    "novel_methodology": {
+      "$ref": "#/$defs/NovelMethodologyAnswer",
+      "description": "Does the paper provide a novel data collection methodology?"
+    },
+    "systematic_evaluation": {
+      "$ref": "#/$defs/SystematicEvaluationAnswer",
+      "description": "Does the paper offer a systematic evaluation or comparative analysis?"
+    },
+    "reproducible": {
+      "$ref": "#/$defs/ReproducibleAnswer",
+      "description": "Does the paper include enough implementation detail to reproduce it?"
+    },
+    "ethical_framework": {
+      "$ref": "#/$defs/EthicalFrameworkAnswer",
+      "description": "Does the paper use an explicit ethical or legal framework or principles? Technical terms with an ethical side count, such as safety, explainability, transparency or bias."
+    },
+    "bias_analysis": {
+      "$ref": "#/$defs/BiasAnalysisAnswer",
+      "description": "Does the paper contain an empirical analysis of bias in data?"
+    },
+    "harm_mitigation": {
+      "$ref": "#/$defs/HarmMitigationAnswer",
+      "description": "Does the paper propose concrete harm mitigation strategies?"
+    },
+    "policy_recommendations": {
+      "$ref": "#/$defs/PolicyRecommendationsAnswer",
+      "description": "Does the paper give policy or data governance recommendations?"
+    },
+    "ethical_tradeoffs": {
+      "$ref": "#/$defs/EthicalTradeoffsAnswer",
+      "description": "Does the paper acknowledge ethical tensions and trade-offs?"
+    },
+    "notes": {
+      "description": "Anything worth flagging to the reviewer. Empty if nothing.",
+      "title": "Notes",
+      "type": "string"
+    }
+  },
+  "required": [
+    "llm_data_collection",
+    "performance_only",
+    "disregards_consent",
+    "missing_irb_vulnerable",
+    "discriminatory_or_military",
+    "humanity",
+    "impartiality",
+    "independence",
+    "neutrality",
+    "novel_methodology",
+    "systematic_evaluation",
+    "reproducible",
+    "ethical_framework",
+    "bias_analysis",
+    "harm_mitigation",
+    "policy_recommendations",
+    "ethical_tradeoffs",
+    "notes"
+  ],
+  "title": "ScreeningAnswers",
+  "type": "object"
+}
