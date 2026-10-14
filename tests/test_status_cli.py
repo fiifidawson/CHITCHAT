@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from chitchat.cli import STAGES, shadowed_keys
+from chitchat.cli import STAGES
+from chitchat.config import shadowed_keys
 from chitchat.jsonl import write_json, write_jsonl
 from chitchat.run_dir import RunDir
 from chitchat.stages.index import milvus_error

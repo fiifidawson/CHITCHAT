@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import logging
+import os
 from collections import Counter
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import UTC, datetime
+from pathlib import Path
 from typing import Any
 
-from chitchat.config import PipelineConfig, ScreeningSettings
+from chitchat.config import PipelineConfig, ScreeningSettings, shadowed_keys
 from chitchat.ids import paper_id
 from chitchat.jsonl import read_jsonl
 from chitchat.run_dir import RunDir
@@ -133,6 +135,17 @@ class Screener:
         return record
 
 
+def _key_hint(provider: str) -> str:
+    """Explain the most common cause: an old key in the environment overriding .env."""
+    name = f"{provider}_API_KEY"
+    if name not in shadowed_keys(dict(os.environ), Path(".env")):
+        return ""
+    return (
+        f" {name} is set in your environment and overrides the one in .env. "
+        f"Remove it: `Remove-Item Env:{name}` (PowerShell) or `unset {name}` (bash)."
+    )
+
+
 def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) -> Counter[str]:
     criteria = load_criteria(cfg.screening.criteria)
 
@@ -177,7 +190,7 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
                 record = future.result()
             except FatalLLMError as e:
                 pool.shutdown(cancel_futures=True)
-                raise StageError(f"{e} Finished papers are kept.") from None
+                raise StageError(f"{e}{_key_hint(provider)} Finished papers are kept.") from None
             store.append(record)
             counts[record["status"]] += 1
             label = (record.get("decision") or {}).get("label") or record.get("skip_reason") or ""

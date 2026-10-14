@@ -13,7 +13,7 @@ from typing import Annotated, Any
 
 import typer
 
-from chitchat.config import ConfigError, PipelineConfig, load_pipeline_config
+from chitchat.config import ConfigError, PipelineConfig, load_pipeline_config, shadowed_keys
 from chitchat.run_dir import RunDir
 
 log = logging.getLogger("chitchat")
@@ -187,22 +187,6 @@ def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
     except (ConfigError, CriteriaError, StageError) as e:
         raise _fail(str(e)) from None
     log.info("Done. Outputs are in %s", run_dir.root)
-
-
-def shadowed_keys(environ: dict[str, str], env_file: Path) -> list[str]:
-    """API keys set in the environment AND in .env with a different value.
-
-    The environment wins, because load_dotenv never overrides. Returns names only.
-    """
-    if not env_file.is_file():
-        return []
-    from dotenv import dotenv_values
-
-    return [
-        name
-        for name, value in dotenv_values(env_file).items()
-        if name.endswith("_API_KEY") and value and environ.get(name) not in (None, "", value)
-    ]
 
 
 def _quiet_library_warnings() -> None:

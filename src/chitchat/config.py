@@ -163,3 +163,19 @@ def _check_files_exist(path: Path, cfg: PipelineConfig) -> None:
     if missing:
         listing = "\n".join(missing)
         raise ConfigError(f"Invalid config {path}: these paths do not exist:\n{listing}")
+
+
+def shadowed_keys(environ: dict[str, str], env_file: Path) -> list[str]:
+    """API keys set in the environment AND in .env with a different value.
+
+    The environment wins, because load_dotenv never overrides. Returns names only.
+    """
+    if not env_file.is_file():
+        return []
+    from dotenv import dotenv_values
+
+    return [
+        name
+        for name, value in dotenv_values(env_file).items()
+        if name.endswith("_API_KEY") and value and environ.get(name) not in (None, "", value)
+    ]
