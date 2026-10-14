@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import logging
 import re
+from collections import Counter
 from datetime import UTC, datetime
 from typing import Any
 
@@ -29,6 +30,7 @@ CITE_RULES = (
 RAG_PROMPT = CITE_RULES + "\n\nContext:\n{context}"
 
 TAG = re.compile(r"\[([PD]\d{4})\]")
+MASK = re.compile(r"\[([A-Z][A-Z_]*?)_\d+\]")  # [PERSON_1], [EMAIL_ADDRESS_2], ...
 ABORTED_UNSAFE = "aborted-unsafe"
 NO_ANSWER = "No answer: the privacy check stopped it. See the report."
 
@@ -60,14 +62,18 @@ def privacy_summary(report: dict[str, Any] | None) -> dict[str, Any] | None:
     if not report:
         return None
     detection = report.get("detection") or {}
+    sent = report.get("sanitized_query") or None
+    question_masks = Counter(MASK.findall(sent or ""))
     return {
         "outcome": _plain(report.get("outcome")),
-        "spans_masked": detection.get("count", 0),
+        "spans_masked": detection.get("count", 0),  # in the retrieved context
         "entities": detection.get("entity_counts", {}),
+        "question_masked": sum(question_masks.values()),
+        "question_entities": dict(question_masks),
         "gate": _plain(report.get("gate_outcome")),
         "answer_model": report.get("answer_model"),
         # Already masked by mmore, so safe to keep and show.
-        "sanitized_query": report.get("sanitized_query") or None,
+        "sanitized_query": sent,
     }
 
 
@@ -202,7 +208,19 @@ def render(result: dict[str, Any]) -> str:
     if summary:
         lines += [
             "",
-            f"Privacy: {summary['outcome']}, {summary['spans_masked']} spans masked "
-            f"{summary['entities'] or ''}".rstrip(),
+            f"Privacy: {summary['outcome']} · question: {_masked(summary, 'question')} · "
+            f"context: {_masked(summary, 'context')}",
         ]
     return "\n".join(lines)
+
+
+def _masked(summary: dict[str, Any], where: str) -> str:
+    """`2 masked (PERSON 1, EMAIL_ADDRESS 1)`, or `nothing masked`."""
+    if where == "question":
+        count, entities = summary.get("question_masked", 0), summary.get("question_entities")
+    else:
+        count, entities = summary.get("spans_masked", 0), summary.get("entities")
+    if not count:
+        return "nothing masked"
+    kinds = ", ".join(f"{k} {v}" for k, v in (entities or {}).items())
+    return f"{count} masked ({kinds})" if kinds else f"{count} masked"

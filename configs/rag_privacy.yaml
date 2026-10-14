@@ -3,7 +3,7 @@ domain: global
 interactive: false              # `chitchat ask --review` turns on a human check
 detection:
   engine: presidio
-  confidence_threshold: 0.7
+  confidence_threshold: 0.4      # Presidio scores phone numbers at 0.4
   entity_types: [PERSON, EMAIL_ADDRESS, PHONE_NUMBER]
 sanitization:
   strategy: token_masking

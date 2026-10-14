@@ -4,7 +4,10 @@ domain: global                  # global | healthcare | humanitarian
 interactive: false
 detection:
   engine: presidio              # presidio (spaCy) or gliner (HF model, heavier)
-  confidence_threshold: 0.7
+  # Presidio scores every phone number at 0.4, so 0.7 would never mask one.
+  # Papers stay at 0.7, so numbers in tables and results are not mistaken for phone numbers.
+  confidence_threshold_papers: 0.7
+  confidence_threshold_own_documents: 0.4
   # Papers: a narrow list. Masking LOCATION or DATE_TIME would remove research content.
   entity_types_papers: [PERSON, EMAIL_ADDRESS, PHONE_NUMBER, US_SSN]
   # Own documents: the broader mmore default.

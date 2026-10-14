@@ -38,8 +38,14 @@ def load_sanitize_configs(path: Path) -> dict[str, dict[str, Any]]:
         problems.append("domain")
     if not detection.get("engine"):
         problems.append("detection.engine")
-    if detection.get("confidence_threshold") is None:
-        problems.append("detection.confidence_threshold")
+    shared = detection.pop("confidence_threshold", None)
+    thresholds = {
+        kind: detection.pop(f"confidence_threshold_{kind}", shared)
+        for kind in (PAPERS, OWN_DOCUMENTS)
+    }
+    for kind, threshold in thresholds.items():
+        if threshold is None:
+            problems.append(f"detection.confidence_threshold_{kind}")
     lists = {
         PAPERS: detection.pop("entity_types_papers", None),
         OWN_DOCUMENTS: detection.pop("entity_types_own_documents", None),
@@ -57,8 +63,26 @@ def load_sanitize_configs(path: Path) -> dict[str, dict[str, Any]]:
 
     configs = {}
     for kind, entities in lists.items():
-        configs[kind] = {**data, "detection": {**detection, "entity_types": list(entities)}}
+        configs[kind] = {
+            **data,
+            "detection": {
+                **detection,
+                "entity_types": list(entities),
+                "confidence_threshold": thresholds[kind],
+            },
+        }
     return configs
+
+
+# --- Preparing text ---------------------------------------------------------------
+
+# PDF extraction can glue a footnote mark onto an email ("a@b.com2"), which then
+# fails email detection. Split the digits off so the address is found.
+_EMAIL_WITH_FOOTNOTE = re.compile(r"\b([\w.+-]+@[\w-]+(?:\.[\w-]+)*\.[A-Za-z]{2,})(\d{1,3})\b")
+
+
+def unglue_emails(text: str) -> str:
+    return _EMAIL_WITH_FOOTNOTE.sub(lambda m: f"{m.group(1)} {m.group(2)}", text)
 
 
 # --- Splitting ------------------------------------------------------------------
@@ -122,7 +146,7 @@ class Sanitizer:
         owners: list[int] = []
         for i, text in enumerate(texts):
             if text:
-                for part in split_text(text):
+                for part in split_text(unglue_emails(text)):
                     chunks.append(part)
                     owners.append(i)
         if not chunks:

@@ -101,7 +101,9 @@ def test_aborted_unsafe_is_handled() -> None:
     assert result["answer"] == NO_ANSWER
     assert result["sources"] == []
     assert result["privacy_report_summary"]["outcome"] == "aborted-unsafe"
-    assert "aborted-unsafe, 3 spans masked" in render(result)
+    assert "aborted-unsafe · question: nothing masked · context: 3 masked (PERSON 3)" in render(
+        result
+    )
     json.dumps(result)
 
 
@@ -149,3 +151,18 @@ def test_presidio_leaves_tags_alone() -> None:
     (clean,), report = sanitizer.sanitize([text])
     assert "[P0007]" in clean and "[D0012]" in clean and "[P0130]" in clean
     assert "John Smith" not in clean
+
+
+def test_question_masks_are_counted() -> None:
+    """The context count alone said "0 masked" even when the question was masked."""
+    report = {"outcome": Outcome.RETURNED,
+              "sanitized_query": "I'm [PERSON_1] ([EMAIL_ADDRESS_1], [PHONE_NUMBER_1]). Gaps?",
+              "detection": {"count": 0, "entity_counts": {}}}  # fmt: skip
+    summary = format_result("q?", {"answer": "x", "privacy_report": report}, SOURCES)[
+        "privacy_report_summary"
+    ]
+    assert summary["question_masked"] == 3
+    assert summary["question_entities"] == {"PERSON": 1, "EMAIL_ADDRESS": 1, "PHONE_NUMBER": 1}
+    text = render(format_result("q?", {"answer": "x", "privacy_report": report}, SOURCES))
+    assert "question: 3 masked (PERSON 1, EMAIL_ADDRESS 1, PHONE_NUMBER 1)" in text
+    assert "context: nothing masked" in text

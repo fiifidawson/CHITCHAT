@@ -106,8 +106,9 @@ Masks personal data. **No LLM. Nothing leaves your machine.**
   - replaces each one with a token: `[PERSON_1]`, `[EMAIL_ADDRESS_2]`, …;
   - the same value gets the same token within one document;
   - uses **two different lists** of what to mask:
-    - **Papers:** names, emails, phone numbers, SSNs. Places and dates are kept, because they are research content.
-    - **Own documents:** also locations, dates, medical record and insurance ids.
+    - **Papers:** names, emails and SSNs. Places, dates and numbers are kept, because they are research content. Phone numbers are also kept: Presidio is unsure about them (score 0.4), and papers use a 0.7 cut-off so figures in tables aren't mistaken for phone numbers.
+    - **Own documents:** also phone numbers (0.4 cut-off), locations, dates, medical record and insurance ids.
+  - splits an email from a footnote number stuck to it (`a@b.com2` → `a@b.com 2`), so the email is found.
 - **Writes:**
   - `papers.sanitized.jsonl`: each paper with its abstract and text masked, plus its `paper_id` and a per-paper privacy count. Replaced each time.
   - `docs.sanitized.jsonl`: the same for your documents.

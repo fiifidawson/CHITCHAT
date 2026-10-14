@@ -15,6 +15,7 @@ from chitchat.stages.sanitize import (
     load_sanitize_configs,
     sanitize_papers,
     split_text,
+    unglue_emails,
 )
 
 REPO = Path(__file__).resolve().parents[1]
@@ -135,7 +136,10 @@ def test_mmore_accepts_both_configs() -> None:
         assert cfg.detection.entity_types
 
 
-@pytest.mark.parametrize("missing", ["domain", "engine", "entity_types_own_documents"])
+@pytest.mark.parametrize(
+    "missing",
+    ["domain", "engine", "entity_types_own_documents", "confidence_threshold_own_documents"],
+)
 def test_unpinned_config_is_refused(tmp_path: Path, missing: str) -> None:
     data = yaml.safe_load((REPO / "configs" / "sanitize.yaml").read_text(encoding="utf-8"))
     if missing == "domain":
@@ -146,3 +150,36 @@ def test_unpinned_config_is_refused(tmp_path: Path, missing: str) -> None:
     path.write_text(yaml.safe_dump(data), encoding="utf-8")
     with pytest.raises(ConfigError, match=missing):
         load_sanitize_configs(path)
+
+
+def test_thresholds_per_list() -> None:
+    """Presidio scores phone numbers at 0.4: own documents must go that low to mask them."""
+    configs = load_sanitize_configs(REPO / "configs" / "sanitize.yaml")
+    assert configs[PAPERS]["detection"]["confidence_threshold"] == 0.7
+    assert configs[OWN_DOCUMENTS]["detection"]["confidence_threshold"] == 0.4
+    assert "confidence_threshold_papers" not in configs[PAPERS]["detection"]
+
+
+def test_shared_threshold_still_works(tmp_path: Path) -> None:
+    data = yaml.safe_load((REPO / "configs" / "sanitize.yaml").read_text(encoding="utf-8"))
+    for kind in ("papers", "own_documents"):
+        del data["detection"][f"confidence_threshold_{kind}"]
+    data["detection"]["confidence_threshold"] = 0.5
+    path = tmp_path / "sanitize.yaml"
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
+    configs = load_sanitize_configs(path)
+    assert {c["detection"]["confidence_threshold"] for c in configs.values()} == {0.5}
+
+
+def test_rag_privacy_masks_phone_numbers() -> None:
+    data = yaml.safe_load((REPO / "configs" / "rag_privacy.yaml").read_text(encoding="utf-8"))
+    assert data["detection"]["confidence_threshold"] <= 0.4
+    assert "PHONE_NUMBER" in data["detection"]["entity_types"]
+
+
+def test_unglue_emails() -> None:
+    assert (
+        unglue_emails("Email: email@email.com2\nAbstract") == "Email: email@email.com 2\nAbstract"
+    )
+    assert unglue_emails("write to a.b@uni-x.ac.uk12.") == "write to a.b@uni-x.ac.uk 12."
+    assert unglue_emails("a.b@uni.edu and 10.1234/x2") == "a.b@uni.edu and 10.1234/x2"
