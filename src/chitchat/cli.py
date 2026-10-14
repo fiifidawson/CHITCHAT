@@ -159,6 +159,15 @@ def ask(
     typer.echo(render(result))
 
 
+@app.command()
+def status(config: ConfigOption = Path("pipeline.yaml")) -> None:
+    """Show which stages are done and what they produced."""
+    from chitchat.status import render_status
+
+    cfg = _load(config)
+    typer.echo(render_status(RunDir(cfg.run_root), list(STAGES)))
+
+
 def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
     from chitchat.screening.criteria import CriteriaError
     from chitchat.stages import StageError
@@ -178,6 +187,22 @@ def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
     except (ConfigError, CriteriaError, StageError) as e:
         raise _fail(str(e)) from None
     log.info("Done. Outputs are in %s", run_dir.root)
+
+
+def shadowed_keys(environ: dict[str, str], env_file: Path) -> list[str]:
+    """API keys set in the environment AND in .env with a different value.
+
+    The environment wins, because load_dotenv never overrides. Returns names only.
+    """
+    if not env_file.is_file():
+        return []
+    from dotenv import dotenv_values
+
+    return [
+        name
+        for name, value in dotenv_values(env_file).items()
+        if name.endswith("_API_KEY") and value and environ.get(name) not in (None, "", value)
+    ]
 
 
 def _quiet_library_warnings() -> None:
@@ -208,12 +233,22 @@ def main() -> None:
         raise SystemExit(subprocess.call(cmd, env=env))
 
     _quiet_library_warnings()
-    from dotenv import load_dotenv
-
-    load_dotenv()
     logging.basicConfig(level=logging.WARNING, format="%(message)s")
     log.setLevel(logging.INFO)
     logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
+
+    from dotenv import load_dotenv
+
+    for name in shadowed_keys(dict(os.environ), Path(".env")):
+        log.warning(
+            "%s is set in your environment and in .env, with different values. "
+            "The environment value is used. To use .env, remove it: "
+            "`Remove-Item Env:%s` (PowerShell) or `unset %s` (bash).",
+            name,
+            name,
+            name,
+        )
+    load_dotenv()
     app()
 
 

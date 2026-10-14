@@ -78,6 +78,15 @@ def _chunk(items: list[dict[str, Any]], run: RunDir) -> list[Any]:
     return chunks
 
 
+def milvus_error(uri: str, error: Exception) -> StageError:
+    """A clear message for Milvus problems."""
+    message = getattr(error, "message", None) or str(error)
+    hint = ""
+    if "connect" in message.lower() or "unavailable" in message.lower():
+        hint = " Is Milvus running? On Windows, start it with `docker compose up -d` (see README)."
+    return StageError(f"Milvus at {uri}: {message}.{hint}")
+
+
 def _reset_collection(uri: str, db_name: str, collection: str) -> None:
     """Create the database if needed and drop the old collection: each run rebuilds it."""
     from pymilvus import MilvusClient
@@ -116,8 +125,8 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
 
     from mmore.index.indexer import Indexer, IndexerConfig
     from mmore.utils import load_config
+    from pymilvus.exceptions import MilvusException
 
-    _reset_collection(ix.db_uri, ix.db_name, ix.collection)
     indexer_config = load_config(
         {
             "dense_model": {"model_name": ix.dense_model, "is_multimodal": False},
@@ -126,6 +135,12 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
         },
         IndexerConfig,
     )
-    Indexer.from_documents(config=indexer_config, documents=chunks, collection_name=ix.collection)
+    try:
+        _reset_collection(ix.db_uri, ix.db_name, ix.collection)
+        Indexer.from_documents(
+            config=indexer_config, documents=chunks, collection_name=ix.collection
+        )
+    except MilvusException as e:
+        raise milvus_error(ix.db_uri, e) from None
     log.info("Indexed into collection %r at %s", ix.collection, ix.db_uri)
     return len(chunks)

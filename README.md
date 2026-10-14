@@ -38,6 +38,29 @@ uv run python -m spacy download en_core_web_lg    # needed by the sanitize stage
 cp .env.example .env                              # then add OPENAI_API_KEY
 ```
 
+A key already set in your shell or Windows environment wins over `.env`.
+`chitchat` warns you when the two differ.
+
+### Milvus (for `index` and `ask`)
+
+- **Linux and macOS:** nothing to install. Use a file, e.g. `db_uri: runs/{run_name}/milvus.db` (Milvus Lite).
+- **Windows:** Milvus Lite has no Windows build. Run Milvus in Docker. Start Docker Desktop first, then in PowerShell:
+
+```powershell
+mkdir $HOME\milvus; cd $HOME\milvus      # outside the repo: Milvus keeps its data here
+curl.exe -L https://github.com/milvus-io/milvus/releases/download/v2.6.25/milvus-standalone-docker-compose.yml -o docker-compose.yml
+docker compose up -d
+docker compose ps                         # wait until milvus-standalone is "healthy"
+```
+
+- Use `curl.exe`, not `curl`: in PowerShell, `curl` is `Invoke-WebRequest` and rejects `-L`.
+- Use v2.6.24 or later. Older compose files use a MinIO image that is no longer on Docker Hub.
+- Set `db_uri: http://127.0.0.1:19530` in your pipeline file. The smoke config already does.
+- The `index` stage creates the database (`db_name`) if needed and rebuilds the collection on each run.
+- Stop Milvus with `docker compose down`, run from that same folder.
+
+The first `index` and `ask` download embedding models from Hugging Face (about 1 GB).
+
 ## Step by step: smoke test
 
 The smoke config searches 2 categories with 3 results per source, so up to 18 papers.
@@ -68,7 +91,7 @@ uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages export
 #    -> runs/smoke/dataset.csv, dataset.jsonl, sources.json, prisma.md
 
-# 7. Index included papers in Milvus (start Milvus first, see below)
+# 7. Index included papers in Milvus (start Milvus first, see Install)
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages index
 
 # 8. Ask a question. Answers cite [P0001] tags and list their sources.
@@ -76,7 +99,13 @@ uv run chitchat ask -c configs/pipeline.smoke.yaml "What consent practices do th
 uv run chitchat ask -c configs/pipeline.smoke.yaml --no-privacy "..."   # skip privacy mode
 uv run chitchat ask -c configs/pipeline.smoke.yaml --review "..."       # check the context yourself first
 #    -> answers are logged in runs/smoke/answers.jsonl
+
+# Any time: what has each stage produced?
+uv run chitchat status -c configs/pipeline.smoke.yaml
 ```
+
+Privacy mode can mistake a product or project name for a person and mask it in your question.
+`ask` then shows the question it actually sent. Rephrase it ("the MoodSmith system") or use `--no-privacy`.
 
 Or run them all at once:
 
@@ -97,34 +126,13 @@ uv run chitchat report -c configs/pipeline.smoke.yaml
 
 Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
 
-## Milvus
-
-The index needs Milvus.
-
-- **Linux and macOS:** nothing to install. Use a file, e.g. `db_uri: runs/{run_name}/milvus.db` (Milvus Lite).
-- **Windows:** Milvus Lite has no Windows build. Run Milvus in Docker:
-
-```powershell
-# Start Docker Desktop first. Then, in a folder outside the repo (PowerShell):
-mkdir $HOME\milvus; cd $HOME\milvus
-curl.exe -L https://github.com/milvus-io/milvus/releases/download/v2.6.6/milvus-standalone-docker-compose.yml -o docker-compose.yml
-docker compose up -d
-docker compose ps    # wait until milvus-standalone is "healthy"
-```
-
-In PowerShell, plain `curl` is `Invoke-WebRequest` and rejects `-L`. Use `curl.exe`.
-
-Then set `db_uri: http://127.0.0.1:19530` in your pipeline file (the smoke config already does).
-The `index` stage creates the database (`db_name`) if it doesn't exist, and rebuilds the collection on each run.
-Stop Milvus with `docker compose down`.
-
-The first `index` and `ask` download embedding models from Hugging Face (about 1 GB in total).
-
 ## Full run
 
 ```bash
 cp configs/pipeline.example.yaml pipeline.yaml    # edit it if needed
 uv run chitchat run                               # all stages, all 8 categories
+uv run chitchat status
+uv run chitchat ask "your question"
 ```
 
 Papers that could not be downloaded are listed in `runs/<run>/raw/papers_failed_pdfs.csv`.
@@ -150,14 +158,32 @@ Save a PDF at its `save_as` path and rerun `discover` to pick it up.
 - Authors cited in a paper's references are masked too. This is expected.
 - Masking lowers risk but does not guarantee anonymity.
 
+## Known limits
+
+- **PDFs:** publishers refuse many downloads, even with a subscription. Use the manual-download list from `discover`.
+- **Masking:** it lowers risk but does not guarantee anonymity. Indirect identifiers can remain.
+  The leakage check in `configs/rag_privacy.yaml` looks for this, but it is off by default because it costs extra LLM calls.
+- **Screening:** it is an aid, not a final decision. Check the evidence quotes. Screenings from an abstract alone are weaker.
+- **Costs:** screening makes one LLM call per paper, plus one more for extraction on papers that are not excluded.
+  Each question costs one answer call. The leakage check adds 5 or more calls per question when on.
+- **Windows:** Milvus needs Docker.
+
 ## Development
 
 ```bash
 uv run ruff check .
+uv run ruff format --check .
 uv run pytest
 ```
 
-Tests need no network, models or API keys.
+These tests need no network, models or API keys.
+
+A tiny real run (arXiv, 3 papers) is marked `slow` and skipped by default.
+It uses your API key and Milvus when they are available:
+
+```bash
+uv run pytest -m slow
+```
 
 ## Main authors
 

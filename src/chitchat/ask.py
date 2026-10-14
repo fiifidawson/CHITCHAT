@@ -156,8 +156,23 @@ def ask(
         )
     elif privacy:
         log.info("No rag_privacy_config set. Answering without privacy mode.")
-    rag = RAGPipeline.from_config(rag_config, privacy_graph=graph, privacy_approver=approver)
-    out = rag({"input": question, "collection_name": cfg.index.collection}, return_dict=True)[0]
+
+    from pymilvus.exceptions import MilvusException
+
+    from chitchat.stages.index import milvus_error
+
+    try:
+        rag = RAGPipeline.from_config(rag_config, privacy_graph=graph, privacy_approver=approver)
+        query = {"input": question, "collection_name": cfg.index.collection}
+        out = rag(query, return_dict=True)[0]
+    except MilvusException as e:
+        raise milvus_error(cfg.index.db_uri, e) from None
+    except ValueError as e:
+        if "collection" not in str(e):
+            raise
+        raise StageError(
+            f"No index called {cfg.index.collection!r} yet. Run the index stage first."
+        ) from None
     result = format_result(question, out, sources)
     append_jsonl(run.answers, result)
     return result
