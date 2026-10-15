@@ -13,7 +13,9 @@ from collections.abc import Iterator
 from contextlib import contextmanager
 from typing import Any
 
+from rich import box
 from rich.console import Console, Group
+from rich.panel import Panel
 from rich.progress import (
     BarColumn,
     MofNCompleteColumn,
@@ -28,6 +30,7 @@ from rich.text import Text
 
 console = Console(stderr=True, highlight=False)
 
+ACCENT = "#f7cb46"  # mmore yellow, so our output matches its progress bars
 BADGE_WIDTH = 9
 STYLES = {
     "HIGH": "bold green",
@@ -108,9 +111,9 @@ def paper_row(record: dict[str, Any], min_year: int | None = None) -> Table:
 def screening_progress(total: int, min_year: int | None = None) -> Iterator[Any]:
     """Yields `report(record)`: prints the paper's row and advances the bar."""
     progress = Progress(
-        SpinnerColumn(),
+        SpinnerColumn(style=ACCENT),
         TextColumn("Screening"),
-        BarColumn(),
+        BarColumn(complete_style=ACCENT, finished_style=ACCENT, pulse_style=ACCENT),
         MofNCompleteColumn(),
         TimeElapsedColumn(),
         TextColumn("left"),
@@ -168,9 +171,24 @@ def summary_table(records: list[dict[str, Any]], reused: int) -> Table:
     return table
 
 
-def print_summary(records: list[dict[str, Any]], reused: int, title: str, footer: str = "") -> None:
-    parts: list[Any] = [Text(title, style="bold"), summary_table(records, reused)]
+def summary_panel(
+    records: list[dict[str, Any]], reused: int, title: str, footer: str = ""
+) -> Panel:
+    """The summary table in a yellow box, with the title on the top border."""
+    parts: list[Any] = [summary_table(records, reused)]
     if footer:
-        parts.append(Text(footer, style="dim"))
+        parts += [Text(""), Text(footer, style="dim")]
+    return Panel(
+        Group(*parts),
+        title=Text(f" {title} ", style=f"bold {ACCENT}"),
+        title_align="left",
+        border_style=ACCENT,
+        box=box.ROUNDED,
+        padding=(0, 1),
+        expand=False,
+    )
+
+
+def print_summary(records: list[dict[str, Any]], reused: int, title: str, footer: str = "") -> None:
     console.print()
-    console.print(Group(*parts))
+    console.print(summary_panel(records, reused, title, footer))

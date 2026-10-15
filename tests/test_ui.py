@@ -59,3 +59,14 @@ def test_summary() -> None:
     assert "Failed 1 error 1 · retried next run" in text
     assert "Reused 5 from earlier runs" in text
     assert "200 in · 20 out" in text
+
+
+def test_summary_panel() -> None:
+    records = [_screened("HIGH", []), {"status": "skipped", "skip_reason": "no_text"}]
+    panel = ui.summary_panel(records, reused=0, title="Screening done", footer="Saved to x.jsonl")
+    assert panel.border_style == ui.ACCENT
+    text = _render(panel, width=80)
+    lines = text.strip().splitlines()
+    assert "Screening done" in lines[0]  # title sits on the top border
+    assert "Included" in text and "Saved to x.jsonl" in text
+    assert all(len(line) == len(lines[0]) for line in lines)  # a closed box
