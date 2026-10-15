@@ -7,7 +7,7 @@ from chitchat.config import shadowed_keys
 from chitchat.jsonl import write_json, write_jsonl
 from chitchat.run_dir import RunDir
 from chitchat.stages.index import milvus_error
-from chitchat.status import render_status, stage_details
+from chitchat.status import stage_details, status_rows
 
 
 def _screening_record(n: int, status: str, label: str | None = None) -> dict:
@@ -18,9 +18,9 @@ def _screening_record(n: int, status: str, label: str | None = None) -> dict:
 def test_status_on_empty_run(tmp_path: Path) -> None:
     run = RunDir(tmp_path)
     assert stage_details(run) == {}
-    text = render_status(run, list(STAGES))
-    assert "queries" in text and "index" in text and "ask" in text
-    assert "done" not in text
+    rows = status_rows(run, list(STAGES))
+    assert [r[0] for r in rows] == [*STAGES, "ask"]
+    assert all(finished is None and output == "" for _, finished, output in rows)
 
 
 def test_status_details(tmp_path: Path) -> None:
@@ -48,9 +48,9 @@ def test_status_details(tmp_path: Path) -> None:
     assert details["sanitize"] == "papers: 12 spans masked"
     assert details["screen"] == "screened 2, skipped 1 (HIGH 1, MEDIUM 0, LOW 0, EXCLUDE 1)"
 
-    text = render_status(run, list(STAGES))
-    discover_line = next(line for line in text.splitlines() if line.strip().startswith("discover"))
-    assert "done" in discover_line and "3 papers" in discover_line
+    rows = {stage: (finished, output) for stage, finished, output in status_rows(run, list(STAGES))}
+    assert rows["discover"][0] and rows["discover"][1] == "3 papers, 2 with PDF"
+    assert rows["queries"][0] is None  # has output but no done marker
 
 
 def test_shadowed_keys(tmp_path: Path) -> None:

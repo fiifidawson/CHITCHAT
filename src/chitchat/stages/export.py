@@ -157,13 +157,38 @@ def run_export(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
 
     for problem in check_totals(prisma):
         log.warning("PRISMA check: %s", problem)
-    log.info(
-        "Wrote %d papers to %s and %s", len(rows), run.dataset_jsonl.name, run.dataset_csv.name
-    )
-    log.info(
-        "Included %d (%s). Report: %s",
-        prisma["included"]["total"],
-        ", ".join(f"{k} {prisma['included'][k]}" for k in ("HIGH", "MEDIUM", "LOW")),
-        run.prisma_md,
-    )
+    _print_summary(prisma, len(rows), run)
     return prisma
+
+
+def _print_summary(prisma: dict[str, Any], n_rows: int, run: RunDir) -> None:
+    from chitchat import ui
+
+    included = prisma["included"]
+    skipped = {k: v for k, v in prisma["excluded_before_screening"].items() if k != "total"}
+    failed = {k: v for k, v in prisma["screening_failed"].items() if k != "total" and v}
+    rows: list[ui.Fact] = [
+        ("Papers", n_rows, "in the dataset"),
+        (
+            "Included",
+            included["total"],
+            ui.breakdown(included, ("HIGH", "MEDIUM", "LOW")),
+            "bold green",
+        ),
+        ("Excluded", prisma["excluded_by_rules"]["total"], "by the decision rules", "bold red"),
+        ("Skipped", prisma["excluded_before_screening"]["total"], ui.breakdown(skipped)),
+    ]
+    if prisma["screening_failed"]["total"]:
+        rows.append(
+            ("Failed", prisma["screening_failed"]["total"], ui.breakdown(failed), "bold magenta")
+        )
+    if prisma["not_screened_yet"]:
+        rows.append(("Not screened", prisma["not_screened_yet"], "run the screen stage"))
+    if prisma["own_documents_added"]:
+        rows.append(("Own documents", prisma["own_documents_added"], "added"))
+    ui.print_box(
+        "Dataset and PRISMA",
+        rows,
+        footer=f"Saved to {ui.shorten_path(run.root)}: "
+        "dataset.csv, dataset.jsonl, sources.json, prisma.md",
+    )

@@ -104,11 +104,13 @@ def run_queries(cfg: PipelineConfig, run: RunDir) -> list[dict[str, str]]:
     disc = _load_discovery_config(cfg, run)
     queries = _build_queries(disc)
     write_json(run.queries, queries)
-    for q in queries:
-        groups = q["query"].count(" AND ") + 1
-        log.info("  %s: %d groups, %d characters", q["category"], groups, len(q["query"]))
+
+    from chitchat import ui
+
+    limit = OPENALEX_MAX_CHARS if "openalex" in disc.sources else None
+    ui.console.print(ui.queries_table(queries, limit))
     _warn_long_queries(queries, disc.sources)
-    log.info("Wrote %d boolean queries to %s", len(queries), run.queries)
+    ui.note(f"Saved to {ui.shorten_path(run.queries)}")
     return queries
 
 
@@ -125,13 +127,29 @@ def run_discover(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
     stats = discovery_stats(pipeline)
     write_json(run.discovery_stats, stats)
 
-    log.info("Found %d papers, %d after removing duplicates.", stats["n_found"], stats["n_unique"])
-    for status, count in sorted(stats["pdf_counts"].items()):
-        log.info("  PDF %s: %d", status, count)
-    if stats["failed_list"]:
-        log.info(
-            "Some PDFs are missing. Save them at the `save_as` paths in %s and rerun.",
-            stats["failed_list"],
-        )
-    log.info("Wrote %d papers to %s", len(papers), run.papers_raw)
+    _print_summary(stats, run, len(papers))
     return stats
+
+
+def _print_summary(stats: dict[str, Any], run: RunDir, n_papers: int) -> None:
+    from chitchat import ui
+
+    pdfs = stats["pdf_counts"]
+    obtained = {k: v for k, v in pdfs.items() if k in ("downloaded", "cached")}
+    missing = {k: v for k, v in pdfs.items() if k not in ("downloaded", "cached")}
+    rows: list[ui.Fact] = [
+        ("Found", stats["n_found"], ui.breakdown(stats["found"]) or "no source returned papers"),
+        ("Duplicates", stats["duplicates_removed"], "removed"),
+        ("Papers", stats["n_unique"], "after removing duplicates", "bold green"),
+        ("Full text", sum(obtained.values()), ui.breakdown(obtained)),
+    ]
+    if missing:
+        rows.append(("No PDF", sum(missing.values()), ui.breakdown(missing), "bold red"))
+    footer = [f"Saved {n_papers} papers to {ui.shorten_path(run.papers_raw)}"]
+    if stats["failed_list"]:
+        footer.append(
+            f"Missing PDFs: save them at the save_as paths in "
+            f"{ui.shorten_path(stats['failed_list'])}, then rerun discover."
+        )
+    ui.console.print()
+    ui.print_box("Discovery", rows, footer)

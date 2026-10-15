@@ -118,10 +118,7 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
             "and no own documents. Run screen first."
         )
     n_docs = sum(1 for i in items if i["tag"].startswith("D"))
-    log.info("Indexing %d papers and %d own documents", len(items) - n_docs, n_docs)
-
     chunks = _chunk(items, run)
-    log.info("Made %d chunks", len(chunks))
 
     from mmore.index.indexer import Indexer, IndexerConfig
     from mmore.utils import load_config
@@ -142,5 +139,16 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
         )
     except MilvusException as e:
         raise milvus_error(ix.db_uri, e) from None
-    log.info("Indexed into collection %r at %s", ix.collection, ix.db_uri)
+    from chitchat import ui
+
+    ui.print_box(
+        "Index",
+        [
+            ("Papers", len(items) - n_docs, f"labelled {', '.join(ix.include_labels)}"),
+            ("Own documents", n_docs, ""),
+            ("Chunks", len(chunks), "each starts with its [P0001] tag"),
+            ("Collection", "", f"{ix.collection} at {ix.db_uri}"),
+        ],
+        footer='Next: chitchat ask "your question"',
+    )
     return len(chunks)

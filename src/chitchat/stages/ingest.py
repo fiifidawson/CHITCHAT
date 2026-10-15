@@ -36,7 +36,9 @@ def to_doc_records(samples: list[dict[str, Any]]) -> list[dict[str, Any]]:
 def run_ingest(cfg: PipelineConfig, run: RunDir) -> int:
     folder = cfg.own_documents.folder
     if not folder or not folder.is_dir():
-        log.info("No own documents folder (%s). Skipping.", folder)
+        from chitchat import ui
+
+        ui.note(f"No own documents folder ({ui.shorten_path(folder or '')}). Skipped.")
         return 0
 
     from mmore.run_process import merged_results_path, process
@@ -64,5 +66,11 @@ def run_ingest(cfg: PipelineConfig, run: RunDir) -> int:
     process(str(config_path))
     samples = list(read_jsonl(Path(merged_results_path(str(out)))))
     n = write_jsonl(run.docs_raw, to_doc_records(samples))
-    log.info("Read %d own documents into %s", n, run.docs_raw)
+    from chitchat import ui
+
+    ui.print_box(
+        "Own documents",
+        [("Documents", n, f"read from {ui.shorten_path(folder)}")],
+        footer=f"Saved to {ui.shorten_path(run.docs_raw)}. They are never screened.",
+    )
     return n

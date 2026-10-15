@@ -153,7 +153,13 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
         if not run.screening.exists():
             raise StageError(f"No screening results yet ({run.screening}).")
         changed = redecide(run.screening, criteria)
-        log.info("Recomputed decisions with the current rules. %d labels changed.", changed)
+        from chitchat import ui
+
+        ui.print_box(
+            "Relabelled",
+            [("Changed", changed, "labels, using the current rules. No LLM calls.")],
+            footer="Next: chitchat report, to rebuild the dataset and PRISMA.",
+        )
         return Counter()
 
     sanitized = cfg.privacy.before_screening
@@ -170,19 +176,15 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
     done = store.done_ids(criteria.hash, model)
     todo = [p for p in papers if (p.get("paper_id") or paper_id(p)) not in done]
     reused = len(papers) - len(todo)
-    log.info(
-        "Screening %d of %d papers with %s (criteria %s). %d reused from earlier runs.",
-        len(todo),
-        len(papers),
-        model,
-        criteria.ref,
-        reused,
+    from chitchat import ui
+
+    ui.note(
+        f"{len(todo)} of {len(papers)} papers to screen with {model} "
+        f"(criteria {criteria.ref}). {reused} reused from earlier runs."
     )
     counts: Counter[str] = Counter()
     if not todo:
         return counts
-
-    from chitchat import ui
 
     chat_model, provider = build_chat_model(cfg.screening.llm)
     screener = Screener(criteria, cfg.screening, chat_model, provider, sanitized)

@@ -55,14 +55,7 @@ def stage_details(run: RunDir) -> dict[str, str]:
     return details
 
 
-def render_status(run: RunDir, stages: list[str]) -> str:
+def status_rows(run: RunDir, stages: list[str]) -> list[tuple[str, str | None, str]]:
+    """(stage, finished_at or None, what it produced) for each stage, then `ask`."""
     details = stage_details(run)
-    lines = [f"Run folder: {run.root}", ""]
-    width = max(len(s) for s in [*stages, "ask"])
-    for stage in [*stages, "ask"]:
-        done = run.done_at(stage)
-        mark = "done" if done or (stage == "ask" and stage in details) else "-"
-        when = f" ({done[:16].replace('T', ' ')} UTC)" if done else ""
-        detail = details.get(stage, "")
-        lines.append(f"  {stage:<{width}}  {mark:<4}{when}  {detail}".rstrip())
-    return "\n".join(lines)
+    return [(stage, run.done_at(stage), details.get(stage, "")) for stage in [*stages, "ask"]]

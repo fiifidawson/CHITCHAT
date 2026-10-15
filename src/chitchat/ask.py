@@ -208,21 +208,7 @@ def render(result: dict[str, Any]) -> str:
         lines += ["", f"Note: privacy mode sent your question as: {sent}"]
         lines.append("If a name was masked by mistake, rephrase it or use --no-privacy.")
     if summary:
-        lines += [
-            "",
-            f"Privacy: {summary['outcome']} · question: {_masked(summary, 'question')} · "
-            f"context: {_masked(summary, 'context')}",
-        ]
+        from chitchat.ui import privacy_line
+
+        lines += ["", privacy_line(summary)]
     return "\n".join(lines)
-
-
-def _masked(summary: dict[str, Any], where: str) -> str:
-    """`2 masked (PERSON 1, EMAIL_ADDRESS 1)`, or `nothing masked`."""
-    if where == "question":
-        count, entities = summary.get("question_masked", 0), summary.get("question_entities")
-    else:
-        count, entities = summary.get("spans_masked", 0), summary.get("entities")
-    if not count:
-        return "nothing masked"
-    kinds = ", ".join(f"{k} {v}" for k, v in (entities or {}).items())
-    return f"{count} masked ({kinds})" if kinds else f"{count} masked"

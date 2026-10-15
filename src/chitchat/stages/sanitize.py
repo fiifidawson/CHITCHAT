@@ -181,30 +181,36 @@ def _totals(reports: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def sanitize_papers(papers: list[dict[str, Any]], sanitizer: Sanitizer) -> list[dict[str, Any]]:
+    from chitchat import ui
+
     out = []
-    for i, paper in enumerate(papers, 1):
-        (abstract, text), report = sanitizer.sanitize(
-            [paper.get("abstract"), paper.get("extracted_text")]
-        )
-        out.append(
-            {
-                **paper,
-                "paper_id": paper_id(paper),
-                "abstract": abstract,
-                "extracted_text": text,
-                "privacy": report,
-            }
-        )
-        if i % 10 == 0 or i == len(papers):
-            log.info("  papers: %d/%d", i, len(papers))
+    with ui.progress("Masking papers", len(papers)) as advance:
+        for paper in papers:
+            (abstract, text), report = sanitizer.sanitize(
+                [paper.get("abstract"), paper.get("extracted_text")]
+            )
+            out.append(
+                {
+                    **paper,
+                    "paper_id": paper_id(paper),
+                    "abstract": abstract,
+                    "extracted_text": text,
+                    "privacy": report,
+                }
+            )
+            advance()
     return out
 
 
 def sanitize_docs(docs: list[dict[str, Any]], sanitizer: Sanitizer) -> list[dict[str, Any]]:
+    from chitchat import ui
+
     out = []
-    for doc in docs:
-        (text,), report = sanitizer.sanitize([doc.get("text")])
-        out.append({**doc, "text": text, "privacy": report})
+    with ui.progress("Masking own documents", len(docs)) as advance:
+        for doc in docs:
+            (text,), report = sanitizer.sanitize([doc.get("text")])
+            out.append({**doc, "text": text, "privacy": report})
+            advance()
     return out
 
 
@@ -212,23 +218,40 @@ def run_sanitize(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
     configs = load_sanitize_configs(cfg.privacy.sanitize_config)
     report: dict[str, Any] = {}
 
+    from chitchat import ui
+
     if run.papers_raw.exists():
         papers = list(read_jsonl(run.papers_raw))
-        log.info("Sanitizing %d papers", len(papers))
+        ui.note("Loading the personal-data detector (Presidio)…")
         clean = sanitize_papers(papers, Sanitizer.from_dict(configs[PAPERS]))
         write_jsonl(run.papers_sanitized, clean)
         report[PAPERS] = _totals([p["privacy"] for p in clean])
     else:
-        log.info("No papers yet (%s). Run discover first.", run.papers_raw)
+        ui.note(f"No papers yet ({ui.shorten_path(run.papers_raw)}). Run discover first.")
 
     if run.docs_raw.exists():
         docs = list(read_jsonl(run.docs_raw))
-        log.info("Sanitizing %d own documents", len(docs))
         clean = sanitize_docs(docs, Sanitizer.from_dict(configs[OWN_DOCUMENTS]))
         write_jsonl(run.docs_sanitized, clean)
         report[OWN_DOCUMENTS] = _totals([d["privacy"] for d in clean])
 
     write_json(run.privacy_report, report)
-    for kind, totals in report.items():
-        log.info("  %s: %d spans masked %s", kind, totals["spans"], totals["entities"])
+    labels = {PAPERS: "Papers", OWN_DOCUMENTS: "Own documents"}
+    rows: list[ui.Fact] = [
+        (
+            labels[kind],
+            totals["documents"],
+            f"{totals['spans']:,} masked: {ui.breakdown(totals['entities']) or 'nothing found'}",
+        )
+        for kind, totals in report.items()
+    ]
+    ui.console.print()
+    ui.print_box(
+        "Privacy",
+        rows or [("Nothing", "", "no papers or documents to sanitize")],
+        footer=[
+            "No LLM was used. Raw text stays in raw/.",
+            f"Saved to {ui.shorten_path(run.root)}: sanitized files and privacy_report.json",
+        ],
+    )
     return report

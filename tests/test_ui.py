@@ -70,3 +70,63 @@ def test_summary_panel() -> None:
     assert "Screening done" in lines[0]  # title sits on the top border
     assert "Included" in text and "Saved to x.jsonl" in text
     assert all(len(line) == len(lines[0]) for line in lines)  # a closed box
+
+
+def test_queries_table_flags_long_queries() -> None:
+    queries = [
+        {"category": "Short", "query": "(a) AND (b)"},
+        {"category": "Long", "query": "x" * 20},
+    ]
+    text = _render(ui.queries_table(queries, openalex_limit=15), width=100)
+    assert "Boolean queries" in text
+    short = next(line for line in text.splitlines() if "Short" in line)
+    long = next(line for line in text.splitlines() if "Long" in line)
+    assert "ok" in short and " 2 " in short  # two AND groups
+    assert "too long" in long
+    assert "OpenAlex" not in _render(ui.queries_table(queries, openalex_limit=None), width=100)
+
+
+def test_status_table(tmp_path) -> None:
+    rows = [("discover", "2026-10-14T19:52:00+00:00", "15 papers"), ("index", None, "")]
+    text = _render(ui.status_table(rows, tmp_path), width=100)
+    discover = next(line for line in text.splitlines() if "discover" in line)
+    assert "✓" in discover and "2026-10-14 19:52" in discover and "15 papers" in discover
+    assert "–" in next(line for line in text.splitlines() if "index" in line)
+
+
+def test_answer_view() -> None:
+    result = {
+        "question": "Who is Sarah?",
+        "answer": "It is [PERSON_1] [P0001].",
+        "aborted": False,
+        "sources": [{"tag": "P0001", "title": "A", "year": 2024, "doi": "10.1/a", "known": True}],
+        "retrieved": [],
+        "privacy_report_summary": {
+            "outcome": "returned",
+            "sanitized_query": "Who is [PERSON_1]?",
+            "question_masked": 1,
+            "question_entities": {"PERSON": 1},
+            "spans_masked": 0,
+            "entities": {},
+        },
+    }
+    text = _render(ui.answer_view(result), width=100)
+    assert "Answer" in text.splitlines()[0]  # boxed, title on the border
+    assert "[P0001] A (2024)" in text and "https://doi.org/10.1/a" in text
+    assert "Privacy mode sent your question as: Who is [PERSON_1]?" in text
+    assert "question: 1 masked (PERSON 1) · context: nothing masked" in text
+
+
+def test_log_handler_styles_warnings(monkeypatch) -> None:
+    import logging
+
+    console = Console(width=100, record=True, force_terminal=False)
+    monkeypatch.setattr(ui, "console", console)
+    logger = logging.getLogger("chitchat.test_ui")
+    logger.addHandler(ui.ConsoleLogHandler())
+    logger.setLevel(logging.INFO)
+    logger.propagate = False
+    logger.info("plain info")
+    logger.warning("watch out")
+    text = console.export_text()
+    assert "plain info" in text and "⚠ watch out" in text

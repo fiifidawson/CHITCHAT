@@ -84,7 +84,11 @@ def _root() -> None:
 
 
 def _fail(message: str) -> typer.Exit:
-    typer.secho(message, fg=typer.colors.RED, err=True)
+    from rich.text import Text
+
+    from chitchat import ui
+
+    ui.console.print(Text(f"✗ {message}", style="bold red"))
     return typer.Exit(2)
 
 
@@ -147,8 +151,8 @@ def ask(
     k: Annotated[int | None, typer.Option(help="How many chunks to retrieve.")] = None,
 ) -> None:
     """Answer a question from the index, with [P0001] citations."""
+    from chitchat import ui
     from chitchat.ask import ask as run_ask
-    from chitchat.ask import render
     from chitchat.stages import StageError
 
     cfg = _load(config)
@@ -156,19 +160,22 @@ def ask(
         result = run_ask(cfg, RunDir(cfg.run_root), question, not no_privacy, review, k)
     except StageError as e:
         raise _fail(str(e)) from None
-    typer.echo(render(result))
+    ui.out.print(ui.answer_view(result))
 
 
 @app.command()
 def status(config: ConfigOption = Path("pipeline.yaml")) -> None:
     """Show which stages are done and what they produced."""
-    from chitchat.status import render_status
+    from chitchat import ui
+    from chitchat.status import status_rows
 
     cfg = _load(config)
-    typer.echo(render_status(RunDir(cfg.run_root), list(STAGES)))
+    run_dir = RunDir(cfg.run_root)
+    ui.out.print(ui.status_table(status_rows(run_dir, list(STAGES)), run_dir.root))
 
 
 def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
+    from chitchat import ui
     from chitchat.screening.criteria import CriteriaError
     from chitchat.stages import StageError
     from chitchat.stages.screen import run_screen
@@ -178,15 +185,21 @@ def _run_stages(config: Path, names: list[str], redecide: bool = False) -> None:
     run_dir.root.mkdir(parents=True, exist_ok=True)
     try:
         if redecide:
+            ui.stage_header("redecide", 1, 1)
             run_screen(cfg, run_dir, redecide_only=True)
             return
-        for name in names:
-            log.info("== %s ==", name)
+        for position, name in enumerate(names, 1):
+            ui.stage_header(name, position, len(names))
             STAGES[name](cfg, run_dir)
             run_dir.mark_done(name)
     except (ConfigError, CriteriaError, StageError) as e:
         raise _fail(str(e)) from None
-    log.info("Done. Outputs are in %s", run_dir.root)
+    ui.console.print()
+    ui.print_box(
+        "Done",
+        [("Stages", len(names), ", ".join(names)), ("Outputs", "", ui.shorten_path(run_dir.root))],
+        footer=f"See what each stage produced: chitchat status -c {config}",
+    )
 
 
 def _quiet_library_warnings() -> None:
@@ -217,9 +230,9 @@ def main() -> None:
         raise SystemExit(subprocess.call(cmd, env=env))
 
     _quiet_library_warnings()
-    from chitchat.ui import LateBoundStderr
+    from chitchat.ui import ConsoleLogHandler
 
-    logging.basicConfig(level=logging.WARNING, format="%(message)s", stream=LateBoundStderr())
+    logging.basicConfig(level=logging.WARNING, format="%(message)s", handlers=[ConsoleLogHandler()])
     log.setLevel(logging.INFO)
     logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
 
