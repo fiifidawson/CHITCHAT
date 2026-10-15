@@ -123,7 +123,7 @@ uv run chitchat report -c configs/pipeline.smoke.yaml
 
 Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
 
-For about 20 or 30 papers, use `configs/pipeline.smoke20.yaml` or `configs/pipeline.smoke30.yaml` with the same commands. Outputs go to `runs/smoke20/` or `runs/smoke30/`.
+For about 20 or 30 papers, use `configs/pipeline.smoke20.yaml` or `configs/pipeline.smoke30.yaml` with the same commands. For about 55 papers with the full boolean search, use `configs/pipeline.smoke55.yaml`. Outputs go to `runs/smoke20/` or `runs/smoke30/`.
 
 ## Full run
 

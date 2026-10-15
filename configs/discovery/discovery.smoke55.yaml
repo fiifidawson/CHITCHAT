@@ -1,0 +1,27 @@
+# Discovery for a ~55-paper test run with the full boolean search (all 8 categories).
+# At most 4 papers x 2 sources x 8 categories = 64, fewer after duplicates are removed.
+# Paths are relative to this file.
+synonyms_path: synonyms.jsonl
+categories_path: categories.yaml
+output_file: papers.jsonl
+
+# OpenAlex is left out: every full query is over its 1,500-character limit, so it would return nothing.
+sources: [europepmc, arxiv]
+max_pages: 1
+max_results: 4
+
+download_pdfs: true
+pdf_dir: pdfs
+pdf_extractor: fast
+pdf_timeout: 30
+force_redownload: false
+
+arxiv_category_map:
+  Foundational: cs.LG
+  Humanitarian: cs.CY
+  Inclusion: cs.CY
+  Transparency: cs.CY
+  Harm: cs.CY
+  Consent: cs.CY
+  Environmental: cs.CY
+arxiv_enable_pair_query: true

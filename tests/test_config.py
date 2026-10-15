@@ -29,7 +29,9 @@ def test_example_config_loads(project: Path) -> None:
     assert cfg.screening.llm.to_mmore() == {"llm_name": "gpt-4o-mini", "temperature": 0}
 
 
-@pytest.mark.parametrize(("name", "cap"), [("smoke", 18), ("smoke20", 24), ("smoke30", 36)])
+@pytest.mark.parametrize(
+    ("name", "cap"), [("smoke", 18), ("smoke20", 24), ("smoke30", 36), ("smoke55", 64)]
+)
 def test_smoke_configs_load_in_place(name: str, cap: int) -> None:
     repo = Path(__file__).resolve().parents[1]
     cfg = load_pipeline_config(repo / "configs" / f"pipeline.{name}.yaml")

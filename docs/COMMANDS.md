@@ -9,6 +9,7 @@ Every command runs from the repo root. Add `-c <config>` to pick a run; the defa
 | `configs/pipeline.smoke.yaml` | Quick test: 2 categories, up to 18 papers. Outputs in `runs/smoke/` |
 | `configs/pipeline.smoke20.yaml` | Test run of about 20 papers (up to 24). Outputs in `runs/smoke20/` |
 | `configs/pipeline.smoke30.yaml` | Test run of about 30 papers (up to 36). Outputs in `runs/smoke30/` |
+| `configs/pipeline.smoke55.yaml` | About 55 papers with the full boolean search: all 8 categories, Europe PMC and arXiv (up to 64). Outputs in `runs/smoke55/` |
 | `pipeline.yaml` | Your full run. Copy it from `configs/pipeline.example.yaml` |
 
 ## Setup (once)
