@@ -11,6 +11,7 @@ import re
 from collections import Counter
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -29,7 +30,8 @@ from rich.progress import (
 from rich.table import Table
 from rich.text import Text
 
-console = Console(stderr=True, highlight=False)  # progress, logs, stage summaries
+# Progress, logs and stage summaries. `record=True` keeps a copy for the run's log file.
+console = Console(stderr=True, highlight=False, record=True)
 out = Console(highlight=False)  # results you may want to pipe or save: answers, status
 
 ACCENT = "#f7cb46"  # mmore yellow, so our output matches its progress bars
@@ -75,10 +77,20 @@ class ConsoleLogHandler(logging.Handler):
 
 
 def stage_header(name: str, position: int, total: int) -> None:
+    """A yellow rule with the stage, its place in the run and the clock time it starts."""
+    started = datetime.now().strftime("%H:%M:%S")
     console.print()
     console.rule(
-        Text(f" {name} · {position}/{total} ", style=f"bold {ACCENT}"), style=ACCENT, align="left"
+        Text(f" {name} · {position}/{total} · started {started} ", style=f"bold {ACCENT}"),
+        style=ACCENT,
+        align="left",
     )
+
+
+def stage_finished(name: str, seconds: float) -> None:
+    from chitchat.timing import format_duration
+
+    console.print(Text(f"{name} finished in {format_duration(seconds)}", style="dim"))
 
 
 def note(message: str) -> None:
@@ -99,8 +111,10 @@ def facts(rows: list[Fact]) -> Table:
     return table
 
 
-def boxed(title: str, body: RenderableType, footer: str | list[str] = "") -> Panel:
-    """A yellow box, with the title on the top border and dim footer lines."""
+def boxed(
+    title: str, body: RenderableType, footer: str | list[str] = "", colour: str = ACCENT
+) -> Panel:
+    """A box (yellow by default), with the title on the top border and dim footer lines."""
     parts: list[Any] = [body]
     lines = [footer] if isinstance(footer, str) else footer
     if any(lines):
@@ -108,9 +122,9 @@ def boxed(title: str, body: RenderableType, footer: str | list[str] = "") -> Pan
         parts += [Text(line, style="dim") for line in lines if line]
     return Panel(
         Group(*parts),
-        title=Text(f" {title} ", style=f"bold {ACCENT}"),
+        title=Text(f" {title} ", style=f"bold {colour}"),
         title_align="left",
-        border_style=ACCENT,
+        border_style=colour,
         box=box.ROUNDED,
         padding=(0, 1),
         expand=False,
@@ -291,24 +305,107 @@ def print_summary(records: list[dict[str, Any]], reused: int, title: str, footer
 # --- Status ----------------------------------------------------------------------------
 
 
-def status_table(rows: list[tuple[str, str | None, str]], run_root: Path) -> Table:
-    """`rows`: (stage, finished_at or None, what it produced)."""
-    table = Table(
-        title=Text(f"Run: {shorten_path(run_root)}", style=f"bold {ACCENT}"),
+def _table(title: str) -> Table:
+    return Table(
+        title=Text(title, style=f"bold {ACCENT}"),
         title_justify="left",
         box=box.ROUNDED,
         border_style=ACCENT,
         header_style="bold",
     )
+
+
+def status_table(
+    rows: list[tuple[str, str | None, str]],
+    run_root: Path,
+    durations: dict[str, float] | None = None,
+) -> Table:
+    """`rows`: (stage, finished_at or None, what it produced). `durations`: from the last run."""
+    from chitchat.timing import format_duration
+
+    durations = durations or {}
+    table = _table(f"Run: {shorten_path(run_root)}")
     table.add_column("Stage")
     table.add_column("", justify="center")
     table.add_column("Finished (UTC)", style="dim")
+    table.add_column("Took", justify="right", style="dim")
     table.add_column("Output", overflow="fold")
     for stage, finished, output in rows:
         done = bool(finished) or bool(output and stage == "ask")
         mark = Text("✓", style="bold green") if done else Text("–", style="dim")
         when = finished[:16].replace("T", " ") if finished else ""
-        table.add_row(Text(stage, style="" if done else "dim"), mark, when, output)
+        took = format_duration(durations[stage]) if stage in durations else ""
+        table.add_row(Text(stage, style="" if done else "dim"), mark, when, took, output)
+    return table
+
+
+OUTCOME_STYLES = {"done": "bold green", "failed": "bold red", "interrupted": ACCENT}
+
+
+def history_table(runs: list[dict[str, Any]]) -> Table:
+    """The most recent runs from history.jsonl, newest first."""
+    from chitchat.timing import format_duration
+
+    table = _table("Recent runs")
+    table.add_column("Run id")
+    table.add_column("Command")
+    table.add_column("Outcome")
+    table.add_column("Stages", overflow="fold")
+    table.add_column("Took", justify="right")
+    for r in runs:
+        stages = ", ".join(s["name"] for s in r.get("stages", [])) or "-"
+        outcome = r.get("outcome") or "?"
+        table.add_row(
+            r["run_id"],
+            r.get("command", ""),
+            Text(outcome, style=OUTCOME_STYLES.get(outcome, "")),
+            stages,
+            format_duration(r.get("seconds", 0)),
+        )
+    return table
+
+
+def run_box(recorder: Any, footer: str | list[str] = "") -> Panel:
+    """Done / Failed / Interrupted, with each stage's duration and where the log is."""
+    from chitchat.timing import format_duration
+
+    outcome = recorder.outcome or ("failed" if recorder.error else "done")
+    colour = {"failed": "red", "interrupted": ACCENT}.get(outcome, ACCENT)
+    marks = {
+        "done": ("✓", "green"),
+        "failed": ("✗", "red"),
+        "interrupted": ("■", ACCENT),
+    }
+    table = Table.grid(padding=(0, 2))
+    table.add_column()
+    table.add_column(justify="right", style="dim")
+    table.add_column(style="dim", overflow="fold")
+    for s in recorder.stages:
+        mark, style = marks.get(s["status"], ("?", ""))
+        table.add_row(
+            Text(f"{mark} {s['name']}", style=style),
+            format_duration(s["seconds"]),
+            s.get("error", "")[:160],
+        )
+    total = Text("Total", style="bold")
+    table.add_row(total, Text(format_duration(recorder.seconds), style="bold"), "")
+    lines = [
+        f"Run id {recorder.run_id} · log: {shorten_path(recorder.log_path)}",
+        *([footer] if isinstance(footer, str) else footer),
+    ]
+    return boxed(outcome.capitalize(), table, lines, colour=colour)
+
+
+# --- Search planning ---------------------------------------------------------------------
+
+
+def concepts_table(concepts: list[tuple[str, list[str]]]) -> Table:
+    """Each concept and the synonyms it searches for."""
+    table = _table("Concepts")
+    table.add_column("Concept", style="bold")
+    table.add_column("Synonyms (any of these)", overflow="fold")
+    for word, synonyms in concepts:
+        table.add_row(word, ", ".join(synonyms) if synonyms else Text("(none)", style="dim"))
     return table
 
 

@@ -60,6 +60,42 @@ The first `index` and `ask` download embedding models from Hugging Face (about 1
 
 All commands on one page: [docs/COMMANDS.md](docs/COMMANDS.md). What each stage does, skips and reuses: [docs/PIPELINE.md](docs/PIPELINE.md).
 
+## Start a search from your question
+
+`chitchat search` turns your research question into a boolean search, lets you check and change it, then runs the pipeline in a new folder.
+
+```powershell
+uv run chitchat search "How do humanitarian organisations obtain informed consent when collecting data to train LLMs?"
+uv run chitchat search --mode shallow "consent in LLM training data"
+uv run chitchat search --predefined     # the fixed 8-category search in configs/discovery/
+```
+
+| | Shallow: quick scan | Deep: systematic search (default) |
+|---|---|---|
+| Clarifying questions | none | 4, before drafting |
+| Search | 1 category, up to 4 concepts | 3 to 6 categories, 2 to 4 concepts each |
+| Results | 10 per source | 25 per source, 2 pages |
+| Full text | no: screens abstracts, so it takes minutes | yes: downloads PDFs |
+
+1. In deep mode, answer a few questions first. Type a number to pick a suggestion, write your own answer, or press Enter to skip.
+2. Check the draft: the concepts with their synonyms, and the boolean queries.
+3. Type `a` to accept, `c` to ask for changes in plain words (for example "drop medical terms, add refugee camps"), or `q` to quit. You can ask for changes as many times as you like.
+4. On accept, the search is saved in a new folder, e.g. `runs/humanitarian-organisations-obtain-informed-consent-2026-10-21/`, and the pipeline runs.
+5. Later commands use that folder's config: `uv run chitchat ask -c runs/<folder>/pipeline.yaml "your question"`.
+
+- Your question is checked for personal data on your machine before it goes to the LLM.
+- Every query is kept under 1,500 characters, so OpenAlex can run it.
+- Screening still uses `configs/criteria.example.yaml`, whatever the question.
+- Options: `--yes` accepts the first draft without questions, `--plan-only` saves the search without running it, `--run-name` picks the folder name.
+
+### Timing, history and logs
+
+Each stage shows when it started and how long it took. A run ends with a Done (or Failed) box listing every stage's duration, the run id and the log file.
+
+- `runs/<folder>/history.jsonl`: one line per run, with the run id, command, stages, durations and outcome.
+- `runs/<folder>/logs/<run id>.log`: everything the run printed.
+- `chitchat status` shows the last durations and the recent runs.
+
 ## Step by step: smoke test
 
 The smoke config searches 2 categories with 3 results per source, so up to 18 papers. Outputs go to `runs/smoke/`. Run the steps one at a time and look at each output.
@@ -158,6 +194,7 @@ Papers that could not be downloaded are listed in `runs/<run>/raw/papers_failed_
 
 ## Known limits
 
+- **Screening criteria:** they are written for humanitarian AI data ethics. A search on another topic still uses them. Edit `configs/criteria.example.yaml` to change them.
 - **PDFs:** publishers refuse many downloads, even with a subscription. Use the manual-download list from `discover`.
 - **Masking:** it lowers risk but does not guarantee anonymity. Indirect identifiers can remain. The leakage check in `configs/rag_privacy.yaml` looks for this, but it is off by default because it costs extra LLM calls.
 - **Screening:** it is an aid, not a final decision. Check the evidence quotes. Screenings from an abstract alone are weaker.

@@ -7,6 +7,7 @@ because mmore RAG passes only the chunk text and file_path to the answer LLM.
 from __future__ import annotations
 
 import logging
+import sys
 from typing import Any
 
 from chitchat.config import PipelineConfig
@@ -81,6 +82,12 @@ def _chunk(items: list[dict[str, Any]], run: RunDir) -> list[Any]:
 def milvus_error(uri: str, error: Exception) -> StageError:
     """A clear message for Milvus problems."""
     message = getattr(error, "message", None) or str(error)
+    if "milvus-lite" in message.lower() or ("://" not in uri and sys.platform == "win32"):
+        return StageError(
+            f"Milvus at {uri}: this is a Milvus Lite file, and Milvus Lite doesn't run on "
+            "Windows. Set `index.db_uri: http://127.0.0.1:19530` in your config and start "
+            "Milvus in Docker (see README)."
+        )
     hint = ""
     if "connect" in message.lower() or "unavailable" in message.lower():
         hint = " Is Milvus running? On Windows, start it with `docker compose up -d` (see README)."

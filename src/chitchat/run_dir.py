@@ -15,6 +15,29 @@ class RunDir:
     root: Path
 
     @property
+    def config(self) -> Path:
+        """The pipeline config written by `chitchat search` for this run."""
+        return self.root / "pipeline.yaml"
+
+    @property
+    def search(self) -> Path:
+        """The drafted search: synonyms, categories, discovery config and plan."""
+        return self.root / "search"
+
+    @property
+    def plan(self) -> Path:
+        return self.search / "plan.json"
+
+    @property
+    def history(self) -> Path:
+        """One line per command run on this folder: stages, durations, outcome."""
+        return self.root / "history.jsonl"
+
+    @property
+    def logs(self) -> Path:
+        return self.root / "logs"
+
+    @property
     def queries(self) -> Path:
         return self.root / "queries.json"
 

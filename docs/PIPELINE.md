@@ -33,6 +33,32 @@ Every `chitchat` command does these steps first, in this order:
 
    Any problem stops the command with a message that names the field at fault (exit code 2).
 
+## `chitchat search`: planning the search
+
+`chitchat search "question"` builds the boolean search from your question instead of the predefined files. It then sets up a new run folder and runs the pipeline there.
+
+1. **Run folder.** A new folder named from the question and the date, e.g. `runs/humanitarian-organisations-obtain-informed-consent-2026-10-21/`. If it exists, `-2`, `-3`… is added. `--run-name` sets the name yourself.
+2. **Privacy check.** Your question, and later your answers and change requests, are checked for personal data on your machine with Presidio (the `rag_privacy.yaml` settings). Anything found is masked before it goes to the LLM, and you see the masked version.
+3. **Clarifying questions (deep mode only).** The LLM asks about 4 questions: scope, population, setting, years, what to leave out. Each has suggested answers. Type a number, your own answer, or press Enter to skip.
+4. **Draft.** The LLM proposes concepts (each with synonyms) and categories (each combining 2 or more concepts with AND). If the draft breaks the rules, for example a category with only one concept, the LLM is asked to fix it, up to 2 times, before you see it.
+5. **Checks on the draft.** Terms are cleaned (no quotes or AND/OR inside), duplicates and unknown words are dropped, and the mode's limits are applied. If a query is over 1,500 characters, the last synonyms of its longest group are dropped until it fits, so OpenAlex can run it. Every change is listed under the draft.
+6. **Your decision.** `a` accepts. `c` asks for a change in plain words: the LLM revises the whole search with the full conversation, and you see the new draft. Repeat as often as you like. `q` quits and saves nothing.
+7. **Saved files.** `search/synonyms.jsonl`, `search/categories.yaml` and `search/discovery.yaml` (in mmore's formats), `search/plan.json` (the whole conversation: question, answers, every draft and change request), and `pipeline.yaml` (your template settings, pointed at this folder, with its own Milvus collection).
+8. **Run.** It asks "Run the pipeline now?" and runs every stage. Later commands use `-c runs/<folder>/pipeline.yaml`.
+
+| | Shallow: quick scan | Deep: systematic search (default) |
+|---|---|---|
+| Clarifying questions | none | 4 |
+| Categories | 1 | 3 to 6 |
+| Concepts per category | 2 to 4 | 2 to 4 |
+| Synonyms per concept | up to 5 | up to 8 |
+| Results | 10 per source, 1 page | 25 per source, 2 pages |
+| PDFs | not downloaded: screening reads abstracts | downloaded: screening reads full text |
+
+Change any of these under `search.shallow` or `search.deep` in your pipeline config. Only the fields you set are changed. `search.mode` sets the default mode, and `search.llm` the model (default: the screening model).
+
+`--predefined` skips the planning and uses the search files named in the config (`discovery.config`). It still gets a new folder, timing and history.
+
 ## `chitchat run`
 
 ```powershell
@@ -45,6 +71,15 @@ uv run chitchat run -c <config> --redecide
 - **Errors:** if a stage fails, the run stops there. Later stages don't run, and earlier results are kept.
 - **Done markers:** after each successful stage, a marker is written to `runs/<run>/.done/<stage>`. `chitchat status` shows these. **Nothing is ever skipped because of a marker.** A stage runs every time you ask for it.
 - **`--redecide`** ignores `--stages` and only relabels screened papers (see [screen](#5-screen)).
+
+## Runs, history and logs
+
+Every command that runs stages (`run`, `report`, `search`) is one run, with an id like `2026-10-21T14-03-07`.
+
+- **In the terminal:** each stage header shows its start time, each stage ends with how long it took, and the run ends with a Done, Failed or Interrupted box listing every stage's duration, the total, the run id and the log file.
+- **`history.jsonl`:** one line per run in the run folder: run id, command, config, mode, start and end, outcome, any error, and each stage's start, duration and outcome. It is written even when a stage fails or you press Ctrl+C.
+- **`logs/<run id>.log`:** everything the run printed, with a short header. Progress bars are left out, so it stays readable.
+- **`chitchat status`:** a "Took" column with each stage's last duration, and a table of the 5 most recent runs.
 
 ## The stages
 
@@ -236,6 +271,7 @@ Things to know:
 
 ## Known gaps
 
+- **Screening criteria don't follow the question.** `chitchat search` builds the search from your question, but screening still uses `configs/criteria.example.yaml`, which is written for humanitarian AI data ethics.
 - **Skipped papers stay skipped.** A `skipped` record counts as finished. If you lower `min_year`, lower `min_chars`, or add a PDF for a paper skipped as `no_text`, it is not screened again. To redo those papers, delete their lines from `screening.jsonl` and run `screen`. To redo everything, delete the whole file.
 - **Screening ignores new text.** A paper screened on its abstract keeps that result after you add its PDF. The fix is the same: delete its line.
 - **Sanitize changes don't reach screening.** After you change `sanitize.yaml`, the masked text changes, but screened papers are reused.
@@ -245,6 +281,10 @@ Things to know:
 
 ```
 runs/<run_name>/
+├── pipeline.yaml               search: this run's config (use it with -c)
+├── search/                     search: synonyms.jsonl, categories.yaml, discovery.yaml, plan.json
+├── history.jsonl               one line per run: stages, durations, outcome
+├── logs/                       one log file per run
 ├── raw/                        raw text: never share this folder
 │   ├── papers.jsonl            discover
 │   ├── discovery_stats.json    discover
