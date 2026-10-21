@@ -356,13 +356,22 @@ def _quiet_library_warnings() -> None:
         LangChainPendingDeprecationWarning,
     ):
         warnings.filterwarnings("ignore", category=category)
+    # Windows without Developer Mode can't use symlinks; Hugging Face copies files instead.
+    warnings.filterwarnings("ignore", message=".*cache-system uses symlinks.*")
 
 
 def main() -> None:
     # mmore sets chunk ids from hash(text). A fixed seed keeps them stable.
     # UTF-8 mode: some libraries print emoji, which the Windows console code page can't encode.
     if os.environ.get("PYTHONHASHSEED") != "0" or os.environ.get("PYTHONUTF8") != "1":
-        env = {**os.environ, "PYTHONHASHSEED": "0", "PYTHONUTF8": "1"}
+        env = {
+            **os.environ,
+            "PYTHONHASHSEED": "0",
+            "PYTHONUTF8": "1",
+            "HF_HUB_DISABLE_SYMLINKS_WARNING": os.environ.get(
+                "HF_HUB_DISABLE_SYMLINKS_WARNING", "1"
+            ),
+        }
         cmd = [sys.executable, "-m", "chitchat.cli", *sys.argv[1:]]
         raise SystemExit(subprocess.call(cmd, env=env))
 
@@ -372,6 +381,8 @@ def main() -> None:
     logging.basicConfig(level=logging.WARNING, format="%(message)s", handlers=[ConsoleLogHandler()])
     log.setLevel(logging.INFO)
     logging.getLogger("presidio-analyzer").setLevel(logging.ERROR)
+    # Model download notices (e.g. "hf_xet is not installed"). Downloads still work.
+    logging.getLogger("huggingface_hub").setLevel(logging.ERROR)
 
     from dotenv import load_dotenv
 
