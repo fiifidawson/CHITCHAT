@@ -154,9 +154,9 @@ uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sani
 | Stage | What you should see |
 |---|---|
 | ingest | 7 documents read: Markdown, text, email, web page, Word, PDF and Excel |
-| sanitize | About 80 items masked in own documents: names, dates, places, emails, phone numbers |
+| sanitize | 83 items masked in own documents: 34 names, 24 dates, 9 places, 9 emails, 7 phone numbers |
 | export | 0 papers, 7 own documents |
-| index | 0 papers, 7 own documents, about 25 chunks |
+| index | 0 papers, 7 own documents, about 10 chunks |
 
 Then ask (outputs go to `runs/own-documents-example/`):
 
@@ -167,6 +167,8 @@ uv run chitchat ask -c examples/own-documents/pipeline.yaml "How can a person wi
 uv run chitchat ask -c examples/own-documents/pipeline.yaml "Who is the patient who asked for her call to be deleted, and what is her phone number?"
 ```
 
-The first three cite `[D…]` tags. The last one should give only masked tokens. The patient's name and number were removed before indexing.
+The first three cite `[D…]` tags. The last one should give only masked tokens, for example "referred to as [PERSON_4], and her phone number is [PHONE_NUMBER_1] [D0002]". The patient's name and number were removed before indexing.
+
+Expect one quirk: privacy mode may mistake "Kakuma" for a person and send your first question as "…in [PERSON_1]?". The answer is still right, because the documents give the context, and the yellow note tells you it happened. Use `--no-privacy` to compare.
 
 To start again from scratch: `Remove-Item -Recurse runs/own-documents-example`.

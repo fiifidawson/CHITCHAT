@@ -310,7 +310,7 @@ def _run_stages(
     run_dir.root.mkdir(parents=True, exist_ok=True)
     names = ["redecide"] if redecide else names
     footer = f"See what each stage produced: chitchat status -c {ui.shorten_path(config)}"
-    with RunRecorder(run_dir, command, ui.shorten_path(config), mode or cfg.search.mode) as rec:
+    with RunRecorder(run_dir, command, ui.shorten_path(config), mode) as rec:
         try:
             for position, name in enumerate(names, 1):
                 ui.stage_header(name, position, len(names))

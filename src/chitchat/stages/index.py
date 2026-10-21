@@ -153,7 +153,7 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
         [
             ("Papers", len(items) - n_docs, f"labelled {', '.join(ix.include_labels)}"),
             ("Own documents", n_docs, ""),
-            ("Chunks", len(chunks), "each starts with its [P0001] tag"),
+            ("Chunks", len(chunks), "each starts with its [P0001] or [D0001] tag"),
             ("Collection", "", f"{ix.collection} at {ix.db_uri}"),
         ],
         footer='Next: chitchat ask "your question"',
