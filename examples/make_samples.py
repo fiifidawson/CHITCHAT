@@ -94,12 +94,33 @@ POLICY_PDF = [
 
 INVENTORY = [
     ("Dataset", "Source", "Contains personal data", "Consent basis", "Status", "Owner"),
-    ("Helpline transcripts 2023-2025", "Helpline", "yes", "re-consent needed", "on hold", "Tomás Herrera"),
+    (
+        "Helpline transcripts 2023-2025",
+        "Helpline",
+        "yes",
+        "re-consent needed",
+        "on hold",
+        "Tomás Herrera",
+    ),
     ("Synthetic conversations", "Staff-written", "no", "not needed", "in use", "Tomás Herrera"),
     ("Partner NGO web pages", "Public web", "no", "licence check", "in use", "Peter Schmid"),
-    ("Clinic referral notes", "Kakuma clinic", "yes (health)", "none", "excluded", "Dr. Samuel Otieno"),
-    ("Community FAQ feedback", "Community sessions", "yes", "verbal consent", "in review", "Amina Wanjiru"),
-]  # fmt: skip
+    (
+        "Clinic referral notes",
+        "Kakuma clinic",
+        "yes (health)",
+        "none",
+        "excluded",
+        "Dr. Samuel Otieno",
+    ),
+    (
+        "Community FAQ feedback",
+        "Community sessions",
+        "yes",
+        "verbal consent",
+        "in review",
+        "Amina Wanjiru",
+    ),
+]
 
 
 def make_docx(path: Path) -> None:
@@ -142,9 +163,9 @@ def make_xlsx(path: Path) -> None:
     wb = Workbook()
     ws = wb.active
     ws.title = "Data inventory"
-    ws.append([NOTE])
-    for row in INVENTORY:
+    for row in INVENTORY:  # header in the first row, so readers detect the columns
         ws.append(list(row))
+    wb.create_sheet("About").append([NOTE])
     wb.save(path)
 
 

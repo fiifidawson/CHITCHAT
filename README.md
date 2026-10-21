@@ -58,7 +58,7 @@ docker compose ps                         # wait until milvus-standalone is "hea
 
 The first `index` and `ask` download embedding models from Hugging Face (about 1 GB).
 
-All commands on one page: [docs/COMMANDS.md](docs/COMMANDS.md). What each stage does, skips and reuses: [docs/PIPELINE.md](docs/PIPELINE.md).
+All commands on one page: [docs/COMMANDS.md](docs/COMMANDS.md). What each stage does, skips and reuses: [docs/PIPELINE.md](docs/PIPELINE.md). Use cases to try, with fictional sample documents: [docs/USE_CASES.md](docs/USE_CASES.md).
 
 ## Start a search from your question
 

@@ -1,0 +1,38 @@
+MEETING MINUTES - LLM DATA POLICY WORKING GROUP
+Fictional sample for testing. All names, numbers, addresses and IDs are made up.
+
+Organisation: Northbridge Relief Network (fictional)
+Date: 12 February 2026, 14:00-15:30 CET
+Place: Geneva office, Rue de Lausanne 44 (fictional), and online
+
+Present: Laura Bianchi (chair, data protection lead), Tomás Herrera (ML engineer), Amina Wanjiru (protection officer, joined from Nairobi), Peter Schmid (legal counsel)
+Minutes: Tomás Herrera (tomas.herrera@example.org)
+
+1. Purpose of the working group
+Laura Bianchi explained that the group must agree how we collect and use data to fine-tune a language model for the beneficiary helpline. The board wants a written policy before any data is used.
+
+2. Data sources discussed
+- Helpline call transcripts from 2023 to 2025 (about 41,000 calls). Contain personal data and sometimes health information.
+- Public web pages of partner NGOs. No consent needed, but licences must be checked.
+- Synthetic conversations written by staff. No personal data.
+Tomás Herrera proposed starting with synthetic data and public pages only, and adding transcripts later if consent can be shown.
+
+3. Consent and legal basis
+Peter Schmid said that consent collected for "service improvement" in 2023 does not clearly cover model training. Re-consent or a new legal basis is needed. He warned that consent from people in crisis may not be freely given, and suggested a legitimate-interest assessment plus a strong opt-out.
+Amina Wanjiru reported that communities in Kakuma were open to sharing data if identifying details are removed, but want a way to withdraw.
+
+4. Anonymisation
+Agreed: names, phone numbers, emails, case IDs and exact locations below district level are removed before data leaves the country office. Tomás Herrera warned that rare combinations (for example age, language and camp block) can still identify someone. A re-identification test will be run on a sample.
+
+5. Decisions
+- D1: Phase 1 uses synthetic data and public pages only.
+- D2: Transcripts are used only after re-consent and a re-identification test.
+- D3: Calls about gender-based violence and child protection are never used.
+- D4: The policy is reviewed every 12 months.
+
+6. Actions
+- Peter Schmid: draft the legitimate-interest assessment by 1 March 2026.
+- Tomás Herrera: run the re-identification test on 500 transcripts.
+- Laura Bianchi: share the draft policy with the board. Contact: laura.bianchi@example.org, +41 22 555 01 87.
+
+Next meeting: 5 March 2026.

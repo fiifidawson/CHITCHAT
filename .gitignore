@@ -189,6 +189,7 @@ legacy/analysis/graphs/
 
 # Pipeline runs. raw/ holds unsanitized text: never share it.
 runs/
-my_docs/
+# Your own documents stay private. examples/my_docs/ holds fictional samples and is tracked.
+/my_docs/
 *.db
 volumes/

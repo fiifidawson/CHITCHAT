@@ -1,0 +1,41 @@
+# Minor example 1: a quick scan. Shallow search, abstracts only, no own documents.
+# Walkthrough: examples/README.md. Paths are relative to this file.
+#   uv run chitchat search -c examples/quick-scan/pipeline.yaml --mode shallow "your question"
+
+run_name: quick-scan-example
+runs_dir: ../../runs
+
+discovery:
+  config: ../../configs/discovery/discovery.yaml   # used only with --predefined
+
+own_documents:
+  folder: null                         # papers only
+
+privacy:
+  sanitize_config: ../../configs/sanitize.yaml
+  before_screening: true
+  rag_privacy_config: ../../configs/rag_privacy.yaml
+
+screening:
+  criteria: ../../configs/criteria.example.yaml
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }
+  min_year: 2018
+  min_chars: 300                       # abstracts
+  max_chars: 60000
+  use_abstract_if_no_text: true
+  max_concurrency: 4
+
+search:
+  mode: shallow
+  shallow:
+    max_results: 10                    # per source: up to 30 papers
+
+index:
+  db_uri: http://127.0.0.1:19530       # Milvus in Docker. Linux/macOS: milvus.db
+  db_name: review
+  collection: quick_scan_example
+
+ask:
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }
+  k: 6
+  reranker: null

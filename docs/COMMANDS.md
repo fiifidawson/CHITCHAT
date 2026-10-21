@@ -1,6 +1,6 @@
 # Commands
 
-Every command runs from the repo root. Add `-c <config>` to pick a run; the default is `pipeline.yaml`. For what each stage does, skips and reuses, see [PIPELINE.md](PIPELINE.md).
+Every command runs from the repo root. Add `-c <config>` to pick a run; the default is `pipeline.yaml`. For what each stage does, skips and reuses, see [PIPELINE.md](PIPELINE.md). For use cases to try, with sample documents, see [USE_CASES.md](USE_CASES.md).
 
 ## Configs
 

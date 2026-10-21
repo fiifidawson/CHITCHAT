@@ -1,0 +1,43 @@
+# Thorough example: deep search from a question, plus the fictional sample documents.
+# Walkthrough: examples/README.md. Paths are relative to this file.
+#   uv run chitchat search -c examples/thorough/pipeline.yaml "your question"
+
+run_name: thorough-example   # `chitchat search` makes its own folder; this name is for `chitchat run`
+runs_dir: ../../runs
+
+discovery:
+  config: ../../configs/discovery/discovery.yaml   # used only with --predefined
+
+own_documents:
+  folder: ../my_docs/                  # the 7 fictional sample documents
+  fast: true
+
+privacy:
+  sanitize_config: ../../configs/sanitize.yaml
+  before_screening: true
+  rag_privacy_config: ../../configs/rag_privacy.yaml
+
+screening:
+  criteria: ../../configs/criteria.example.yaml
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }
+  min_year: 2018
+  min_chars: 500
+  max_chars: 60000
+  use_abstract_if_no_text: true
+  max_concurrency: 4
+
+search:
+  mode: deep
+  deep:
+    max_results: 8                     # per source and category: up to ~150 papers, ~100 after duplicates
+    max_pages: 1
+
+index:
+  db_uri: http://127.0.0.1:19530       # Milvus in Docker. Linux/macOS: milvus.db
+  db_name: review
+  collection: thorough_example
+
+ask:
+  llm: { llm_name: gpt-4o-mini, temperature: 0 }
+  k: 8
+  reranker: null                       # skip the 1 GB reranker download
