@@ -73,6 +73,33 @@ Change any of these under `search.shallow` or `search.deep` in your pipeline con
 
 `--predefined` skips the planning and uses the search files named in the config (`discovery.config`). It still gets a new folder, timing and history.
 
+### Choosing sources
+
+Every search goes to **OpenAlex, Europe PMC and arXiv** by default. The draft's summary line names the sources it will search. The "OpenAlex ok / too long" status appears only because OpenAlex is the one source with a length limit (1,500 characters). Europe PMC and arXiv have no such limit to check.
+
+| Source | Covers | Notes |
+|---|---|---|
+| `openalex` | Most fields, all publishers | Rejects queries over 1,500 characters. Drafts are fitted to it automatically |
+| `europepmc` | Life sciences and health | |
+| `arxiv` | Computer science, physics, statistics preprints | Searches key terms, not the full boolean |
+| `google_scholar` | Everything | Off by default. Needs the extra `mmore[google_scholar]` (Selenium) and often hits captchas |
+
+Where to change them:
+
+- **For new searches:** in your template config, list the sources per mode. Only the modes you change are affected:
+
+  ```yaml
+  search:
+    deep:
+      sources: [openalex, europepmc]
+    shallow:
+      sources: [arxiv]
+  ```
+
+  Without OpenAlex in the list, queries are not trimmed and the OpenAlex status is not shown.
+- **For one run that's already planned:** edit `sources:` in `runs/<folder>/search/discovery.yaml`, then rerun from `discover`: `uv run chitchat run -c runs/<folder>/pipeline.yaml`.
+- **For the predefined search:** edit `sources:` in `configs/discovery/discovery.yaml`.
+
 ## `chitchat run`
 
 ```bash

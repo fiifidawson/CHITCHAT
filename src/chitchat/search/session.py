@@ -173,7 +173,11 @@ def _answer_from(raw: str, suggestions: list[str]) -> str:
 
 
 def _show_draft(
-    io: SearchIO, plan: SearchPlan, queries: list[dict[str, str]], notes: list[str]
+    io: SearchIO,
+    plan: SearchPlan,
+    queries: list[dict[str, str]],
+    notes: list[str],
+    sources: list[str],
 ) -> None:
     from rich.text import Text
 
@@ -185,7 +189,8 @@ def _show_draft(
         (cat.name, [(w, synonyms.get(w, [])) for w in cat.words], lengths.get(cat.name, 0))
         for cat in plan.categories
     ]
-    io.show(ui.draft_view(categories, OPENALEX_MAX_CHARS))
+    limit = OPENALEX_MAX_CHARS if "openalex" in sources else None
+    io.show(ui.draft_view(categories, limit, sources))
     if plan.rationale:
         io.show(Text(plan.rationale, style="dim"))
     for line in notes:
@@ -240,7 +245,9 @@ def plan_search(
                 messages = add_repair(messages, raw, problems)
                 raw = drafter.plan(messages)
         plan, notes = normalize_plan(raw, preset)
-        plan, dropped = fit_to_limit(plan)
+        dropped: list[str] = []
+        if "openalex" in preset.sources:  # only OpenAlex limits the query length
+            plan, dropped = fit_to_limit(plan)
         if dropped:
             notes.append(
                 f"dropped {len(dropped)} synonyms so every query fits OpenAlex's "
@@ -249,7 +256,7 @@ def plan_search(
         queries = build_queries(plan)
         turn: dict[str, Any] = {"draft": plan.model_dump(), "notes": notes}
         log["turns"].append(turn)
-        _show_draft(io, plan, queries, notes)
+        _show_draft(io, plan, queries, notes, preset.sources)
 
         feedback = ""
         while not feedback:

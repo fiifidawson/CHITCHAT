@@ -405,6 +405,20 @@ def run_box(recorder: Any, footer: str | list[str] = "") -> Panel:
 # --- Search planning ---------------------------------------------------------------------
 
 
+SOURCE_NAMES = {
+    "openalex": "OpenAlex",
+    "europepmc": "Europe PMC",
+    "arxiv": "arXiv",
+    "google_scholar": "Google Scholar",
+}
+
+
+def source_names(sources: list[str]) -> str:
+    """`OpenAlex, Europe PMC and arXiv`."""
+    names = [SOURCE_NAMES.get(s, s) for s in sources]
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+
+
 # One colour per concept, kept across categories, so a shared concept is easy to spot.
 CONCEPT_COLOURS = ("#5fd7ff", "#ff79c6", "#50fa7b", "#bd93f9", "#ffb86c", "#8be9fd", "#ff5555")
 
@@ -453,17 +467,25 @@ def category_box(
 def draft_view(
     categories: list[tuple[str, list[tuple[str, list[str]]], int]],
     limit: int | None,
+    sources: list[str] | None = None,
 ) -> Group:
-    """A short overview line, then one box per category."""
+    """A short overview line, then one box per category.
+
+    `limit` is OpenAlex's query length limit, or None when OpenAlex isn't searched.
+    """
     words = list(dict.fromkeys(w for _, concepts, _ in categories for w, _ in concepts))
     colours = concept_colours(words)
-    fits = sum(1 for _, _, chars in categories if limit is None or chars <= limit)
     overview = Text("Draft search: ", style="bold")
-    overview.append(
-        f"{len(categories)} categor{'y' if len(categories) == 1 else 'ies'} · "
-        f"{len(words)} concepts · {fits}/{len(categories)} fit OpenAlex",
-        style="dim",
-    )
+    parts = [
+        f"{len(categories)} categor{'y' if len(categories) == 1 else 'ies'}",
+        f"{len(words)} concepts",
+    ]
+    if sources:
+        parts.append(f"searches {source_names(sources)}")
+    if limit is not None:
+        fits = sum(1 for _, _, chars in categories if chars <= limit)
+        parts.append(f"{fits}/{len(categories)} fit OpenAlex")
+    overview.append(" · ".join(parts), style="dim")
     hint = Text(
         "A paper must match every concept in a category (AND), "
         "using the concept or any of its synonyms (OR).",

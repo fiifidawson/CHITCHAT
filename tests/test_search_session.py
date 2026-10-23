@@ -196,3 +196,17 @@ def test_rule_breaking_draft_is_repaired_before_showing() -> None:
     repair = model.calls[1][1][-1].content
     assert "breaks the rules" in repair and "fewer than 2" in repair
     assert result is not None and len(result.plan.categories[0].words) == 2
+
+
+def test_no_openalex_means_no_trimming() -> None:
+    long_synonyms = [f"a long synonym phrase number {j}" for j in range(60)]
+    plan = _plan()
+    plan["concepts"][0]["synonyms"] = long_synonyms
+    preset = SearchPreset(
+        **{**DEFAULT_PRESETS["shallow"], "max_synonyms": 60, "sources": ["europepmc", "arxiv"]}
+    )
+    model = FakeChatModel([plan])
+    result = plan_search("q", "shallow", preset, Drafter(model), FakeIO(choices=["a"]))
+    assert result is not None
+    assert len(result.plan.concepts[0].synonyms) == 60  # nothing dropped for OpenAlex
+    assert not any("OpenAlex" in n for t in result.log["turns"] for n in t["notes"])

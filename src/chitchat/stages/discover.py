@@ -116,6 +116,7 @@ def run_queries(cfg: PipelineConfig, run: RunDir) -> list[dict[str, str]]:
 
     limit = OPENALEX_MAX_CHARS if "openalex" in disc.sources else None
     ui.console.print(ui.queries_table(queries, limit))
+    ui.note(f"Each query will be sent to {ui.source_names(list(disc.sources))}.")
     _warn_long_queries(queries, disc.sources)
     ui.note(f"Saved to {ui.shorten_path(run.queries)}")
     return queries
