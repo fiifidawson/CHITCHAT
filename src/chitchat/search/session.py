@@ -13,7 +13,7 @@ from typing import Any, Protocol
 
 import yaml
 
-from chitchat.config import PipelineConfig, SearchPreset
+from chitchat.config import DOCKER_MILVUS, PipelineConfig, SearchPreset
 from chitchat.jsonl import write_json
 from chitchat.run_dir import RunDir
 from chitchat.search.drafting import Drafter, add_feedback, add_repair, first_messages
@@ -27,7 +27,6 @@ from chitchat.search.plan import (
     write_plan_files,
 )
 
-DOCKER_MILVUS = "http://127.0.0.1:19530"
 REPAIR_ATTEMPTS = 2  # automatic fixes of a draft that breaks the rules
 
 _STOPWORDS = {
@@ -101,7 +100,9 @@ def write_run_config(
             cfg.own_documents.folder, run_root
         )
     index = data.setdefault("index", {})
-    if "://" not in cfg.index.db_uri:
+    if index.get("db_uri", "auto") == "auto":
+        index["db_uri"] = "auto"  # Docker on Windows, a file in this folder elsewhere
+    elif "://" not in cfg.index.db_uri:
         # Milvus Lite (a local file) has no Windows build: use Milvus in Docker there.
         index["db_uri"] = DOCKER_MILVUS if sys.platform == "win32" else "milvus.db"
     index["collection"] = collection_name(run_root.name)
@@ -178,8 +179,13 @@ def _show_draft(
 
     from chitchat import ui
 
-    io.show(ui.concepts_table([(c.word, c.synonyms) for c in plan.concepts]))
-    io.show(ui.queries_table(queries, OPENALEX_MAX_CHARS))
+    synonyms = {c.word: c.synonyms for c in plan.concepts}
+    lengths = {q["category"]: len(q["query"]) for q in queries}
+    categories = [
+        (cat.name, [(w, synonyms.get(w, [])) for w in cat.words], lengths.get(cat.name, 0))
+        for cat in plan.categories
+    ]
+    io.show(ui.draft_view(categories, OPENALEX_MAX_CHARS))
     if plan.rationale:
         io.show(Text(plan.rationale, style="dim"))
     for line in notes:

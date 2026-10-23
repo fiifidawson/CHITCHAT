@@ -24,8 +24,8 @@ def test_example_config_loads(project: Path) -> None:
     assert cfg.run_name == "humanitarian-llm-2026"
     assert cfg.run_root == project.resolve() / "runs" / "humanitarian-llm-2026"
     assert cfg.discovery.config.is_file()
-    assert cfg.index.db_uri.endswith("milvus.db")
-    assert "{run_name}" not in cfg.index.db_uri
+    # `auto`: Docker on Windows, a Milvus Lite file in the run folder elsewhere.
+    assert cfg.index.db_uri in ("http://127.0.0.1:19530", str(cfg.run_root / "milvus.db"))
     assert cfg.screening.llm.to_mmore() == {"llm_name": "gpt-4o-mini", "temperature": 0}
 
 
@@ -93,3 +93,28 @@ def test_remote_db_uri_kept(project: Path) -> None:
     _edit(project / "pipeline.yaml", index__db_uri="http://127.0.0.1:19530")
     cfg = load_pipeline_config(project / "pipeline.yaml")
     assert cfg.index.db_uri == "http://127.0.0.1:19530"
+
+
+@pytest.mark.parametrize(
+    ("platform", "expected"),
+    [("win32", "http://127.0.0.1:19530"), ("darwin", "file"), ("linux", "file")],
+)
+def test_db_uri_auto(
+    project: Path, monkeypatch: pytest.MonkeyPatch, platform: str, expected: str
+) -> None:
+    from chitchat import config
+
+    monkeypatch.setattr(config.sys, "platform", platform)
+    _edit(project / "pipeline.yaml", index__db_uri="auto")
+    cfg = load_pipeline_config(project / "pipeline.yaml")
+    if expected == "file":
+        assert cfg.index.db_uri == str(cfg.run_root / "milvus.db")
+    else:
+        assert cfg.index.db_uri == expected
+
+
+def test_milvus_lite_uses_default_database() -> None:
+    from chitchat.stages.index import milvus_db_name
+
+    assert milvus_db_name("/runs/x/milvus.db", "review") == "default"
+    assert milvus_db_name("http://127.0.0.1:19530", "review") == "review"

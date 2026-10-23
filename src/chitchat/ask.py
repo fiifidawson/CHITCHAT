@@ -139,10 +139,15 @@ def ask(
     from mmore.rag.pipeline import RAGConfig, RAGPipeline
     from mmore.utils import load_config
 
+    from chitchat.stages.index import milvus_db_name
+
     rag_config = load_config(
         {
             "retriever": {
-                "db": {"uri": cfg.index.db_uri, "name": cfg.index.db_name},
+                "db": {
+                    "uri": cfg.index.db_uri,
+                    "name": milvus_db_name(cfg.index.db_uri, cfg.index.db_name),
+                },
                 "collection_name": cfg.index.collection,
                 "k": k or cfg.ask.k,
                 "hybrid_search_weight": 0.5,

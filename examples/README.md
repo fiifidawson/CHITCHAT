@@ -10,16 +10,18 @@ Three end-to-end examples, each with its own config in this folder. Run every co
 
 The sample documents in [my_docs/](my_docs/) are fictional: the organisation, people, phone numbers, emails and IDs are made up. See [docs/USE_CASES.md](../docs/USE_CASES.md) for what each one contains.
 
-## Before you start (once)
+## Before you start
 
-```powershell
-uv sync
-uv run python -m spacy download en_core_web_lg
-docker start milvus-etcd milvus-minio milvus-standalone     # or follow "Milvus" in the README
-Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue  # so the key in .env is used
-```
+Follow [docs/SETUP.md](../docs/SETUP.md) once. Then, at the start of each session:
 
-Check that `.env` has a working `OPENAI_API_KEY`, and that `docker ps` shows `milvus-standalone` as healthy. The configs use Milvus at `http://127.0.0.1:19530`. On Linux or macOS you can set `index.db_uri: milvus.db` instead.
+| Windows (PowerShell) | macOS (Terminal) |
+|---|---|
+| Open Docker Desktop, then `docker start milvus-etcd milvus-minio milvus-standalone` | Nothing to start: Milvus Lite is a file in each run folder |
+| `Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue` | `unset OPENAI_API_KEY` |
+
+The second line makes sure the key in `.env` is used, not an old one from your terminal. The example configs use `index.db_uri: auto`, which picks the right Milvus for your system.
+
+The commands below are the same on Windows and macOS.
 
 ## Thorough: deep search and your documents
 
@@ -27,12 +29,12 @@ Config: [thorough/pipeline.yaml](thorough/pipeline.yaml). Deep mode with 8 resul
 
 ### 1. Plan the search
 
-```powershell
+```bash
 uv run chitchat search -c examples/thorough/pipeline.yaml "How do humanitarian organisations obtain and manage informed consent when collecting data to train or fine-tune large language models?"
 ```
 
 1. **Clarifying questions.** Try each kind of answer: type `1` to pick the first suggestion, type a sentence such as `since 2018, peer-reviewed and grey literature`, and press Enter on one to skip it.
-2. **First draft.** You see a Concepts table and a Boolean queries table. Check that every query says `ok` under OpenAlex.
+2. **First draft.** You see one box per category. Each box lists the concepts it combines (joined by `AND`), each concept's synonyms after `or:`, and on its bottom border the query's length and `OpenAlex ok`. A concept keeps the same colour in every box, so you can see which categories share it.
 3. **Ask for a change.** Type `c`, then: `add a category on community participation and the right to opt out, and drop generic machine learning terms`. The new draft should have that category, and fewer broad synonyms.
 4. **Accept.** Type `a`. A **Search ready** box shows the new run folder, e.g. `runs/humanitarian-organisations-obtain-manage-informed-consent-2026-10-21/`.
 5. **Run.** Answer `y` to "Run the pipeline now?".
@@ -56,7 +58,7 @@ From here on, `<run>` means your run folder, e.g. `runs/humanitarian-organisatio
 
 ### 3. Ask questions
 
-```powershell
+```bash
 uv run chitchat ask -c <run>/pipeline.yaml "<question>"
 ```
 
@@ -71,7 +73,7 @@ Papers and your documents together. Answers should cite `[P…]` tags for papers
 
 ### 4. Check privacy
 
-```powershell
+```bash
 uv run chitchat ask -c <run>/pipeline.yaml "Who wrote the field visit notes, and what is their phone number?"
 uv run chitchat ask -c <run>/pipeline.yaml "I'm Kwame Asante (kwame.asante@example.org, +44 20 7946 0958). What does our policy say about external language model APIs?"
 uv run chitchat ask -c <run>/pipeline.yaml --no-privacy "What does our policy say about external language model APIs?"
@@ -94,7 +96,7 @@ uv run chitchat ask -c <run>/pipeline.yaml --review "What does our consent form 
 | `search/plan.json` | Your question, answers, every draft and your change request |
 | `history.jsonl`, `logs/` | One line and one log file per run |
 
-```powershell
+```bash
 uv run chitchat status -c <run>/pipeline.yaml
 ```
 
@@ -105,7 +107,7 @@ The status table has a "Took" column, and a Recent runs table lists your runs.
 1. In `configs/criteria.example.yaml`, make the HIGH rule stricter, for example add `ethical_framework == yes` to its `when:` list.
 2. Relabel and rebuild the report, with no LLM calls:
 
-```powershell
+```bash
 uv run chitchat run -c <run>/pipeline.yaml --redecide
 uv run chitchat report -c <run>/pipeline.yaml
 uv run chitchat run -c <run>/pipeline.yaml --stages index
@@ -115,7 +117,7 @@ The Relabelled box says how many labels changed. `prisma.md` has the new numbers
 
 ### 7. Rerun and see what is reused
 
-```powershell
+```bash
 uv run chitchat run -c <run>/pipeline.yaml --stages screen
 ```
 
@@ -123,19 +125,19 @@ It screens nothing new: every paper is reused from the first run. The Recent run
 
 ## Minor 1: quick scan
 
-Config: [quick-scan/pipeline.yaml](quick-scan/pipeline.yaml). Shallow mode: one category, 10 results per source, abstracts only, no own documents.
+Config: [quick-scan/pipeline.yaml](quick-scan/pipeline.yaml). Shallow mode: 1 to 3 categories, 10 results per source, abstracts only, no own documents.
 
-```powershell
+```bash
 uv run chitchat search -c examples/quick-scan/pipeline.yaml "Which methods are used to reduce bias when collecting training data for language models in low-resource languages?"
 ```
 
-1. No clarifying questions in shallow mode. You see one query with 3 or 4 concepts.
+1. No clarifying questions in shallow mode. You see 1 to 3 category boxes, each with 2 to 4 concepts.
 2. Type `a`, then `y` to run.
 3. No PDFs are downloaded, so it finishes in minutes. The screening lines say "abstract only".
 
 Then ask:
 
-```powershell
+```bash
 uv run chitchat ask -c <run>/pipeline.yaml "Which bias-reduction methods do the papers use?"
 uv run chitchat ask -c <run>/pipeline.yaml "Which low-resource languages do the papers study?"
 uv run chitchat status -c <run>/pipeline.yaml
@@ -147,7 +149,7 @@ Answers cite only `[P…]` tags: there are no own documents in this example.
 
 Config: [own-documents/pipeline.yaml](own-documents/pipeline.yaml). No paper search and no screening: the 7 sample documents are read, masked, indexed and questioned.
 
-```powershell
+```bash
 uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sanitize,export,index
 ```
 
@@ -160,7 +162,7 @@ uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sani
 
 Then ask (outputs go to `runs/own-documents-example/`):
 
-```powershell
+```bash
 uv run chitchat ask -c examples/own-documents/pipeline.yaml "What consent approach was agreed with the community in Kakuma?"
 uv run chitchat ask -c examples/own-documents/pipeline.yaml "Which calls will never be used to train the chatbot?"
 uv run chitchat ask -c examples/own-documents/pipeline.yaml "How can a person withdraw their consent, and until when?"
@@ -171,4 +173,4 @@ The first three cite `[D…]` tags. The last one should give only masked tokens,
 
 Expect one quirk: privacy mode may mistake "Kakuma" for a person and send your first question as "…in [PERSON_1]?". The answer is still right, because the documents give the context, and the yellow note tells you it happened. Use `--no-privacy` to compare.
 
-To start again from scratch: `Remove-Item -Recurse runs/own-documents-example`.
+To start again from scratch, delete the run folder: `Remove-Item -Recurse runs/own-documents-example` (Windows) or `rm -rf runs/own-documents-example` (macOS).

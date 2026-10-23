@@ -6,6 +6,7 @@ Input paths are relative to the config file's folder.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import Any, Literal
 
@@ -70,8 +71,13 @@ class ScreeningSettings(_Model):
     max_concurrency: int = Field(4, ge=1)
 
 
+DOCKER_MILVUS = "http://127.0.0.1:19530"
+
+
 class IndexSettings(_Model):
-    db_uri: str = "runs/{run_name}/milvus.db"
+    # `auto`: Milvus in Docker on Windows (Milvus Lite has no Windows build),
+    # a Milvus Lite file in the run folder on macOS and Linux.
+    db_uri: str = "auto"
     db_name: str = "review"
     collection: str = "review"
     dense_model: str = "sentence-transformers/all-MiniLM-L6-v2"
@@ -90,11 +96,11 @@ SearchMode = Literal["deep", "shallow"]
 
 # Defaults for `chitchat search`. Override any field under `search.deep` or `search.shallow`.
 DEFAULT_PRESETS: dict[str, dict[str, Any]] = {
-    # A fast look at what exists: one focused query, abstracts only.
+    # A fast look at what exists: 1 to 3 focused queries, abstracts only.
     "shallow": {
         "clarifying_questions": 0,
         "min_categories": 1,
-        "max_categories": 1,
+        "max_categories": 3,
         "max_concepts_per_category": 4,
         "max_synonyms": 5,
         "max_results": 10,
@@ -210,6 +216,10 @@ def load_pipeline_config(path: str | Path) -> PipelineConfig:
     if cfg.own_documents.folder:
         cfg.own_documents.folder = _resolve(base, cfg.own_documents.folder)
 
+    if cfg.index.db_uri == "auto":
+        cfg.index.db_uri = (
+            DOCKER_MILVUS if sys.platform == "win32" else str(cfg.run_root / "milvus.db")
+        )
     uri = cfg.index.db_uri.format(run_name=cfg.run_name)
     cfg.index.db_uri = uri if "://" in uri else str(_resolve(base, Path(uri)))
 

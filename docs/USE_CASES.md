@@ -20,9 +20,11 @@ They belong to an invented NGO, the Northbridge Relief Network, which is plannin
 
 Use them by copying them into `my_docs/`, the folder the configs read:
 
-```powershell
-Copy-Item -Recurse examples/my_docs/* my_docs/
-```
+| Windows (PowerShell) | macOS (Terminal) |
+|---|---|
+| `New-Item -ItemType Directory -Force my_docs; Copy-Item examples/my_docs/* my_docs/` | `mkdir -p my_docs && cp examples/my_docs/* my_docs/` |
+
+Or use [examples/own-documents/pipeline.yaml](../examples/own-documents/pipeline.yaml), which reads them where they are.
 
 To rebuild the Word, PDF and Excel files: `uv run python examples/make_samples.py`.
 
@@ -30,7 +32,7 @@ To rebuild the Word, PDF and Excel files: `uv run python examples/make_samples.p
 
 You want a first look at what exists, in minutes.
 
-```powershell
+```bash
 uv run chitchat search --mode shallow "How do humanitarian organisations obtain informed consent when collecting data to train LLMs?"
 ```
 
@@ -44,14 +46,14 @@ Look for:
 
 You are starting a review and want a careful search.
 
-```powershell
+```bash
 uv run chitchat search "How do humanitarian organisations obtain informed consent when collecting data to train LLMs?"
 ```
 
 Look for:
 
 - 4 clarifying questions first. Try answering `1` (picks a suggestion), a sentence of your own, and Enter (skips).
-- 3 to 6 categories, each combining 2 to 4 concepts.
+- 3 to 6 category boxes. Each lists its concepts joined by `AND`, with each concept's synonyms after `or:`.
 - Then type `c` and ask for a change, for example "drop generic machine learning terms and add refugee camps". The new draft should reflect it.
 - `search/plan.json` in the run folder records every turn.
 
@@ -59,8 +61,9 @@ Look for:
 
 You have internal notes, emails and policies, and want answers that combine them with the literature.
 
-```powershell
-Copy-Item -Recurse examples/my_docs/* my_docs/
+Copy the samples into `my_docs/` first (see the table above), then:
+
+```bash
 uv run chitchat run -c runs/<your-run>/pipeline.yaml --stages ingest,sanitize,export,index
 uv run chitchat ask -c runs/<your-run>/pipeline.yaml "What did the working group decide about using helpline transcripts?"
 ```
@@ -83,7 +86,7 @@ Questions that need the samples:
 
 You need to show that personal data does not leave your machine.
 
-```powershell
+```bash
 uv run chitchat run -c runs/<your-run>/pipeline.yaml --stages ingest,sanitize
 ```
 
@@ -110,7 +113,7 @@ These are good cases to show that masking lowers risk but is not perfect.
 
 ## 5. Asking with and without privacy mode
 
-```powershell
+```bash
 uv run chitchat ask -c runs/<your-run>/pipeline.yaml "I'm Kwame Asante (kwame.asante@example.org). What do our documents say about opt-out by SMS?"
 uv run chitchat ask -c runs/<your-run>/pipeline.yaml --no-privacy "I'm Kwame Asante (kwame.asante@example.org). What do our documents say about opt-out by SMS?"
 uv run chitchat ask -c runs/<your-run>/pipeline.yaml --review "What do our documents say about opt-out by SMS?"
@@ -129,7 +132,7 @@ You think the labels are too generous and want stricter rules.
 1. Edit only the `decision:` rules in `configs/criteria.example.yaml`.
 2. Relabel and rebuild the report, with no LLM calls:
 
-```powershell
+```bash
 uv run chitchat run -c runs/<your-run>/pipeline.yaml --redecide
 uv run chitchat report -c runs/<your-run>/pipeline.yaml
 ```
@@ -140,7 +143,7 @@ Look for a "Relabelled" box with how many labels changed, and new numbers in `pr
 
 You want the original 8-category search from the legacy project.
 
-```powershell
+```bash
 uv run chitchat search --predefined
 ```
 
@@ -148,7 +151,7 @@ Look for: a new run folder with the fixed search, and the OpenAlex warning: all 
 
 ## 8. Comparing runs and timing
 
-```powershell
+```bash
 uv run chitchat status -c runs/<your-run>/pipeline.yaml
 ```
 

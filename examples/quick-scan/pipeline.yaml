@@ -31,7 +31,7 @@ search:
     max_results: 10                    # per source: up to 30 papers
 
 index:
-  db_uri: http://127.0.0.1:19530       # Milvus in Docker. Linux/macOS: milvus.db
+  db_uri: auto                         # Windows: Milvus in Docker (127.0.0.1:19530). macOS/Linux: a milvus.db file in the run folder
   db_name: review
   collection: quick_scan_example
 

@@ -42,14 +42,28 @@ Every `chitchat` command does these steps first, in this order:
 3. **Clarifying questions (deep mode only).** The LLM asks about 4 questions: scope, population, setting, years, what to leave out. Each has suggested answers. Type a number, your own answer, or press Enter to skip.
 4. **Draft.** The LLM proposes concepts (each with synonyms) and categories (each combining 2 or more concepts with AND). If the draft breaks the rules, for example a category with only one concept, the LLM is asked to fix it, up to 2 times, before you see it.
 5. **Checks on the draft.** Terms are cleaned (no quotes or AND/OR inside), duplicates and unknown words are dropped, and the mode's limits are applied. If a query is over 1,500 characters, the last synonyms of its longest group are dropped until it fits, so OpenAlex can run it. Every change is listed under the draft.
-6. **Your decision.** `a` accepts. `c` asks for a change in plain words: the LLM revises the whole search with the full conversation, and you see the new draft. Repeat as often as you like. `q` quits and saves nothing.
-7. **Saved files.** `search/synonyms.jsonl`, `search/categories.yaml` and `search/discovery.yaml` (in mmore's formats), `search/plan.json` (the whole conversation: question, answers, every draft and change request), and `pipeline.yaml` (your template settings, pointed at this folder, with its own Milvus collection).
-8. **Run.** It asks "Run the pipeline now?" and runs every stage. Later commands use `-c runs/<folder>/pipeline.yaml`.
+6. **What you see.** A summary line (number of categories and concepts, and how many fit OpenAlex), then one box per category:
+
+   ```
+   ╭─ Category 1 · Consent in data collection ────────────────────────────────╮
+   │ informed consent  or: data permission, opt-in consent, explicit consent  │
+   │ AND                                                                      │
+   │ data collection   or: data gathering, data acquisition                   │
+   ╰─────────────────────────────────────────── 194 characters · OpenAlex ok ─╯
+   ```
+
+   - Each line is one concept: the concept itself, then `or:` and its synonyms. A paper matches the line if it uses any of them.
+   - `AND` between lines means a paper must match every line of the box.
+   - Each concept keeps the same colour in every box, so you can see when two categories share one.
+   - The bottom border shows the query's length and whether OpenAlex accepts it.
+7. **Your decision.** `a` accepts. `c` asks for a change in plain words: the LLM revises the whole search with the full conversation, and you see the new draft. Repeat as often as you like. `q` quits and saves nothing.
+8. **Saved files.** `search/synonyms.jsonl`, `search/categories.yaml` and `search/discovery.yaml` (in mmore's formats), `search/plan.json` (the whole conversation: question, answers, every draft and change request), and `pipeline.yaml` (your template settings, pointed at this folder, with its own Milvus collection).
+9. **Run.** It asks "Run the pipeline now?" and runs every stage. Later commands use `-c runs/<folder>/pipeline.yaml`.
 
 | | Shallow: quick scan | Deep: systematic search (default) |
 |---|---|---|
 | Clarifying questions | none | 4 |
-| Categories | 1 | 3 to 6 |
+| Categories | 1 to 3 | 3 to 6 |
 | Concepts per category | 2 to 4 | 2 to 4 |
 | Synonyms per concept | up to 5 | up to 8 |
 | Results | 10 per source, 1 page | 25 per source, 2 pages |
@@ -61,7 +75,7 @@ Change any of these under `search.shallow` or `search.deep` in your pipeline con
 
 ## `chitchat run`
 
-```powershell
+```bash
 uv run chitchat run -c <config>                       # every stage
 uv run chitchat run -c <config> --stages screen,export
 uv run chitchat run -c <config> --redecide
@@ -94,7 +108,8 @@ Builds the boolean search. **Offline, no network.**
   - turns each word and its synonyms into a quoted `OR` group: `("AI" OR "machine learning" OR …)`;
   - joins the groups of each category with `AND`;
   - drops a word that isn't in the synonyms file, with a warning.
-- **Writes:** `queries.json`, one query per category. It is replaced each time.
+- **Shows** a table with one row per category: its concepts (joined by AND), the number of AND groups, the length in characters, and whether OpenAlex accepts it.
+- **Writes:** `queries.json`, one entry per category: its name, its concepts and the full query. It is replaced each time.
 - **Warns** when a query is over 1,500 characters and OpenAlex is a source. OpenAlex rejects those, so it returns nothing for that category.
 - **Optional:** `discover` builds the same queries itself. This stage is for looking at them before you search.
 
@@ -209,6 +224,16 @@ Builds the dataset and the PRISMA report. **No network.**
 
 Puts the included papers and your documents into Milvus, so `ask` can search them.
 
+Where Milvus is depends on `index.db_uri`:
+
+| `db_uri` | Windows | macOS and Linux |
+|---|---|---|
+| `auto` (the default) | Milvus in Docker at `http://127.0.0.1:19530` | Milvus Lite: a `milvus.db` file in the run folder, no server |
+| `http://…` | that Milvus server | that Milvus server |
+| a file path | not possible: Milvus Lite has no Windows build | that file |
+
+Each run folder from `chitchat search` gets its own collection, so runs never overwrite each other's index.
+
 - **Reads:** `sources.json` (run `export` first), the sanitized papers and documents, and `screening.jsonl`.
 - **Chooses:**
   - papers whose label is in `index.include_labels` (default HIGH, MEDIUM, LOW). Each uses its full text, or its abstract if there's no full text.
@@ -216,14 +241,14 @@ Puts the included papers and your documents into Milvus, so `ask` can search the
 - **Does:**
   1. Splits the texts into chunks of a few sentences.
   2. Starts every chunk with its tag, e.g. `[P0007] …`, so the answer can cite it.
-  3. Creates the Milvus database if needed.
+  3. Creates the Milvus database (`db_name`) if needed. Milvus Lite always uses its default database.
   4. **Deletes the old collection and builds it again.** The index always matches the current results.
 - **Fails clearly** when nothing is included ("Run screen first") or Milvus can't be reached ("Is Milvus running?").
-- **The first run downloads embedding models** (about 1 GB).
+- **The first run downloads embedding models** (about 600 MB).
 
 ## `chitchat ask`
 
-```powershell
+```bash
 uv run chitchat ask -c <config> "question"
 uv run chitchat ask -c <config> --no-privacy "question"
 uv run chitchat ask -c <config> --review "question"

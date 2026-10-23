@@ -93,8 +93,8 @@ def test_shallow_asks_nothing_and_accepts() -> None:
     )
     assert result is not None
     assert model.kinds() == ["SearchPlan"]
-    assert len(result.plan.categories) == 1  # shallow keeps one category
-    assert len(result.queries) == 1
+    assert len(result.plan.categories) <= SHALLOW.max_categories
+    assert len(result.queries) == len(result.plan.categories)
 
 
 def test_deep_asks_clarifying_questions_first() -> None:

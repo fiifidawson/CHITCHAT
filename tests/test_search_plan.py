@@ -66,10 +66,23 @@ def test_normalize_cleans_terms_and_drops_duplicates() -> None:
 
 
 def test_normalize_applies_preset_limits() -> None:
-    plan, notes = normalize_plan(_plan(n_synonyms=9, n_categories=3), SHALLOW)
-    assert len(plan.categories) == SHALLOW.max_categories == 1
+    too_many = SHALLOW.max_categories + 1
+    raw = SearchPlan(
+        concepts=[
+            Concept(word=f"c{i}", synonyms=[f"s{i}.{j}" for j in range(9)]) for i in range(6)
+        ],
+        categories=[
+            Category(name=f"Angle {k}", words=["c0", f"c{k + 1}", "c2", "c3", "c4"])
+            for k in range(too_many)
+        ],
+        rationale="r",
+    )
+    plan, notes = normalize_plan(raw, SHALLOW)
+    assert len(plan.categories) == SHALLOW.max_categories
+    assert all(len(c.words) <= SHALLOW.max_concepts_per_category for c in plan.categories)
     assert all(len(c.synonyms) <= SHALLOW.max_synonyms for c in plan.concepts)
-    assert {c.word for c in plan.concepts} == {"concept 0", "concept 1"}  # unused concepts dropped
+    used = {w for c in plan.categories for w in c.words}
+    assert {c.word for c in plan.concepts} == used  # unused concepts are dropped
     assert notes
 
 
@@ -234,3 +247,17 @@ def test_plan_problems() -> None:
     assert any("'Synonyms as words'" in p and "fewer than 2" in p for p in problems)
     assert any("at least 3 categories" in p for p in problems)
     assert plan_problems(_plan(), SHALLOW) == []
+
+
+def test_run_config_keeps_auto(project: Path) -> None:
+    import yaml as _yaml
+
+    template = project / "pipeline.yaml"
+    data = _yaml.safe_load(template.read_text(encoding="utf-8"))
+    data["index"]["db_uri"] = "auto"
+    template.write_text(_yaml.safe_dump(data), encoding="utf-8")
+    cfg = load_pipeline_config(template)
+    run_root = project / "runs" / "r-auto"
+    discovery = write_plan_files(run_root / "search", _plan(), SHALLOW)
+    path = write_run_config(template, cfg, run_root, discovery, "deep")
+    assert _yaml.safe_load(path.read_text(encoding="utf-8"))["index"]["db_uri"] == "auto"

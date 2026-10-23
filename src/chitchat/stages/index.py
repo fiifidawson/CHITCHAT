@@ -79,6 +79,11 @@ def _chunk(items: list[dict[str, Any]], run: RunDir) -> list[Any]:
     return chunks
 
 
+def milvus_db_name(uri: str, db_name: str) -> str:
+    """Milvus Lite (a local file) has only the default database."""
+    return db_name if "://" in uri else "default"
+
+
 def milvus_error(uri: str, error: Exception) -> StageError:
     """A clear message for Milvus problems."""
     message = getattr(error, "message", None) or str(error)
@@ -135,12 +140,12 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
         {
             "dense_model": {"model_name": ix.dense_model, "is_multimodal": False},
             "sparse_model": {"model_name": ix.sparse_model, "is_multimodal": False},
-            "db": {"uri": ix.db_uri, "name": ix.db_name},
+            "db": {"uri": ix.db_uri, "name": milvus_db_name(ix.db_uri, ix.db_name)},
         },
         IndexerConfig,
     )
     try:
-        _reset_collection(ix.db_uri, ix.db_name, ix.collection)
+        _reset_collection(ix.db_uri, milvus_db_name(ix.db_uri, ix.db_name), ix.collection)
         Indexer.from_documents(
             config=indexer_config, documents=chunks, collection_name=ix.collection
         )

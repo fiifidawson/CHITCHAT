@@ -175,7 +175,7 @@ def shorten_path(path: Path | str) -> str:
 # --- Queries ---------------------------------------------------------------------------
 
 
-def queries_table(queries: list[dict[str, str]], openalex_limit: int | None) -> Table:
+def queries_table(queries: list[dict[str, Any]], openalex_limit: int | None) -> Table:
     """One row per category. With `openalex_limit`, flags queries OpenAlex will reject."""
     table = Table(
         title=Text("Boolean queries", style=f"bold {ACCENT}"),
@@ -184,15 +184,21 @@ def queries_table(queries: list[dict[str, str]], openalex_limit: int | None) -> 
         border_style=ACCENT,
         header_style="bold",
     )
+    with_concepts = any(q.get("concepts") for q in queries)
     table.add_column("#", justify="right", style="dim")
-    table.add_column("Category")
+    table.add_column("Category", style="bold")
+    if with_concepts:
+        table.add_column("Concepts (all must match)", overflow="fold")
     table.add_column("AND groups", justify="right")
     table.add_column("Characters", justify="right")
     if openalex_limit:
         table.add_column("OpenAlex")
     for n, q in enumerate(queries, 1):
         length = len(q["query"])
-        row = [str(n), q["category"], str(q["query"].count(" AND ") + 1), f"{length:,}"]
+        row = [str(n), q["category"]]
+        if with_concepts:
+            row.append(" AND ".join(q.get("concepts") or []))
+        row += [str(q["query"].count(" AND ") + 1), f"{length:,}"]
         if openalex_limit:
             row.append("[green]ok[/]" if length <= openalex_limit else "[red]too long[/]")
         table.add_row(*row)
@@ -399,14 +405,75 @@ def run_box(recorder: Any, footer: str | list[str] = "") -> Panel:
 # --- Search planning ---------------------------------------------------------------------
 
 
-def concepts_table(concepts: list[tuple[str, list[str]]]) -> Table:
-    """Each concept and the synonyms it searches for."""
-    table = _table("Concepts")
-    table.add_column("Concept", style="bold")
-    table.add_column("Synonyms (any of these)", overflow="fold")
-    for word, synonyms in concepts:
-        table.add_row(word, ", ".join(synonyms) if synonyms else Text("(none)", style="dim"))
-    return table
+# One colour per concept, kept across categories, so a shared concept is easy to spot.
+CONCEPT_COLOURS = ("#5fd7ff", "#ff79c6", "#50fa7b", "#bd93f9", "#ffb86c", "#8be9fd", "#ff5555")
+
+
+def concept_colours(words: list[str]) -> dict[str, str]:
+    return {w: CONCEPT_COLOURS[i % len(CONCEPT_COLOURS)] for i, w in enumerate(words)}
+
+
+def category_box(
+    number: int,
+    name: str,
+    concepts: list[tuple[str, list[str]]],
+    characters: int,
+    limit: int | None,
+    colours: dict[str, str],
+) -> Panel:
+    """One category: its concepts joined by AND, each with the synonyms it also matches."""
+    grid = Table.grid(padding=(0, 2))
+    grid.add_column(no_wrap=True)
+    grid.add_column(overflow="fold")
+    for i, (word, synonyms) in enumerate(concepts):
+        if i:
+            grid.add_row(Text("AND", style="bold dim"), "")
+        also = Text("or: ", style="dim")
+        also.append(", ".join(synonyms) if synonyms else "(no synonyms)", style="dim")
+        grid.add_row(Text(word, style=f"bold {colours.get(word, '')}"), also)
+    fits = limit is None or characters <= limit
+    status = Text(f" {characters:,} characters", style="dim")
+    if limit is not None:
+        status.append(" · OpenAlex ", style="dim")
+        status.append("ok" if fits else "too long", style="green" if fits else "bold red")
+    status.append(" ")
+    return Panel(
+        grid,
+        title=Text(f" Category {number} · {name} ", style=f"bold {ACCENT}"),
+        title_align="left",
+        subtitle=status,
+        subtitle_align="right",
+        border_style=ACCENT,
+        box=box.ROUNDED,
+        padding=(0, 1),
+        expand=True,
+    )
+
+
+def draft_view(
+    categories: list[tuple[str, list[tuple[str, list[str]]], int]],
+    limit: int | None,
+) -> Group:
+    """A short overview line, then one box per category."""
+    words = list(dict.fromkeys(w for _, concepts, _ in categories for w, _ in concepts))
+    colours = concept_colours(words)
+    fits = sum(1 for _, _, chars in categories if limit is None or chars <= limit)
+    overview = Text("Draft search: ", style="bold")
+    overview.append(
+        f"{len(categories)} categor{'y' if len(categories) == 1 else 'ies'} · "
+        f"{len(words)} concepts · {fits}/{len(categories)} fit OpenAlex",
+        style="dim",
+    )
+    hint = Text(
+        "A paper must match every concept in a category (AND), "
+        "using the concept or any of its synonyms (OR).",
+        style="dim",
+    )
+    boxes = [
+        category_box(n, name, concepts, chars, limit, colours)
+        for n, (name, concepts, chars) in enumerate(categories, 1)
+    ]
+    return Group(overview, hint, *boxes)
 
 
 # --- Ask ---------------------------------------------------------------------------------

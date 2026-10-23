@@ -130,3 +130,22 @@ def test_log_handler_styles_warnings(monkeypatch) -> None:
     logger.warning("watch out")
     text = console.export_text()
     assert "plain info" in text and "⚠ watch out" in text
+
+
+def test_queries_table_shows_concepts() -> None:
+    queries = [{"category": "Consent", "concepts": ["consent", "LLMs"], "query": "(a) AND (b)"}]
+    text = _render(ui.queries_table(queries, openalex_limit=1500), width=120)
+    assert "Concepts (all must match)" in text and "consent AND LLMs" in text
+
+
+def test_draft_view_partitions_categories() -> None:
+    categories = [
+        ("Consent in data", [("consent", ["opt-out"]), ("data", ["datasets"])], 120),
+        ("Too broad", [("x" * 10, [])], 2000),
+    ]
+    text = _render(ui.draft_view(categories, limit=1500), width=100)
+    assert "Draft search: 2 categories · 3 concepts · 1/2 fit OpenAlex" in text
+    first, second = text.split("Category 2 · Too broad")
+    assert "Category 1 · Consent in data" in first and "or: opt-out" in first and "AND" in first
+    assert "120 characters · OpenAlex ok" in first
+    assert "(no synonyms)" in second and "too long" in second
