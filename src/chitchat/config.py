@@ -6,6 +6,7 @@ Input paths are relative to the config file's folder.
 
 from __future__ import annotations
 
+import sys
 from pathlib import Path
 from typing import Any, Literal
 
@@ -70,8 +71,13 @@ class ScreeningSettings(_Model):
     max_concurrency: int = Field(4, ge=1)
 
 
+DOCKER_MILVUS = "http://127.0.0.1:19530"
+
+
 class IndexSettings(_Model):
-    db_uri: str = "runs/{run_name}/milvus.db"
+    # `auto`: Milvus in Docker on Windows (Milvus Lite has no Windows build),
+    # a Milvus Lite file in the run folder on macOS and Linux.
+    db_uri: str = "auto"
     db_name: str = "review"
     collection: str = "review"
     dense_model: str = "sentence-transformers/all-MiniLM-L6-v2"
@@ -86,6 +92,67 @@ class AskSettings(_Model):
     reranker: str | None = "BAAI/bge-reranker-base"
 
 
+SearchMode = Literal["deep", "shallow"]
+
+# Defaults for `chitchat search`. Override any field under `search.deep` or `search.shallow`.
+DEFAULT_PRESETS: dict[str, dict[str, Any]] = {
+    # A fast look at what exists: 1 to 3 focused queries, abstracts only.
+    "shallow": {
+        "clarifying_questions": 0,
+        "min_categories": 1,
+        "max_categories": 3,
+        "max_concepts_per_category": 4,
+        "max_synonyms": 5,
+        "max_results": 10,
+        "max_pages": 1,
+        "download_pdfs": False,
+    },
+    # A thorough search for a review: clarifying questions, several angles, full text.
+    "deep": {
+        "clarifying_questions": 4,
+        "min_categories": 3,
+        "max_categories": 6,
+        "max_concepts_per_category": 4,
+        "max_synonyms": 8,
+        "max_results": 25,
+        "max_pages": 2,
+        "download_pdfs": True,
+    },
+}
+
+
+class SearchPreset(_Model):
+    clarifying_questions: int = Field(ge=0, le=8)
+    min_categories: int = Field(ge=1)
+    max_categories: int = Field(ge=1)
+    max_concepts_per_category: int = Field(ge=1)
+    max_synonyms: int = Field(ge=0)
+    max_results: int = Field(ge=1)
+    max_pages: int = Field(ge=1)
+    download_pdfs: bool
+    sources: list[str] = ["openalex", "europepmc", "arxiv"]
+
+
+class SearchSettings(_Model):
+    mode: SearchMode = "deep"
+    llm: LLMSettings | None = None  # defaults to screening.llm
+    deep: SearchPreset = Field(default_factory=lambda: SearchPreset(**DEFAULT_PRESETS["deep"]))
+    shallow: SearchPreset = Field(
+        default_factory=lambda: SearchPreset(**DEFAULT_PRESETS["shallow"])
+    )
+
+    @field_validator("deep", "shallow", mode="before")
+    @classmethod
+    def _fill_defaults(cls, value: Any, info: Any) -> Any:
+        """Only the fields you set override the defaults."""
+        if isinstance(value, dict):
+            return {**DEFAULT_PRESETS[info.field_name], **value}
+        return value
+
+    def preset(self, mode: str) -> SearchPreset:
+        return self.deep if mode == "deep" else self.shallow
+
+
 class PipelineConfig(_Model):
     run_name: str = Field(pattern=r"^[A-Za-z0-9._-]+$")
     runs_dir: Path = Path("runs")
@@ -95,6 +162,7 @@ class PipelineConfig(_Model):
     screening: ScreeningSettings
     index: IndexSettings = IndexSettings()
     ask: AskSettings = AskSettings()
+    search: SearchSettings = SearchSettings()
 
     @property
     def run_root(self) -> Path:
@@ -103,6 +171,10 @@ class PipelineConfig(_Model):
     @property
     def ask_llm(self) -> LLMSettings:
         return self.ask.llm or self.screening.llm
+
+    @property
+    def search_llm(self) -> LLMSettings:
+        return self.search.llm or self.screening.llm
 
 
 def _format_errors(path: Path, err: ValidationError) -> str:
@@ -144,6 +216,10 @@ def load_pipeline_config(path: str | Path) -> PipelineConfig:
     if cfg.own_documents.folder:
         cfg.own_documents.folder = _resolve(base, cfg.own_documents.folder)
 
+    if cfg.index.db_uri == "auto":
+        cfg.index.db_uri = (
+            DOCKER_MILVUS if sys.platform == "win32" else str(cfg.run_root / "milvus.db")
+        )
     uri = cfg.index.db_uri.format(run_name=cfg.run_name)
     cfg.index.db_uri = uri if "://" in uri else str(_resolve(base, Path(uri)))
 

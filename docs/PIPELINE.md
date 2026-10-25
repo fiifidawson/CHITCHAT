@@ -33,9 +33,76 @@ Every `chitchat` command does these steps first, in this order:
 
    Any problem stops the command with a message that names the field at fault (exit code 2).
 
+## `chitchat search`: planning the search
+
+`chitchat search "question"` builds the boolean search from your question instead of the predefined files. It then sets up a new run folder and runs the pipeline there.
+
+1. **Run folder.** A new folder named from the question and the date, e.g. `runs/humanitarian-organisations-obtain-informed-consent-2026-10-21/`. If it exists, `-2`, `-3`… is added. `--run-name` sets the name yourself.
+2. **Privacy check.** Your question, and later your answers and change requests, are checked for personal data on your machine with Presidio (the `rag_privacy.yaml` settings). Anything found is masked before it goes to the LLM, and you see the masked version.
+3. **Clarifying questions (deep mode only).** The LLM asks about 4 questions: scope, population, setting, years, what to leave out. Each has suggested answers. Type a number, your own answer, or press Enter to skip.
+4. **Draft.** The LLM proposes concepts (each with synonyms) and categories (each combining 2 or more concepts with AND). If the draft breaks the rules, for example a category with only one concept, the LLM is asked to fix it, up to 2 times, before you see it.
+5. **Checks on the draft.** Terms are cleaned (no quotes or AND/OR inside), duplicates and unknown words are dropped, and the mode's limits are applied. If a query is over 1,500 characters, the last synonyms of its longest group are dropped until it fits, so OpenAlex can run it. Every change is listed under the draft.
+6. **What you see.** A summary line (number of categories and concepts, and how many fit OpenAlex), then one box per category:
+
+   ```
+   ╭─ Category 1 · Consent in data collection ────────────────────────────────╮
+   │ informed consent  or: data permission, opt-in consent, explicit consent  │
+   │ AND                                                                      │
+   │ data collection   or: data gathering, data acquisition                   │
+   ╰─────────────────────────────────────────── 194 characters · OpenAlex ok ─╯
+   ```
+
+   - Each line is one concept: the concept itself, then `or:` and its synonyms. A paper matches the line if it uses any of them.
+   - `AND` between lines means a paper must match every line of the box.
+   - Each concept keeps the same colour in every box, so you can see when two categories share one.
+   - The bottom border shows the query's length and whether OpenAlex accepts it.
+7. **Your decision.** `a` accepts. `c` asks for a change in plain words: the LLM revises the whole search with the full conversation, and you see the new draft. Repeat as often as you like. `q` quits and saves nothing.
+8. **Saved files.** `search/synonyms.jsonl`, `search/categories.yaml` and `search/discovery.yaml` (in mmore's formats), `search/plan.json` (the whole conversation: question, answers, every draft and change request), and `pipeline.yaml` (your template settings, pointed at this folder, with its own Milvus collection).
+9. **Run.** It asks "Run the pipeline now?" and runs every stage. Later commands use `-c runs/<folder>/pipeline.yaml`.
+
+| | Shallow: quick scan | Deep: systematic search (default) |
+|---|---|---|
+| Clarifying questions | none | 4 |
+| Categories | 1 to 3 | 3 to 6 |
+| Concepts per category | 2 to 4 | 2 to 4 |
+| Synonyms per concept | up to 5 | up to 8 |
+| Results | 10 per source, 1 page | 25 per source, 2 pages |
+| PDFs | not downloaded: screening reads abstracts | downloaded: screening reads full text |
+
+Change any of these under `search.shallow` or `search.deep` in your pipeline config. Only the fields you set are changed. `search.mode` sets the default mode, and `search.llm` the model (default: the screening model).
+
+`--predefined` skips the planning and uses the search files named in the config (`discovery.config`). It still gets a new folder, timing and history.
+
+### Choosing sources
+
+Every search goes to **OpenAlex, Europe PMC and arXiv** by default. The draft's summary line names the sources it will search. The "OpenAlex ok / too long" status appears only because OpenAlex is the one source with a length limit (1,500 characters). Europe PMC and arXiv have no such limit to check.
+
+| Source | Covers | Notes |
+|---|---|---|
+| `openalex` | Most fields, all publishers | Rejects queries over 1,500 characters. Drafts are fitted to it automatically |
+| `europepmc` | Life sciences and health | |
+| `arxiv` | Computer science, physics, statistics preprints | Searches key terms, not the full boolean |
+| `google_scholar` | Everything | Off by default. Needs the extra `mmore[google_scholar]` (Selenium) and often hits captchas |
+
+Where to change them:
+
+- **For new searches:** in your template config, list the sources per mode. Only the modes you change are affected:
+
+  ```yaml
+  search:
+    deep:
+      sources: [openalex, europepmc]
+    shallow:
+      sources: [arxiv]
+  ```
+
+  Without OpenAlex in the list, queries are not trimmed and the OpenAlex status is not shown.
+- **For one run that's already planned:** edit `sources:` in `runs/<folder>/search/discovery.yaml`, then rerun from `discover`: `uv run chitchat run -c runs/<folder>/pipeline.yaml`.
+- **For the predefined search:** edit `sources:` in `configs/discovery/discovery.yaml`.
+
 ## `chitchat run`
 
-```powershell
+```bash
 uv run chitchat run -c <config>                       # every stage
 uv run chitchat run -c <config> --stages screen,export
 uv run chitchat run -c <config> --redecide
@@ -45,6 +112,15 @@ uv run chitchat run -c <config> --redecide
 - **Errors:** if a stage fails, the run stops there. Later stages don't run, and earlier results are kept.
 - **Done markers:** after each successful stage, a marker is written to `runs/<run>/.done/<stage>`. `chitchat status` shows these. **Nothing is ever skipped because of a marker.** A stage runs every time you ask for it.
 - **`--redecide`** ignores `--stages` and only relabels screened papers (see [screen](#5-screen)).
+
+## Runs, history and logs
+
+Every command that runs stages (`run`, `report`, `search`) is one run, with an id like `2026-10-21T14-03-07`.
+
+- **In the terminal:** each stage header shows its start time, each stage ends with how long it took, and the run ends with a Done, Failed or Interrupted box listing every stage's duration, the total, the run id and the log file.
+- **`history.jsonl`:** one line per run in the run folder: run id, command, config, mode, start and end, outcome, any error, and each stage's start, duration and outcome. It is written even when a stage fails or you press Ctrl+C.
+- **`logs/<run id>.log`:** everything the run printed, with a short header. Progress bars are left out, so it stays readable.
+- **`chitchat status`:** a "Took" column with each stage's last duration, and a table of the 5 most recent runs.
 
 ## The stages
 
@@ -59,7 +135,8 @@ Builds the boolean search. **Offline, no network.**
   - turns each word and its synonyms into a quoted `OR` group: `("AI" OR "machine learning" OR …)`;
   - joins the groups of each category with `AND`;
   - drops a word that isn't in the synonyms file, with a warning.
-- **Writes:** `queries.json`, one query per category. It is replaced each time.
+- **Shows** a table with one row per category: its concepts (joined by AND), the number of AND groups, the length in characters, and whether OpenAlex accepts it.
+- **Writes:** `queries.json`, one entry per category: its name, its concepts and the full query. It is replaced each time.
 - **Warns** when a query is over 1,500 characters and OpenAlex is a source. OpenAlex rejects those, so it returns nothing for that category.
 - **Optional:** `discover` builds the same queries itself. This stage is for looking at them before you search.
 
@@ -174,6 +251,16 @@ Builds the dataset and the PRISMA report. **No network.**
 
 Puts the included papers and your documents into Milvus, so `ask` can search them.
 
+Where Milvus is depends on `index.db_uri`:
+
+| `db_uri` | Windows | macOS and Linux |
+|---|---|---|
+| `auto` (the default) | Milvus in Docker at `http://127.0.0.1:19530` | Milvus Lite: a `milvus.db` file in the run folder, no server |
+| `http://…` | that Milvus server | that Milvus server |
+| a file path | not possible: Milvus Lite has no Windows build | that file |
+
+Each run folder from `chitchat search` gets its own collection, so runs never overwrite each other's index.
+
 - **Reads:** `sources.json` (run `export` first), the sanitized papers and documents, and `screening.jsonl`.
 - **Chooses:**
   - papers whose label is in `index.include_labels` (default HIGH, MEDIUM, LOW). Each uses its full text, or its abstract if there's no full text.
@@ -181,14 +268,14 @@ Puts the included papers and your documents into Milvus, so `ask` can search the
 - **Does:**
   1. Splits the texts into chunks of a few sentences.
   2. Starts every chunk with its tag, e.g. `[P0007] …`, so the answer can cite it.
-  3. Creates the Milvus database if needed.
+  3. Creates the Milvus database (`db_name`) if needed. Milvus Lite always uses its default database.
   4. **Deletes the old collection and builds it again.** The index always matches the current results.
 - **Fails clearly** when nothing is included ("Run screen first") or Milvus can't be reached ("Is Milvus running?").
-- **The first run downloads embedding models** (about 1 GB).
+- **The first run downloads embedding models** (about 600 MB).
 
 ## `chitchat ask`
 
-```powershell
+```bash
 uv run chitchat ask -c <config> "question"
 uv run chitchat ask -c <config> --no-privacy "question"
 uv run chitchat ask -c <config> --review "question"
@@ -236,6 +323,7 @@ Things to know:
 
 ## Known gaps
 
+- **Screening criteria don't follow the question.** `chitchat search` builds the search from your question, but screening still uses `configs/criteria.example.yaml`, which is written for humanitarian AI data ethics.
 - **Skipped papers stay skipped.** A `skipped` record counts as finished. If you lower `min_year`, lower `min_chars`, or add a PDF for a paper skipped as `no_text`, it is not screened again. To redo those papers, delete their lines from `screening.jsonl` and run `screen`. To redo everything, delete the whole file.
 - **Screening ignores new text.** A paper screened on its abstract keeps that result after you add its PDF. The fix is the same: delete its line.
 - **Sanitize changes don't reach screening.** After you change `sanitize.yaml`, the masked text changes, but screened papers are reused.
@@ -245,6 +333,10 @@ Things to know:
 
 ```
 runs/<run_name>/
+├── pipeline.yaml               search: this run's config (use it with -c)
+├── search/                     search: synonyms.jsonl, categories.yaml, discovery.yaml, plan.json
+├── history.jsonl               one line per run: stages, durations, outcome
+├── logs/                       one log file per run
 ├── raw/                        raw text: never share this folder
 │   ├── papers.jsonl            discover
 │   ├── discovery_stats.json    discover

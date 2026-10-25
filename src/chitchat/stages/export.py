@@ -134,10 +134,11 @@ def write_csv(path: Path, rows: list[dict[str, Any]], criteria: Criteria) -> Non
 
 
 def run_export(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
-    if not run.papers_sanitized.exists():
-        raise StageError(f"Missing {run.papers_sanitized}. Run the sanitize stage first.")
+    # A run can hold papers, your own documents, or both (documents only: no search).
+    if not run.papers_sanitized.exists() and not run.docs_sanitized.exists():
+        raise StageError(f"Nothing sanitized yet in {run.root}. Run the sanitize stage first.")
     criteria = load_criteria(cfg.screening.criteria)
-    papers = list(read_jsonl(run.papers_sanitized))
+    papers = list(read_jsonl(run.papers_sanitized)) if run.papers_sanitized.exists() else []
     docs = list(read_jsonl(run.docs_sanitized)) if run.docs_sanitized.exists() else []
     screening = ScreeningStore(run.screening).latest()
     labels = {pid: (r.get("decision") or {}).get("label") for pid, r in screening.items()}

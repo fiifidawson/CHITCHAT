@@ -56,16 +56,23 @@ def _load_discovery_config(cfg: PipelineConfig, run: RunDir) -> Any:
     return disc
 
 
-def _build_queries(disc: Any) -> list[dict[str, str]]:
-    """The boolean query per category, as mmore builds it. Offline."""
+def _build_queries(disc: Any) -> list[dict[str, Any]]:
+    """The boolean query per category, as mmore builds it, with the concepts it combines."""
     import yaml
     from mmore.paper_discovery.boolean import build_boolean_queries, load_synonyms
 
     synonyms = load_synonyms(disc.synonyms_path)
+    known = {e.word.lower(): e.word for e in synonyms}
     with open(disc.categories_path, encoding="utf-8") as f:
         categories = yaml.safe_load(f)["categories"]
     return [
-        {"category": q.combination_title, "query": q.boolean_combination}
+        {
+            "category": q.combination_title,
+            "concepts": [
+                known[w.lower()] for w in categories[q.combination_title] if w.lower() in known
+            ],
+            "query": q.boolean_combination,
+        }
         for q in build_boolean_queries(synonyms, categories)
     ]
 
@@ -109,6 +116,7 @@ def run_queries(cfg: PipelineConfig, run: RunDir) -> list[dict[str, str]]:
 
     limit = OPENALEX_MAX_CHARS if "openalex" in disc.sources else None
     ui.console.print(ui.queries_table(queries, limit))
+    ui.note(f"Each query will be sent to {ui.source_names(list(disc.sources))}.")
     _warn_long_queries(queries, disc.sources)
     ui.note(f"Saved to {ui.shorten_path(run.queries)}")
     return queries

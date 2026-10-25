@@ -64,6 +64,12 @@ def test_shadowed_keys(tmp_path: Path) -> None:
     assert shadowed_keys(environ, tmp_path / "missing.env") == []
 
 
+def test_milvus_lite_on_windows_hint() -> None:
+    error = milvus_error("C:/runs/x/milvus.db", RuntimeError("milvus-lite is required"))
+    assert "doesn't run on Windows" in str(error) and "http://127.0.0.1:19530" in str(error)
+    assert "pip install" not in str(error)
+
+
 def test_milvus_error_hint() -> None:
     class MilvusException(Exception):
         message = "Fail connecting to server on 127.0.0.1:19530"

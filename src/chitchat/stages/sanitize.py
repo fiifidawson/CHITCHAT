@@ -227,7 +227,10 @@ def run_sanitize(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
         write_jsonl(run.papers_sanitized, clean)
         report[PAPERS] = _totals([p["privacy"] for p in clean])
     else:
-        ui.note(f"No papers yet ({ui.shorten_path(run.papers_raw)}). Run discover first.")
+        if run.docs_raw.exists():
+            ui.note("No papers in this run: only your own documents are sanitized.")
+        else:
+            ui.note(f"No papers yet ({ui.shorten_path(run.papers_raw)}). Run discover first.")
 
     if run.docs_raw.exists():
         docs = list(read_jsonl(run.docs_raw))

@@ -7,6 +7,7 @@ because mmore RAG passes only the chunk text and file_path to the answer LLM.
 from __future__ import annotations
 
 import logging
+import sys
 from typing import Any
 
 from chitchat.config import PipelineConfig
@@ -78,9 +79,20 @@ def _chunk(items: list[dict[str, Any]], run: RunDir) -> list[Any]:
     return chunks
 
 
+def milvus_db_name(uri: str, db_name: str) -> str:
+    """Milvus Lite (a local file) has only the default database."""
+    return db_name if "://" in uri else "default"
+
+
 def milvus_error(uri: str, error: Exception) -> StageError:
     """A clear message for Milvus problems."""
     message = getattr(error, "message", None) or str(error)
+    if "milvus-lite" in message.lower() or ("://" not in uri and sys.platform == "win32"):
+        return StageError(
+            f"Milvus at {uri}: this is a Milvus Lite file, and Milvus Lite doesn't run on "
+            "Windows. Set `index.db_uri: http://127.0.0.1:19530` in your config and start "
+            "Milvus in Docker (see README)."
+        )
     hint = ""
     if "connect" in message.lower() or "unavailable" in message.lower():
         hint = " Is Milvus running? On Windows, start it with `docker compose up -d` (see README)."
@@ -128,12 +140,12 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
         {
             "dense_model": {"model_name": ix.dense_model, "is_multimodal": False},
             "sparse_model": {"model_name": ix.sparse_model, "is_multimodal": False},
-            "db": {"uri": ix.db_uri, "name": ix.db_name},
+            "db": {"uri": ix.db_uri, "name": milvus_db_name(ix.db_uri, ix.db_name)},
         },
         IndexerConfig,
     )
     try:
-        _reset_collection(ix.db_uri, ix.db_name, ix.collection)
+        _reset_collection(ix.db_uri, milvus_db_name(ix.db_uri, ix.db_name), ix.collection)
         Indexer.from_documents(
             config=indexer_config, documents=chunks, collection_name=ix.collection
         )
@@ -146,7 +158,7 @@ def run_index(cfg: PipelineConfig, run: RunDir) -> int:
         [
             ("Papers", len(items) - n_docs, f"labelled {', '.join(ix.include_labels)}"),
             ("Own documents", n_docs, ""),
-            ("Chunks", len(chunks), "each starts with its [P0001] tag"),
+            ("Chunks", len(chunks), "each starts with its [P0001] or [D0001] tag"),
             ("Collection", "", f"{ix.collection} at {ix.db_uri}"),
         ],
         footer='Next: chitchat ask "your question"',

@@ -159,3 +159,29 @@ def test_needs_sanitized_papers(tmp_path: Path) -> None:
     cfg = SimpleNamespace(screening=SimpleNamespace(criteria=CRITERIA_PATH))
     with pytest.raises(StageError, match="sanitize"):
         run_export(cfg, RunDir(tmp_path))
+
+
+def test_documents_only_run(tmp_path: Path) -> None:
+    """No paper search: own documents still get tags, a dataset and a PRISMA report."""
+    rd = RunDir(tmp_path)
+    write_jsonl(
+        rd.docs_sanitized,
+        [
+            {
+                "doc_id": "doc:b",
+                "text": "Notes by [PERSON_1].",
+                "metadata": {"file_path": "/x/notes.md"},
+            },
+            {"doc_id": "doc:a", "text": "Policy.", "metadata": {"file_path": "/x/policy.pdf"}},
+        ],
+    )
+    cfg = SimpleNamespace(screening=SimpleNamespace(criteria=CRITERIA_PATH))
+    p = run_export(cfg, rd)
+    assert p["records_after_dedupe"] == 0 and p["own_documents_added"] == 2
+    assert check_totals(p) == []
+    sources = read_json(rd.sources)
+    assert {t: s["title"] for t, s in sources.items()} == {
+        "D0001": "policy.pdf",
+        "D0002": "notes.md",
+    }
+    assert list(read_jsonl(rd.dataset_jsonl)) == []

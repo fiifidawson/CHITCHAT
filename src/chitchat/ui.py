@@ -11,6 +11,7 @@ import re
 from collections import Counter
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -29,7 +30,8 @@ from rich.progress import (
 from rich.table import Table
 from rich.text import Text
 
-console = Console(stderr=True, highlight=False)  # progress, logs, stage summaries
+# Progress, logs and stage summaries. `record=True` keeps a copy for the run's log file.
+console = Console(stderr=True, highlight=False, record=True)
 out = Console(highlight=False)  # results you may want to pipe or save: answers, status
 
 ACCENT = "#f7cb46"  # mmore yellow, so our output matches its progress bars
@@ -75,10 +77,20 @@ class ConsoleLogHandler(logging.Handler):
 
 
 def stage_header(name: str, position: int, total: int) -> None:
+    """A yellow rule with the stage, its place in the run and the clock time it starts."""
+    started = datetime.now().strftime("%H:%M:%S")
     console.print()
     console.rule(
-        Text(f" {name} · {position}/{total} ", style=f"bold {ACCENT}"), style=ACCENT, align="left"
+        Text(f" {name} · {position}/{total} · started {started} ", style=f"bold {ACCENT}"),
+        style=ACCENT,
+        align="left",
     )
+
+
+def stage_finished(name: str, seconds: float) -> None:
+    from chitchat.timing import format_duration
+
+    console.print(Text(f"{name} finished in {format_duration(seconds)}", style="dim"))
 
 
 def note(message: str) -> None:
@@ -99,8 +111,10 @@ def facts(rows: list[Fact]) -> Table:
     return table
 
 
-def boxed(title: str, body: RenderableType, footer: str | list[str] = "") -> Panel:
-    """A yellow box, with the title on the top border and dim footer lines."""
+def boxed(
+    title: str, body: RenderableType, footer: str | list[str] = "", colour: str = ACCENT
+) -> Panel:
+    """A box (yellow by default), with the title on the top border and dim footer lines."""
     parts: list[Any] = [body]
     lines = [footer] if isinstance(footer, str) else footer
     if any(lines):
@@ -108,9 +122,9 @@ def boxed(title: str, body: RenderableType, footer: str | list[str] = "") -> Pan
         parts += [Text(line, style="dim") for line in lines if line]
     return Panel(
         Group(*parts),
-        title=Text(f" {title} ", style=f"bold {ACCENT}"),
+        title=Text(f" {title} ", style=f"bold {colour}"),
         title_align="left",
-        border_style=ACCENT,
+        border_style=colour,
         box=box.ROUNDED,
         padding=(0, 1),
         expand=False,
@@ -161,7 +175,7 @@ def shorten_path(path: Path | str) -> str:
 # --- Queries ---------------------------------------------------------------------------
 
 
-def queries_table(queries: list[dict[str, str]], openalex_limit: int | None) -> Table:
+def queries_table(queries: list[dict[str, Any]], openalex_limit: int | None) -> Table:
     """One row per category. With `openalex_limit`, flags queries OpenAlex will reject."""
     table = Table(
         title=Text("Boolean queries", style=f"bold {ACCENT}"),
@@ -170,15 +184,21 @@ def queries_table(queries: list[dict[str, str]], openalex_limit: int | None) -> 
         border_style=ACCENT,
         header_style="bold",
     )
+    with_concepts = any(q.get("concepts") for q in queries)
     table.add_column("#", justify="right", style="dim")
-    table.add_column("Category")
+    table.add_column("Category", style="bold")
+    if with_concepts:
+        table.add_column("Concepts (all must match)", overflow="fold")
     table.add_column("AND groups", justify="right")
     table.add_column("Characters", justify="right")
     if openalex_limit:
         table.add_column("OpenAlex")
     for n, q in enumerate(queries, 1):
         length = len(q["query"])
-        row = [str(n), q["category"], str(q["query"].count(" AND ") + 1), f"{length:,}"]
+        row = [str(n), q["category"]]
+        if with_concepts:
+            row.append(" AND ".join(q.get("concepts") or []))
+        row += [str(q["query"].count(" AND ") + 1), f"{length:,}"]
         if openalex_limit:
             row.append("[green]ok[/]" if length <= openalex_limit else "[red]too long[/]")
         table.add_row(*row)
@@ -291,25 +311,191 @@ def print_summary(records: list[dict[str, Any]], reused: int, title: str, footer
 # --- Status ----------------------------------------------------------------------------
 
 
-def status_table(rows: list[tuple[str, str | None, str]], run_root: Path) -> Table:
-    """`rows`: (stage, finished_at or None, what it produced)."""
-    table = Table(
-        title=Text(f"Run: {shorten_path(run_root)}", style=f"bold {ACCENT}"),
+def _table(title: str) -> Table:
+    return Table(
+        title=Text(title, style=f"bold {ACCENT}"),
         title_justify="left",
         box=box.ROUNDED,
         border_style=ACCENT,
         header_style="bold",
     )
+
+
+def status_table(
+    rows: list[tuple[str, str | None, str]],
+    run_root: Path,
+    durations: dict[str, float] | None = None,
+) -> Table:
+    """`rows`: (stage, finished_at or None, what it produced). `durations`: from the last run."""
+    from chitchat.timing import format_duration
+
+    durations = durations or {}
+    table = _table(f"Run: {shorten_path(run_root)}")
     table.add_column("Stage")
     table.add_column("", justify="center")
     table.add_column("Finished (UTC)", style="dim")
+    table.add_column("Took", justify="right", style="dim")
     table.add_column("Output", overflow="fold")
     for stage, finished, output in rows:
         done = bool(finished) or bool(output and stage == "ask")
         mark = Text("✓", style="bold green") if done else Text("–", style="dim")
         when = finished[:16].replace("T", " ") if finished else ""
-        table.add_row(Text(stage, style="" if done else "dim"), mark, when, output)
+        took = format_duration(durations[stage]) if stage in durations else ""
+        table.add_row(Text(stage, style="" if done else "dim"), mark, when, took, output)
     return table
+
+
+OUTCOME_STYLES = {"done": "bold green", "failed": "bold red", "interrupted": ACCENT}
+
+
+def history_table(runs: list[dict[str, Any]]) -> Table:
+    """The most recent runs from history.jsonl, newest first."""
+    from chitchat.timing import format_duration
+
+    table = _table("Recent runs")
+    table.add_column("Run id")
+    table.add_column("Command")
+    table.add_column("Outcome")
+    table.add_column("Stages", overflow="fold")
+    table.add_column("Took", justify="right")
+    for r in runs:
+        stages = ", ".join(s["name"] for s in r.get("stages", [])) or "-"
+        outcome = r.get("outcome") or "?"
+        table.add_row(
+            r["run_id"],
+            r.get("command", ""),
+            Text(outcome, style=OUTCOME_STYLES.get(outcome, "")),
+            stages,
+            format_duration(r.get("seconds", 0)),
+        )
+    return table
+
+
+def run_box(recorder: Any, footer: str | list[str] = "") -> Panel:
+    """Done / Failed / Interrupted, with each stage's duration and where the log is."""
+    from chitchat.timing import format_duration
+
+    outcome = recorder.outcome or ("failed" if recorder.error else "done")
+    colour = {"failed": "red", "interrupted": ACCENT}.get(outcome, ACCENT)
+    marks = {
+        "done": ("✓", "green"),
+        "failed": ("✗", "red"),
+        "interrupted": ("■", ACCENT),
+    }
+    table = Table.grid(padding=(0, 2))
+    table.add_column()
+    table.add_column(justify="right", style="dim")
+    table.add_column(style="dim", overflow="fold")
+    for s in recorder.stages:
+        mark, style = marks.get(s["status"], ("?", ""))
+        table.add_row(
+            Text(f"{mark} {s['name']}", style=style),
+            format_duration(s["seconds"]),
+            s.get("error", "")[:160],
+        )
+    total = Text("Total", style="bold")
+    table.add_row(total, Text(format_duration(recorder.seconds), style="bold"), "")
+    lines = [
+        f"Run id {recorder.run_id} · log: {shorten_path(recorder.log_path)}",
+        *([footer] if isinstance(footer, str) else footer),
+    ]
+    return boxed(outcome.capitalize(), table, lines, colour=colour)
+
+
+# --- Search planning ---------------------------------------------------------------------
+
+
+SOURCE_NAMES = {
+    "openalex": "OpenAlex",
+    "europepmc": "Europe PMC",
+    "arxiv": "arXiv",
+    "google_scholar": "Google Scholar",
+}
+
+
+def source_names(sources: list[str]) -> str:
+    """`OpenAlex, Europe PMC and arXiv`."""
+    names = [SOURCE_NAMES.get(s, s) for s in sources]
+    return names[0] if len(names) == 1 else ", ".join(names[:-1]) + " and " + names[-1]
+
+
+# One colour per concept, kept across categories, so a shared concept is easy to spot.
+CONCEPT_COLOURS = ("#5fd7ff", "#ff79c6", "#50fa7b", "#bd93f9", "#ffb86c", "#8be9fd", "#ff5555")
+
+
+def concept_colours(words: list[str]) -> dict[str, str]:
+    return {w: CONCEPT_COLOURS[i % len(CONCEPT_COLOURS)] for i, w in enumerate(words)}
+
+
+def category_box(
+    number: int,
+    name: str,
+    concepts: list[tuple[str, list[str]]],
+    characters: int,
+    limit: int | None,
+    colours: dict[str, str],
+) -> Panel:
+    """One category: its concepts joined by AND, each with the synonyms it also matches."""
+    grid = Table.grid(padding=(0, 2))
+    grid.add_column(no_wrap=True)
+    grid.add_column(overflow="fold")
+    for i, (word, synonyms) in enumerate(concepts):
+        if i:
+            grid.add_row(Text("AND", style="bold dim"), "")
+        also = Text("or: ", style="dim")
+        also.append(", ".join(synonyms) if synonyms else "(no synonyms)", style="dim")
+        grid.add_row(Text(word, style=f"bold {colours.get(word, '')}"), also)
+    fits = limit is None or characters <= limit
+    status = Text(f" {characters:,} characters", style="dim")
+    if limit is not None:
+        status.append(" · OpenAlex ", style="dim")
+        status.append("ok" if fits else "too long", style="green" if fits else "bold red")
+    status.append(" ")
+    return Panel(
+        grid,
+        title=Text(f" Category {number} · {name} ", style=f"bold {ACCENT}"),
+        title_align="left",
+        subtitle=status,
+        subtitle_align="right",
+        border_style=ACCENT,
+        box=box.ROUNDED,
+        padding=(0, 1),
+        expand=True,
+    )
+
+
+def draft_view(
+    categories: list[tuple[str, list[tuple[str, list[str]]], int]],
+    limit: int | None,
+    sources: list[str] | None = None,
+) -> Group:
+    """A short overview line, then one box per category.
+
+    `limit` is OpenAlex's query length limit, or None when OpenAlex isn't searched.
+    """
+    words = list(dict.fromkeys(w for _, concepts, _ in categories for w, _ in concepts))
+    colours = concept_colours(words)
+    overview = Text("Draft search: ", style="bold")
+    parts = [
+        f"{len(categories)} categor{'y' if len(categories) == 1 else 'ies'}",
+        f"{len(words)} concepts",
+    ]
+    if sources:
+        parts.append(f"searches {source_names(sources)}")
+    if limit is not None:
+        fits = sum(1 for _, _, chars in categories if chars <= limit)
+        parts.append(f"{fits}/{len(categories)} fit OpenAlex")
+    overview.append(" · ".join(parts), style="dim")
+    hint = Text(
+        "A paper must match every concept in a category (AND), "
+        "using the concept or any of its synonyms (OR).",
+        style="dim",
+    )
+    boxes = [
+        category_box(n, name, concepts, chars, limit, colours)
+        for n, (name, concepts, chars) in enumerate(categories, 1)
+    ]
+    return Group(overview, hint, *boxes)
 
 
 # --- Ask ---------------------------------------------------------------------------------

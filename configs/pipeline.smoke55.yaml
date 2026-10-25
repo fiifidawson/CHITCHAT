@@ -29,7 +29,7 @@ screening:
   max_concurrency: 4
 
 index:
-  db_uri: http://127.0.0.1:19530         # Milvus in Docker. Linux/macOS can use ../runs/{run_name}/milvus.db
+  db_uri: auto                         # Windows: Milvus in Docker (127.0.0.1:19530). macOS/Linux: a milvus.db file in the run folder
   db_name: review
   collection: smoke55
 

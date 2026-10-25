@@ -2,182 +2,121 @@
 
 *ArCHitectures for Interpretable & Transparent Continuous Humanitarian Alignment in chatbot Technologies*
 
-CHITCHAT is a literature-review pipeline built on [mmore](https://github.com/EPFLiGHT/mmore). It finds papers, adds your own documents, removes personal data, screens papers with an LLM, and lets you ask questions with cited answers.
+CHITCHAT is a literature-review pipeline built on [mmore](https://github.com/EPFLiGHT/mmore). You ask a research question. It:
+
+1. turns your question into a boolean search, which you check and refine;
+2. finds papers in OpenAlex, Europe PMC and arXiv, and reads your own documents;
+3. masks personal data, on your machine, before anything is sent to an LLM;
+4. screens each paper against your criteria, with evidence quotes;
+5. writes a dataset and a PRISMA report;
+6. answers questions with cited sources, like `[P0012]` for a paper or `[D0003]` for one of your documents.
 
 It is a research project of the LiGHT lab at EPFL, with the ICRC.
 
 > [!IMPORTANT]
-> Screening is an aid, not a final decision. Every answer comes with an evidence quote so a person can check it.
+> Screening is an aid, not a final decision. Every label comes with evidence quotes so a person can check it.
+
+## Documentation
+
+| Read this | When you want to |
+|---|---|
+| [docs/SETUP.md](docs/SETUP.md) | Install everything, step by step, on Windows or macOS |
+| [examples/README.md](examples/README.md) | Try three end-to-end examples, from 3 minutes to 45 minutes |
+| [docs/COMMANDS.md](docs/COMMANDS.md) | Look up a command |
+| [docs/PIPELINE.md](docs/PIPELINE.md) | Understand what each stage does, skips and reuses |
+| [docs/USE_CASES.md](docs/USE_CASES.md) | See what the pipeline is for, with fictional sample documents |
+| [docs/WEB_APP_BRIEF.md](docs/WEB_APP_BRIEF.md) | Plan a secure web version: the workflow, the data and the security rules |
+
+## Quick start
+
+After [setup](docs/SETUP.md):
+
+```bash
+uv run chitchat search "How do humanitarian organisations obtain informed consent when collecting data to train LLMs?"
+```
+
+1. **Clarifying questions.** Answer a few questions about scope. Press Enter to skip one.
+2. **Your search.** You see the drafted search, one box per category:
+
+   ```
+   ╭─ Category 2 · Consent for LLM training data ─────────────────────────────╮
+   │ informed consent       or: data permission, opt-in consent, user consent │
+   │ AND                                                                      │
+   │ large language models  or: LLMs, language models, generative AI          │
+   │ AND                                                                      │
+   │ data collection        or: data gathering, data acquisition              │
+   ╰─────────────────────────────────────────── 274 characters · OpenAlex ok ─╯
+   ```
+
+   A paper must match every concept in a category (`AND`), through the concept or any of its synonyms (`or:`).
+3. **Your decision.** Type `a` to accept, `c` to ask for changes in plain words (for example "add a category on community participation"), or `q` to quit. Ask for changes as often as you like.
+4. **The run.** It runs in a new folder in `runs/`. Then ask questions:
+
+```bash
+uv run chitchat ask -c runs/<folder>/pipeline.yaml "What consent practices do the papers describe?"
+```
+
+## Two search modes
+
+| | Shallow: quick scan | Deep: systematic search (default) |
+|---|---|---|
+| Use it for | A fast look at what exists | A thorough search for a review |
+| Clarifying questions | none | 4, before drafting |
+| Categories | 1 to 3 | 3 to 6 |
+| Concepts per category | 2 to 4 | 2 to 4 |
+| Results | 10 per source | 25 per source, 2 pages |
+| Full text | no: screens abstracts, so it takes minutes | yes: downloads PDFs |
+
+Choose with `--mode shallow` or `--mode deep`. The fixed search from the earlier project is still available with `--predefined`.
 
 ## The pipeline
 
-| # | Stage | What it does | Output in `runs/<run>/` |
+| # | Stage | What it does | Main output in `runs/<folder>/` |
 |---|---|---|---|
-| 1 | `queries` | Builds the boolean search from the synonyms and categories. Offline. | `queries.json` |
-| 2 | `discover` | Searches OpenAlex, Europe PMC and arXiv, and downloads PDFs | `raw/papers.jsonl`, `raw/discovery_stats.json` |
-| 3 | `ingest` | Reads your own documents from `my_docs/` | `raw/docs.jsonl` |
-| 4 | `sanitize` | Masks personal data. No LLM. | `papers.sanitized.jsonl`, `docs.sanitized.jsonl`, `privacy_report.json` |
-| 5 | `screen` | An LLM answers your criteria. Rules decide the label. | `screening.jsonl` |
-| 6 | `export` | Dataset, source tags and PRISMA report | `dataset.jsonl`, `dataset.csv`, `sources.json`, `prisma.md` |
-| 7 | `index` | Chunks and indexes included papers and own documents | Milvus collection |
-| – | `ask` | Answers a question with `[P0001]` citations | `answers.jsonl` |
+| 1 | `queries` | Builds the boolean queries. Offline | `queries.json` |
+| 2 | `discover` | Searches OpenAlex, Europe PMC and arXiv, downloads PDFs | `raw/papers.jsonl` |
+| 3 | `ingest` | Reads your own documents (PDF, Word, Excel, email, web pages, text) | `raw/docs.jsonl` |
+| 4 | `sanitize` | Masks names, emails, phone numbers and more. No LLM | `papers.sanitized.jsonl`, `privacy_report.json` |
+| 5 | `screen` | An LLM answers your criteria. Fixed rules decide the label | `screening.jsonl` |
+| 6 | `export` | Dataset and PRISMA report | `dataset.csv`, `prisma.md` |
+| 7 | `index` | Puts included papers and your documents into a search index | a Milvus collection |
+| – | `ask` | Answers a question with citations | `answers.jsonl` |
 
-The search terms and screening criteria come from the earlier version of this project, kept in [legacy/](legacy/).
-
-## Install
-
-You need Python 3.11+ and [uv](https://docs.astral.sh/uv/).
-
-```bash
-git clone https://github.com/fiifidawson/CHITCHAT.git
-cd CHITCHAT
-uv sync                                           # slow network? UV_HTTP_TIMEOUT=300 uv sync
-uv run python -m spacy download en_core_web_lg    # needed by the sanitize stage
-cp .env.example .env                              # then add OPENAI_API_KEY
-```
-
-A key already set in your shell or Windows environment wins over `.env`. `chitchat` warns you when the two differ.
-
-### Milvus (for `index` and `ask`)
-
-- **Linux and macOS:** nothing to install. Use a file, e.g. `db_uri: runs/{run_name}/milvus.db` (Milvus Lite).
-- **Windows:** Milvus Lite has no Windows build. Run Milvus in Docker. Start Docker Desktop first, then in PowerShell:
-
-```powershell
-mkdir $HOME\milvus; cd $HOME\milvus      # outside the repo: Milvus keeps its data here
-curl.exe -L https://github.com/milvus-io/milvus/releases/download/v2.6.25/milvus-standalone-docker-compose.yml -o docker-compose.yml
-docker compose up -d
-docker compose ps                         # wait until milvus-standalone is "healthy"
-```
-
-- Use `curl.exe`, not `curl`: in PowerShell, `curl` is `Invoke-WebRequest` and rejects `-L`.
-- Use v2.6.24 or later. Older compose files use a MinIO image that is no longer on Docker Hub.
-- Set `db_uri: http://127.0.0.1:19530` in your pipeline file. The smoke config already does.
-- The `index` stage creates the database (`db_name`) if needed and rebuilds the collection on each run.
-- Stop Milvus with `docker compose down`, run from that same folder.
-
-The first `index` and `ask` download embedding models from Hugging Face (about 1 GB).
-
-All commands on one page: [docs/COMMANDS.md](docs/COMMANDS.md). What each stage does, skips and reuses: [docs/PIPELINE.md](docs/PIPELINE.md).
-
-## Step by step: smoke test
-
-The smoke config searches 2 categories with 3 results per source, so up to 18 papers. Outputs go to `runs/smoke/`. Run the steps one at a time and look at each output.
-
-```bash
-# 1. Boolean queries (offline). Check the AND/OR groups.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages queries
-#    -> runs/smoke/queries.json
-
-# 2. Search the sources and download PDFs. Takes a few minutes.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages discover
-#    -> runs/smoke/raw/papers.jsonl, raw/discovery_stats.json, raw/papers_failed_pdfs.csv
-
-# 3. Optional: your own documents. Put files in my_docs/ first.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages ingest
-#    -> runs/smoke/raw/docs.jsonl
-
-# 4. Privacy: mask names, emails and phone numbers. No LLM, nothing leaves your machine.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages sanitize
-#    -> runs/smoke/papers.sanitized.jsonl, privacy_report.json
-
-# 5. AI screening. Needs OPENAI_API_KEY. Only sanitized text is sent.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
-#    -> runs/smoke/screening.jsonl
-
-# 6. Dataset and PRISMA report. Open dataset.csv in Excel.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages export
-#    -> runs/smoke/dataset.csv, dataset.jsonl, sources.json, prisma.md
-
-# 7. Index included papers in Milvus (start Milvus first, see Install)
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages index
-
-# 8. Ask a question. Answers cite [P0001] tags and list their sources.
-uv run chitchat ask -c configs/pipeline.smoke.yaml "What consent practices do the papers describe?"
-uv run chitchat ask -c configs/pipeline.smoke.yaml --no-privacy "..."   # skip privacy mode
-uv run chitchat ask -c configs/pipeline.smoke.yaml --review "..."       # check the context yourself first
-#    -> answers are logged in runs/smoke/answers.jsonl
-
-# Any time: what has each stage produced?
-uv run chitchat status -c configs/pipeline.smoke.yaml
-```
-
-Privacy mode can mistake a product or project name for a person and mask it in your question. `ask` then shows the question it actually sent. Rephrase it ("the MoodSmith system") or use `--no-privacy`.
-
-Or run them all at once:
-
-```bash
-uv run chitchat run -c configs/pipeline.smoke.yaml
-```
-
-Useful after screening:
-
-```bash
-# Rerun screen: finished papers are reused. Refused, invalid and failed ones are retried.
-uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
-
-# Changed only the `decision` rules? Recompute labels with no LLM calls, then rebuild the report.
-uv run chitchat run -c configs/pipeline.smoke.yaml --redecide
-uv run chitchat report -c configs/pipeline.smoke.yaml
-```
-
-Changing a question in the criteria file changes its hash, so the next `screen` asks the LLM again.
-
-For about 20 or 30 papers, use `configs/pipeline.smoke20.yaml` or `configs/pipeline.smoke30.yaml` with the same commands. For about 55 papers with the full boolean search, use `configs/pipeline.smoke55.yaml`. Outputs go to `runs/smoke20/` or `runs/smoke30/`.
-
-## Full run
-
-```bash
-cp configs/pipeline.example.yaml pipeline.yaml    # edit it if needed
-uv run chitchat run                               # all stages, all 8 categories
-uv run chitchat status
-uv run chitchat ask "your question"
-```
-
-Papers that could not be downloaded are listed in `runs/<run>/raw/papers_failed_pdfs.csv`. Save a PDF at its `save_as` path and rerun `discover` to pick it up.
+Every run records its stages, durations and outcome in `history.jsonl`, and its full output in `logs/`. `chitchat status` shows both.
 
 ## Configuration
 
 | File | What it sets |
 |---|---|
-| `pipeline.yaml` | One run: which configs to use, the screening model, the index |
-| `configs/discovery/synonyms.jsonl` | Search words and their synonyms |
-| `configs/discovery/categories.yaml` | Which words are combined in each search |
-| `configs/discovery/discovery.yaml` | Sources, result limits, PDF download |
+| `runs/<folder>/pipeline.yaml` | One run: written by `chitchat search` from your template |
+| `pipeline.yaml` (your template) | Models, privacy, screening and index settings. Copy it from `configs/pipeline.example.yaml` |
 | `configs/criteria.example.yaml` | Screening questions and decision rules |
-| `configs/sanitize.yaml` | Which personal data is masked |
+| `configs/sanitize.yaml` | Which personal data is masked, for papers and for your documents |
 | `configs/rag_privacy.yaml` | Privacy checks when answering questions |
+| `configs/discovery/` | The predefined search (`--predefined`): synonyms, categories, sources |
 
 ## Privacy
 
-- Raw text stays in `runs/<run>/raw/`. Do not share that folder.
-- Everything else holds sanitized text only.
-- Papers and own documents use different entity lists. Papers keep places and dates, which are research content.
-- Authors cited in a paper's references are masked too. This is expected.
-- Masking lowers risk but does not guarantee anonymity.
+- Your question, your answers and your change requests are checked for personal data on your machine before they reach an LLM.
+- Raw text stays in `runs/<folder>/raw/`. Do not share that folder. Everything else holds masked text only.
+- Your own documents are always masked, with a broader list than papers (papers keep places and dates, which are research content).
+- Masking lowers risk but does not guarantee anonymity. See [docs/USE_CASES.md](docs/USE_CASES.md) for what it misses.
 
 ## Known limits
 
-- **PDFs:** publishers refuse many downloads, even with a subscription. Use the manual-download list from `discover`.
-- **Masking:** it lowers risk but does not guarantee anonymity. Indirect identifiers can remain. The leakage check in `configs/rag_privacy.yaml` looks for this, but it is off by default because it costs extra LLM calls.
-- **Screening:** it is an aid, not a final decision. Check the evidence quotes. Screenings from an abstract alone are weaker.
-- **Costs:** screening makes one LLM call per paper, plus one more for extraction on papers that are not excluded. Each question costs one answer call. The leakage check adds 5 or more calls per question when on.
-- **Windows:** Milvus needs Docker.
+- **Screening criteria** are written for humanitarian AI data ethics. A search on another topic still uses them: edit `configs/criteria.example.yaml` to change them.
+- **PDFs:** publishers refuse many downloads. Missing ones are listed in `raw/papers_failed_pdfs.csv`, where you can add them by hand.
+- **OpenAlex** rejects queries over 1,500 characters. Searches from `chitchat search` are fitted automatically. The predefined search is too long for it.
+- **Costs:** one LLM call per paper to screen it, one more for papers that are not excluded, and one per question. A small run costs cents.
+- **Windows:** the search index needs Docker. macOS and Linux don't.
 
 ## Development
 
 ```bash
 uv run ruff check .
 uv run ruff format --check .
-uv run pytest
-```
-
-These tests need no network, models or API keys.
-
-A tiny real run (arXiv, 3 papers) is marked `slow` and skipped by default. It uses your API key and Milvus when they are available:
-
-```bash
-uv run pytest -m slow
+uv run pytest            # no network, models or API keys
+uv run pytest -m slow    # a tiny real run, using your API key and Milvus
 ```
 
 ## Main authors

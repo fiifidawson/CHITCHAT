@@ -59,3 +59,20 @@ def status_rows(run: RunDir, stages: list[str]) -> list[tuple[str, str | None, s
     """(stage, finished_at or None, what it produced) for each stage, then `ask`."""
     details = stage_details(run)
     return [(stage, run.done_at(stage), details.get(stage, "")) for stage in [*stages, "ask"]]
+
+
+def last_runs(run: RunDir, n: int = 5) -> list[dict]:
+    """The `n` most recent runs from history.jsonl, newest first."""
+    if not run.history.exists():
+        return []
+    return list(read_jsonl(run.history))[-n:][::-1]
+
+
+def stage_durations(run: RunDir) -> dict[str, float]:
+    """How long each stage took the last time it finished."""
+    durations: dict[str, float] = {}
+    for record in last_runs(run, n=10_000)[::-1]:  # oldest first, so newer runs win
+        for stage in record.get("stages", []):
+            if stage.get("status") == "done":
+                durations[stage["name"]] = stage["seconds"]
+    return durations
