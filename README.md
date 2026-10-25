@@ -25,6 +25,7 @@ It is a research project of the LiGHT lab at EPFL, with the ICRC.
 | [docs/COMMANDS.md](docs/COMMANDS.md) | Look up a command |
 | [docs/PIPELINE.md](docs/PIPELINE.md) | Understand what each stage does, skips and reuses |
 | [docs/USE_CASES.md](docs/USE_CASES.md) | See what the pipeline is for, with fictional sample documents |
+| [docs/WEB_APP_BRIEF.md](docs/WEB_APP_BRIEF.md) | Plan a secure web version: the workflow, the data and the security rules |
 
 ## Quick start
 
