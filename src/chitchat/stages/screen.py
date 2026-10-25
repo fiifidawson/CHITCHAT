@@ -10,7 +10,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from chitchat.config import PipelineConfig, ScreeningSettings, shadowed_keys
+from chitchat.config import LLMSettings, PipelineConfig, ScreeningSettings, shadowed_keys
 from chitchat.ids import paper_id
 from chitchat.jsonl import read_jsonl
 from chitchat.run_dir import RunDir
@@ -44,15 +44,19 @@ class Screener:
         chat_model: Any,
         provider: str,
         sanitized: bool,
+        llm: LLMSettings | None = None,
     ) -> None:
+        model = llm or settings.llm
+        assert model is not None, "pass the model, or set screening.llm"
         self.criteria = criteria
         self.settings = settings
-        self.model = settings.llm.llm_name
+        self.model = model.llm_name
         self.provider = provider
         self.sanitized = sanitized
-        self.screen_call = StructuredCaller(chat_model, screening_model(criteria))
+        method = model.structured_output
+        self.screen_call = StructuredCaller(chat_model, screening_model(criteria), method)
         schema = extraction_model(criteria)
-        self.extract_call = StructuredCaller(chat_model, schema) if schema else None
+        self.extract_call = StructuredCaller(chat_model, schema, method) if schema else None
         self.fixed = prompt.fixed_part(criteria)
         self.extract_fixed = prompt.extract_fixed_part(criteria)
 
@@ -172,7 +176,7 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
 
     papers = list(read_jsonl(source))
     store = ScreeningStore(run.screening)
-    model = cfg.screening.llm.llm_name
+    model = cfg.screening_llm.llm_name
     done = store.done_ids(criteria.hash, model)
     todo = [p for p in papers if (p.get("paper_id") or paper_id(p)) not in done]
     reused = len(papers) - len(todo)
@@ -186,8 +190,10 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
     if not todo:
         return counts
 
-    chat_model, provider = build_chat_model(cfg.screening.llm)
-    screener = Screener(criteria, cfg.screening, chat_model, provider, sanitized)
+    chat_model, provider = build_chat_model(cfg.screening_llm)
+    screener = Screener(
+        criteria, cfg.screening, chat_model, provider, sanitized, llm=cfg.screening_llm
+    )
     records: list[dict] = []
     with (
         ThreadPoolExecutor(max_workers=cfg.screening.max_concurrency) as pool,

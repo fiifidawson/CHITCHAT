@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Any, Literal
 
 import yaml
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
 Label = Literal["EXCLUDE", "LOW", "MEDIUM", "HIGH"]
 LABELS: tuple[str, ...] = ("EXCLUDE", "LOW", "MEDIUM", "HIGH")
@@ -25,17 +25,29 @@ class _Model(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
 
+StructuredOutput = Literal["json_schema", "json_mode", "function_calling"]
+
+
 class LLMSettings(_Model):
-    """Passed to mmore's LLMConfig."""
+    """A model. Passed to mmore's LLMConfig.
+
+    Local open models: set `base_url`
+    (Ollama: http://localhost:11434/v1, vLLM: http://host:8000/v1).
+    Hosted OpenAI-compatible providers: also set `provider`;
+    the key is read from <PROVIDER>_API_KEY.
+    """
 
     llm_name: str
     provider: str | None = None
     base_url: str | None = None
     temperature: float = 0
     max_new_tokens: int | None = None
+    # How structured answers are requested. Try json_mode or function_calling if a server
+    # rejects json_schema. Not passed to mmore.
+    structured_output: StructuredOutput = "json_schema"
 
     def to_mmore(self) -> dict[str, Any]:
-        return self.model_dump(exclude_none=True)
+        return self.model_dump(exclude_none=True, exclude={"structured_output"})
 
 
 class DiscoverySettings(_Model):
@@ -63,7 +75,7 @@ class PrivacySettings(_Model):
 
 class ScreeningSettings(_Model):
     criteria: Path
-    llm: LLMSettings
+    llm: LLMSettings | None = None  # defaults to the top-level llm
     min_year: int | None = None
     min_chars: int = Field(500, ge=0)
     max_chars: int = Field(60_000, gt=0)
@@ -87,7 +99,7 @@ class IndexSettings(_Model):
 
 
 class AskSettings(_Model):
-    llm: LLMSettings | None = None  # defaults to screening.llm
+    llm: LLMSettings | None = None  # defaults to the top-level llm
     k: int = Field(6, ge=1)
     reranker: str | None = "BAAI/bge-reranker-base"
 
@@ -135,7 +147,7 @@ class SearchPreset(_Model):
 
 class SearchSettings(_Model):
     mode: SearchMode = "deep"
-    llm: LLMSettings | None = None  # defaults to screening.llm
+    llm: LLMSettings | None = None  # defaults to the top-level llm
     deep: SearchPreset = Field(default_factory=lambda: SearchPreset(**DEFAULT_PRESETS["deep"]))
     shallow: SearchPreset = Field(
         default_factory=lambda: SearchPreset(**DEFAULT_PRESETS["shallow"])
@@ -153,28 +165,71 @@ class SearchSettings(_Model):
         return self.deep if mode == "deep" else self.shallow
 
 
+class AnswerSettings(_Model):
+    """The multi-agent loop that answers the original question at the end of a run."""
+
+    question: str | None = None  # used when the run has no search plan (e.g. --predefined)
+    llm: LLMSettings | None = None  # defaults to the top-level llm
+    max_rounds: int = Field(3, ge=1, le=6)
+    k_per_query: int = Field(6, ge=1)
+    max_evidence_chars: int = Field(24_000, gt=1000)
+
+
+class EvaluateSettings(_Model):
+    judge_llm: LLMSettings | None = None  # defaults to the top-level llm; another family is better
+    baseline_k: int = Field(10, ge=1)
+
+
 class PipelineConfig(_Model):
     run_name: str = Field(pattern=r"^[A-Za-z0-9._-]+$")
     runs_dir: Path = Path("runs")
     discovery: DiscoverySettings
     own_documents: OwnDocumentsSettings = OwnDocumentsSettings()
     privacy: PrivacySettings
+    # The one model every LLM step uses, unless a section sets its own `llm`.
+    llm: LLMSettings | None = None
     screening: ScreeningSettings
     index: IndexSettings = IndexSettings()
     ask: AskSettings = AskSettings()
     search: SearchSettings = SearchSettings()
+    answer: AnswerSettings = AnswerSettings()
+    evaluate: EvaluateSettings = EvaluateSettings()
+
+    @model_validator(mode="after")
+    def _needs_a_model(self) -> PipelineConfig:
+        if self.llm is None and self.screening.llm is None:
+            raise ValueError("set a model under `llm:` (see configs/models/ for examples)")
+        return self
 
     @property
     def run_root(self) -> Path:
         return self.runs_dir / self.run_name
 
     @property
+    def main_llm(self) -> LLMSettings:
+        llm = self.llm or self.screening.llm
+        assert llm is not None  # checked when the config loads
+        return llm
+
+    @property
+    def screening_llm(self) -> LLMSettings:
+        return self.screening.llm or self.main_llm
+
+    @property
     def ask_llm(self) -> LLMSettings:
-        return self.ask.llm or self.screening.llm
+        return self.ask.llm or self.main_llm
 
     @property
     def search_llm(self) -> LLMSettings:
-        return self.search.llm or self.screening.llm
+        return self.search.llm or self.main_llm
+
+    @property
+    def answer_llm(self) -> LLMSettings:
+        return self.answer.llm or self.main_llm
+
+    @property
+    def judge_llm(self) -> LLMSettings:
+        return self.evaluate.judge_llm or self.main_llm
 
 
 def _format_errors(path: Path, err: ValidationError) -> str:

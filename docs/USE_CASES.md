@@ -125,7 +125,7 @@ Look for:
 - With `--no-privacy`: no note and no privacy line.
 - With `--review`: a pause to approve the masked context before anything is sent.
 
-## 6. Changing the screening rules without paying again
+## 6. Changing the screening rules without new LLM calls
 
 You think the labels are too generous and want stricter rules.
 

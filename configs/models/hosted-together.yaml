@@ -1,0 +1,8 @@
+# Hosted open models on Together AI. Before sending real data, turn on zero data retention
+# and turn off training on your data in the account's privacy settings.
+# Set the key in .env:  TOGETHER_API_KEY=...
+llm:
+  llm_name: openai/gpt-oss-120b   # or another open model id from Together's model list
+  provider: together              # the key is read from TOGETHER_API_KEY
+  base_url: https://api.together.xyz/v1
+  temperature: 0

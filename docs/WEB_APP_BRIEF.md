@@ -1,10 +1,10 @@
 # CHITCHAT workflow: brief for a web app
 
-This brief describes what CHITCHAT does today, as a command-line pipeline, so it can be rebuilt as a secure web app. It covers the workflow, the data, and the security rules the web app must keep. For full detail see [PIPELINE.md](PIPELINE.md).
+This brief describes what CHITCHAT does today, as a command-line pipeline, so it can be rebuilt as a secure web app. It covers the workflow, the data, and the security rules the web app must keep. For full detail see [PIPELINE.md](PIPELINE.md). The technical reference for building it (services, the agent loop, the decision-brief screens, the API) is [WEB_APP_REFERENCE.md](WEB_APP_REFERENCE.md).
 
 ## What it does
 
-A researcher asks a research question. CHITCHAT finds relevant papers, adds the researcher's own documents, removes personal data, screens the papers against review criteria with an LLM, produces a dataset and a PRISMA report, and answers follow-up questions with cited sources.
+A researcher asks a research question. CHITCHAT finds relevant papers, adds the researcher's own documents, removes personal data, screens the papers against review criteria with an LLM, produces a dataset and a PRISMA report, answers the original question with a decision brief (options, benefits and risks, trade-offs, conflicting evidence, gaps), and answers follow-up questions with cited sources. It runs on open-weight models served by the organisation.
 
 It is built on [mmore](https://github.com/EPFLiGHT/mmore), which provides paper discovery, document reading, privacy masking, indexing and retrieval.
 
@@ -23,7 +23,8 @@ It is built on [mmore](https://github.com/EPFLiGHT/mmore), which provides paper 
 | 9 | **Review results**: read labels and evidence, change rules and relabel without new LLM calls | User | Interactive | as long as needed | Final labels |
 | 10 | **Export**: dataset (CSV and JSON) and PRISMA report | System | Background job | seconds | Files to download |
 | 11 | **Index** included papers and own documents for questions | System | Background job | 1 to 5 min | A search index per project |
-| 12 | **Ask**: questions answered from the index, citing `[P0012]` (papers) and `[D0003]` (documents) | User + LLM | Interactive | seconds | Answer + sources |
+| 12 | **Answer the question**: four agents (Planner, Retriever, Writer, Critic) write a decision brief, in up to 3 rounds | System + LLM | Background job | 2 to 15 min | A decision brief with sources |
+| 13 | **Ask**: follow-up questions answered from the index, citing `[P0012]` (papers) and `[D0003]` (documents) | User + LLM | Interactive | seconds | Answer + sources |
 
 Steps 5, 7, 8, 10 and 11 run in order as one job. Each can be rerun on its own. Finished screening results are reused, so a rerun only pays for new or failed papers.
 
@@ -51,6 +52,7 @@ One **project** per search (today: one run folder).
 | Screening results | Per paper: answers, evidence quotes, label, model, cost | Low |
 | Dataset and PRISMA report | Exports for the review | Low |
 | Search index | Chunks of masked text, each tagged with its source | Lower (masked only) |
+| Decision brief | Options, claims with sources, trade-offs, conflicts, gaps, the Critic's scores, every agent step | Low to medium |
 | Answers | Questions, answers, sources, privacy summary | Low to medium |
 | Run history and logs | Each job: stages, durations, outcome, errors | Low |
 
@@ -76,7 +78,7 @@ These are already enforced by the pipeline. The web app must not weaken them.
 
 9. **API keys stay on the server.** The browser never sees them. Use a secrets manager, not files.
 10. **Outbound calls are limited** to the paper sources, PDF hosts and the LLM provider. PDF links come from paper metadata, so block internal addresses (to prevent server-side request forgery) and cap download sizes.
-11. **LLM provider terms:** use a provider account that does not train on our data.
+11. **Models:** open-weight models on servers the organisation controls (Ollama or vLLM). A hosted provider only if it doesn't train on prompts and keeps none, under a contract. The model server sits on a private network with no route from the internet. See [MODELS.md](MODELS.md).
 
 ### Uploads and processing
 
@@ -101,6 +103,8 @@ These are already enforced by the pipeline. The web app must not weaken them.
 | Live stage output, the Done or Failed box | A progress panel and a job summary, both kept in history |
 | `chitchat run --redecide`, `chitchat report` | "Edit rules" and "Relabel" on the results screen, with no new LLM cost |
 | `dataset.csv`, `prisma.md` | A results table with filters, evidence on click, PRISMA diagram, downloads |
+| The `answer` stage, `answer/brief.md` | A decision-brief screen: option cards, a trade-off table, conflicts, "if this matters most", gaps, each citation opening its passage |
+| `chitchat evaluate` | An admin screen to compare systems on a question set, blind |
 | `chitchat ask`, `--no-privacy`, `--review` | A chat screen with sources as links, a privacy summary per answer, and an optional "review before sending" step |
 | `chitchat status`, history and logs | A project overview: stages, durations, recent jobs, errors |
 | `my_docs/` folder | A "Your documents" upload area per project |
@@ -109,5 +113,5 @@ These are already enforced by the pipeline. The web app must not weaken them.
 
 - Google Scholar as a source (it hits captchas).
 - The predefined legacy search (keep it as an admin-only template).
-- Choosing LLM providers per user (one organisation-wide provider is enough).
+- Choosing models per user (one organisation-wide model is enough).
 - Editing the screening questions in the browser (start with fixed criteria plus rule editing).

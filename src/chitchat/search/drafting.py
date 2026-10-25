@@ -107,9 +107,9 @@ def add_repair(messages: list[Any], draft: SearchPlan, problems: list[str]) -> l
 class Drafter:
     """Asks the LLM for clarifying questions and search plans."""
 
-    def __init__(self, chat_model: Any) -> None:
-        self._clarify = StructuredCaller(chat_model, ClarifyingQuestions)
-        self._plan = StructuredCaller(chat_model, SearchPlan)
+    def __init__(self, chat_model: Any, method: str = "json_schema") -> None:
+        self._clarify = StructuredCaller(chat_model, ClarifyingQuestions, method)
+        self._plan = StructuredCaller(chat_model, SearchPlan, method)
 
     def clarify(self, question: str, n: int) -> ClarifyingQuestions:
         from langchain_core.messages import HumanMessage, SystemMessage

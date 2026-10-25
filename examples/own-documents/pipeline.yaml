@@ -1,6 +1,6 @@
 # Minor example 2: your own documents only. No paper search and no screening.
 # Walkthrough: examples/README.md. Paths are relative to this file.
-#   uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sanitize,export,index
+#   uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sanitize,export,index,answer
 
 run_name: own-documents-example
 runs_dir: ../../runs
@@ -17,9 +17,15 @@ privacy:
   before_screening: true
   rag_privacy_config: ../../configs/rag_privacy.yaml
 
+# The one model every LLM step uses (search planning, screening, answer, ask, evaluation).
+# Local and open by default. Other choices: configs/models/ and docs/MODELS.md.
+llm:
+  llm_name: qwen3.5:9b
+  base_url: http://localhost:11434/v1   # Ollama
+  temperature: 0
+
 screening:
   criteria: ../../configs/criteria.example.yaml
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }
 
 index:
   db_uri: auto                         # Windows: Milvus in Docker (127.0.0.1:19530). macOS/Linux: a milvus.db file in the run folder
@@ -28,6 +34,11 @@ index:
   include_own_documents: true
 
 ask:
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }
   k: 6
   reranker: null
+
+# The final stage answers this with a decision brief (agents: Planner, Retriever, Writer, Critic).
+# Answered from the sample documents only.
+answer:
+  question: "Should we keep the community FAQ chatbot, and what data safeguards does it need?"
+  max_rounds: 3

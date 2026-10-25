@@ -66,6 +66,12 @@ def _index(cfg: PipelineConfig, run: RunDir) -> None:
     run_index(cfg, run)
 
 
+def _answer(cfg: PipelineConfig, run: RunDir) -> None:
+    from chitchat.stages.answer import run_answer
+
+    run_answer(cfg, run)
+
+
 # Stages in run order.
 STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
     "queries": _queries,
@@ -75,6 +81,7 @@ STAGES: dict[str, Callable[[PipelineConfig, RunDir], Any]] = {
     "screen": _screen,
     "export": _export,
     "index": _index,
+    "answer": _answer,
 }
 
 
@@ -254,7 +261,7 @@ def search(
                 question,
                 mode,
                 preset,
-                Drafter(chat_model),
+                Drafter(chat_model, cfg.search_llm.structured_output),
                 ConsoleIO(),
                 mask=question_masker(cfg.privacy.rag_privacy_config),
                 auto_accept=yes,
@@ -289,7 +296,100 @@ def search(
     _run_stages(
         run_config, list(STAGES), command="search", mode="predefined" if predefined else mode
     )
-    ui.note(f'Ask questions: chitchat ask -c {ui.shorten_path(run_config)} "your question"')
+    ui.note(f'Follow-up questions: chitchat ask -c {ui.shorten_path(run_config)} "your question"')
+
+
+@app.command()
+def evaluate(
+    questions: Annotated[
+        Path, typer.Option("--questions", "-q", help="Text file: one question per line.")
+    ],
+    config: ConfigOption = Path("pipeline.yaml"),
+    imports: Annotated[
+        list[str] | None,
+        typer.Option("--import", help="Another system's answers: name=folder with 1.md, 2.md, …"),
+    ] = None,
+    seed: Annotated[int, typer.Option(help="Seed for the blind A/B order.")] = 0,
+) -> None:
+    """Compare the answer loop with a single-pass baseline and other systems, judged blind."""
+    from chitchat import ui
+    from chitchat.agents.loop import Agents, LoopSettings
+    from chitchat.agents.retrieval import milvus_search
+    from chitchat.evaluate import (
+        Judgement,
+        imported_answer,
+        parse_import,
+        parse_questions,
+        pipeline_systems,
+        run_evaluation,
+        run_id,
+        summarize,
+    )
+    from chitchat.jsonl import read_json, write_jsonl
+    from chitchat.screening.llm import FatalLLMError, StructuredCaller, build_chat_model
+    from chitchat.search.session import question_masker
+    from chitchat.stages import StageError
+    from chitchat.stages.answer import corpus_overview
+
+    cfg = _load(config)
+    run_dir = RunDir(cfg.run_root)
+    try:
+        if not run_dir.sources.exists():
+            raise StageError(f"Missing {run_dir.sources}. Run export and index first.")
+        sources = read_json(run_dir.sources)
+        mask = question_masker(cfg.privacy.rag_privacy_config)
+        asked = [mask(q) for q in parse_questions(questions)]
+        imported = dict(parse_import(spec) for spec in imports or [])
+
+        chat_model, _ = build_chat_model(cfg.answer_llm)
+        judge_model = (
+            chat_model if cfg.judge_llm == cfg.answer_llm else build_chat_model(cfg.judge_llm)[0]
+        )
+        k = max(cfg.answer.k_per_query, cfg.evaluate.baseline_k)
+        settings = LoopSettings(
+            cfg.answer.max_rounds, cfg.answer.k_per_query, cfg.answer.max_evidence_chars
+        )
+        systems = pipeline_systems(
+            Agents(chat_model, cfg.answer_llm.structured_output),
+            milvus_search(cfg, k),
+            sources,
+            corpus_overview(sources),
+            settings,
+            cfg.evaluate.baseline_k,
+            cfg.answer_llm.llm_name,
+        )
+        for name, folder in imported.items():
+            systems[name] = lambda n, _q, folder=folder: imported_answer(folder, n)
+
+        judge = StructuredCaller(judge_model, Judgement, cfg.judge_llm.structured_output)
+        with ui.console.status("Evaluating…", spinner_style=ui.ACCENT) as status:
+            answers, judgements = run_evaluation(
+                asked, systems, judge, seed, on_progress=lambda text: status.update(text)
+            )
+    except FatalLLMError as e:
+        raise _fail(str(e)) from None
+    except (ConfigError, StageError) as e:
+        raise _fail(str(e)) from None
+
+    out = run_dir.eval / run_id()
+    out.mkdir(parents=True, exist_ok=True)
+    write_jsonl(out / "answers.jsonl", answers)
+    write_jsonl(out / "scores.jsonl", judgements)
+    summary = summarize(
+        judgements,
+        {
+            "questions": len(asked),
+            "systems": ", ".join(systems),
+            "answer model": cfg.answer_llm.llm_name,
+            "judge model": cfg.judge_llm.llm_name,
+            "seed": seed,
+        },
+    )
+    (out / "summary.md").write_text(summary, encoding="utf-8")
+    from rich.markdown import Markdown
+
+    ui.out.print(Markdown(summary))
+    ui.note(f"Saved to {ui.shorten_path(out)}")
 
 
 def _run_stages(

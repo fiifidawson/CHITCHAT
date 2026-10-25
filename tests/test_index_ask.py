@@ -121,10 +121,24 @@ def test_privacy_config_gets_citation_rules() -> None:
     pytest.importorskip("mmore.privacy")
     from chitchat.ask import _privacy_config
 
-    cfg = _privacy_config(str(REPO / "configs" / "rag_privacy.yaml"), review=False)
+    default = {"llm_name": "qwen3.5:9b", "base_url": "http://localhost:11434/v1"}
+    cfg = _privacy_config(str(REPO / "configs" / "rag_privacy.yaml"), False, default)
     assert CITE_RULES in cfg.answer.system_prompt
     assert cfg.interactive is False
-    assert cfg.answer.llm.llm_name == "gpt-4o-mini"
+    # No answer.llm in rag_privacy.yaml: privacy mode answers with the pipeline's model.
+    assert cfg.answer.llm.llm_name == "qwen3.5:9b"
+
+
+def test_privacy_config_answer_llm_wins(tmp_path: Path) -> None:
+    pytest.importorskip("mmore.privacy")
+    from chitchat.ask import _privacy_config
+
+    data = yaml.safe_load((REPO / "configs" / "rag_privacy.yaml").read_text(encoding="utf-8"))
+    data["answer"] = {"llm": {"llm_name": "other-model", "base_url": "http://x/v1"}}
+    path = tmp_path / "p.yaml"
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
+    cfg = _privacy_config(str(path), False, {"llm_name": "qwen3.5:9b"})
+    assert cfg.answer.llm.llm_name == "other-model"
 
 
 def test_privacy_config_needs_answer_llm(tmp_path: Path) -> None:
@@ -133,7 +147,7 @@ def test_privacy_config_needs_answer_llm(tmp_path: Path) -> None:
     from chitchat.stages import StageError
 
     data = yaml.safe_load((REPO / "configs" / "rag_privacy.yaml").read_text(encoding="utf-8"))
-    del data["answer"]
+    data.pop("answer", None)
     path = tmp_path / "p.yaml"
     path.write_text(yaml.safe_dump(data), encoding="utf-8")
     with pytest.raises(StageError, match="answer.llm"):

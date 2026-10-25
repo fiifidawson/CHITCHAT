@@ -17,14 +17,18 @@ privacy:
   before_screening: true
   rag_privacy_config: rag_privacy.yaml
 
+# The one model every LLM step uses (search planning, screening, answer, ask, evaluation).
+# Local and open by default. Other choices: configs/models/ and docs/MODELS.md.
+llm:
+  llm_name: qwen3.5:9b
+  base_url: http://localhost:11434/v1   # Ollama
+  temperature: 0
+
 screening:
   criteria: criteria.example.yaml
-  llm:
-    llm_name: gpt-4o-mini
-    temperature: 0
   min_year: 2020
   min_chars: 500
-  max_chars: 60000
+  max_chars: 24000                    # fits a 16k context
   use_abstract_if_no_text: true
   max_concurrency: 4
 
@@ -34,6 +38,11 @@ index:
   collection: smoke30
 
 ask:
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }
   k: 6
   reranker: null                         # skip the reranker download in tests
+
+# The final stage answers this with a decision brief (agents: Planner, Retriever, Writer, Critic).
+# `chitchat search` answers your own question instead; this one is for `chitchat run`.
+answer:
+  question: "How should humanitarian organisations collect data for LLMs ethically, and what are the trade-offs between the main approaches?"
+  max_rounds: 3

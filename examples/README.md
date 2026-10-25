@@ -2,11 +2,13 @@
 
 Three end-to-end examples, each with its own config in this folder. Run every command from the repo root.
 
-| Example | What it shows | Time | LLM cost |
-|---|---|---|---|
-| [Thorough: deep search and your documents](#thorough-deep-search-and-your-documents) | The whole pipeline: clarifying questions, a change request, papers and documents together, privacy checks, relabelling, run history | 30 to 45 min | about $0.10 to $0.30 |
-| [Minor 1: quick scan](#minor-1-quick-scan) | A shallow search on abstracts, then a few questions | 5 to 10 min | under $0.05 |
-| [Minor 2: your documents only](#minor-2-your-documents-only) | No paper search: read, mask, index and question the sample documents | about 3 min | under $0.01 |
+| Example | What it shows | Time on Apple silicon or a GPU |
+|---|---|---|
+| [Thorough: deep search and your documents](#thorough-deep-search-and-your-documents) | The whole pipeline: clarifying questions, a change request, papers and documents together, privacy checks, relabelling, the decision brief, run history | 45 to 90 min |
+| [Minor 1: quick scan](#minor-1-quick-scan) | A shallow search on abstracts, the decision brief, then a few questions | 10 to 20 min |
+| [Minor 2: your documents only](#minor-2-your-documents-only) | No paper search: read, mask and index the sample documents, then a decision brief and questions | about 5 min |
+
+Every example uses the local open model `qwen3.5:9b` on Ollama: free, and nothing leaves your computer. On a CPU-only computer every LLM step is much slower; see [docs/MODELS.md](../docs/MODELS.md#how-fast-it-is).
 
 The sample documents in [my_docs/](my_docs/) are fictional: the organisation, people, phone numbers, emails and IDs are made up. See [docs/USE_CASES.md](../docs/USE_CASES.md) for what each one contains.
 
@@ -17,9 +19,9 @@ Follow [docs/SETUP.md](../docs/SETUP.md) once. Then, at the start of each sessio
 | Windows (PowerShell) | macOS (Terminal) |
 |---|---|
 | Open Docker Desktop, then `docker start milvus-etcd milvus-minio milvus-standalone` | Nothing to start: Milvus Lite is a file in each run folder |
-| `Remove-Item Env:OPENAI_API_KEY -ErrorAction SilentlyContinue` | `unset OPENAI_API_KEY` |
+| Make sure Ollama is running (llama icon in the system tray) | Make sure Ollama is running (llama icon in the menu bar) |
 
-The second line makes sure the key in `.env` is used, not an old one from your terminal. The example configs use `index.db_uri: auto`, which picks the right Milvus for your system.
+If Ollama isn't running, `chitchat` stops before any LLM step with "Is Ollama running?". The example configs use `index.db_uri: auto`, which picks the right Milvus for your system.
 
 The commands below are the same on Windows and macOS.
 
@@ -52,11 +54,24 @@ Each stage starts with a yellow header and its start time, and ends with "finish
 | screen | One line per paper with HIGH, MEDIUM, LOW, EXCLUDE or SKIPPED and the reason, then the summary box with token counts |
 | export | The Dataset and PRISMA box |
 | index | The Index box: papers, 7 own documents, chunks |
+| answer | One line per agent step (Planner, Retriever, Writer, Critic), then the decision brief in boxes and an Answer box: rounds and why it stopped |
 | end | The Done box: every stage's duration, the run id and the log file |
 
 From here on, `<run>` means your run folder, e.g. `runs/humanitarian-organisations-obtain-manage-informed-consent-2026-10-21`.
 
-### 3. Ask questions
+### 3. Read the decision brief
+
+The brief answers the question you started with. It is also saved as `<run>/answer/brief.md`. Check that:
+
+- each option has benefits and risks with `[P…]` or `[D…]` tags, and an evidence strength;
+- the trade-off table has one row per criterion, including humanitarian ones such as do no harm;
+- "Where the evidence disagrees" names the kind of disagreement;
+- claims marked *hypothesis* are the model's reasoning, not the sources';
+- the Answer box says why the loop stopped (accepted by the Critic, the round limit, or no progress).
+
+Each agent step is in `<run>/answer/trace.jsonl`, and every passage it used in `<run>/answer/evidence.json`.
+
+### 4. Ask follow-up questions
 
 ```bash
 uv run chitchat ask -c <run>/pipeline.yaml "<question>"
@@ -71,7 +86,7 @@ Papers and your documents together. Answers should cite `[P…]` tags for papers
 - "Which of our datasets are on hold or excluded, and what would make them usable?"
 - "Why did the medical coordinator advise against using health calls?"
 
-### 4. Check privacy
+### 5. Check privacy
 
 ```bash
 uv run chitchat ask -c <run>/pipeline.yaml "Who wrote the field visit notes, and what is their phone number?"
@@ -85,7 +100,7 @@ uv run chitchat ask -c <run>/pipeline.yaml --review "What does our consent form 
 - The third has no privacy line.
 - The fourth pauses and shows you the masked context before anything is sent.
 
-### 5. Look at the outputs
+### 6. Look at the outputs
 
 | File in `<run>/` | What to check |
 |---|---|
@@ -102,7 +117,7 @@ uv run chitchat status -c <run>/pipeline.yaml
 
 The status table has a "Took" column, and a Recent runs table lists your runs.
 
-### 6. Change the rules without paying again
+### 7. Change the rules without new LLM calls
 
 1. In `configs/criteria.example.yaml`, make the HIGH rule stricter, for example add `ethical_framework == yes` to its `when:` list.
 2. Relabel and rebuild the report, with no LLM calls:
@@ -115,7 +130,7 @@ uv run chitchat run -c <run>/pipeline.yaml --stages index
 
 The Relabelled box says how many labels changed. `prisma.md` has the new numbers, and `index` rebuilds the index with the new set of included papers. Undo your edit afterwards.
 
-### 7. Rerun and see what is reused
+### 8. Rerun and see what is reused
 
 ```bash
 uv run chitchat run -c <run>/pipeline.yaml --stages screen
@@ -133,7 +148,8 @@ uv run chitchat search -c examples/quick-scan/pipeline.yaml "Which methods are u
 
 1. No clarifying questions in shallow mode. You see 1 to 3 category boxes, each with 2 to 4 concepts.
 2. Type `a`, then `y` to run.
-3. No PDFs are downloaded, so it finishes in minutes. The screening lines say "abstract only".
+3. No PDFs are downloaded, so the search part finishes quickly. The screening lines say "abstract only".
+4. The run ends with a decision brief that answers your question, from the abstracts.
 
 Then ask:
 
@@ -150,7 +166,7 @@ Answers cite only `[P…]` tags: there are no own documents in this example.
 Config: [own-documents/pipeline.yaml](own-documents/pipeline.yaml). No paper search and no screening: the 7 sample documents are read, masked, indexed and questioned.
 
 ```bash
-uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sanitize,export,index
+uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sanitize,export,index,answer
 ```
 
 | Stage | What you should see |
@@ -159,8 +175,9 @@ uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sani
 | sanitize | 83 items masked in own documents: 34 names, 24 dates, 9 places, 9 emails, 7 phone numbers |
 | export | 0 papers, 7 own documents |
 | index | 0 papers, 7 own documents, about 10 chunks |
+| answer | A decision brief on the config's question: "Should we keep the community FAQ chatbot, and what data safeguards does it need?" |
 
-Then ask (outputs go to `runs/own-documents-example/`):
+The brief cites only `[D…]` tags, and its gaps section should say that there is no published evidence in this run. Then ask (outputs go to `runs/own-documents-example/`):
 
 ```bash
 uv run chitchat ask -c examples/own-documents/pipeline.yaml "What consent approach was agreed with the community in Kakuma?"

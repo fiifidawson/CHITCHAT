@@ -1,0 +1,10 @@
+# A GPU server you control, with vLLM (Linux and NVIDIA; on Windows use WSL2).
+# Start the server on the GPU machine, for example:
+#   vllm serve Qwen/Qwen3.5-27B --max-model-len 32768
+# Copy the `llm:` block into your pipeline.yaml. Keep the server on a private network.
+llm:
+  llm_name: Qwen/Qwen3.5-27B      # must match the name given to `vllm serve`. Other open choices:
+                                  #   openai/gpt-oss-120b  (Apache 2.0, one 80 GB GPU)
+  base_url: http://gpu-host:8000/v1
+  temperature: 0
+# With vLLM, screening.max_chars can go back up to 60000 when --max-model-len is 32768 or more.

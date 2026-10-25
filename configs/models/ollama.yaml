@@ -1,0 +1,10 @@
+# Local, on your own computer, with Ollama (Windows, macOS, Linux). Nothing leaves the machine.
+# Setup: docs/SETUP.md. Copy the `llm:` block into your pipeline.yaml.
+#   ollama pull qwen3.5:9b
+llm:
+  llm_name: qwen3.5:9b            # Apache 2.0, about 7 GB. Other open choices:
+                                  #   gpt-oss:20b  (Apache 2.0, about 14 GB, 16 GB RAM or more)
+                                  #   qwen3.5:4b   (Apache 2.0, about 4 GB, for small laptops)
+  base_url: http://localhost:11434/v1
+  temperature: 0
+  # structured_output: json_mode  # try this if a model rejects json_schema
