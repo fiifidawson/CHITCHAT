@@ -291,6 +291,7 @@ Your runs in `runs/` and your documents in `my_docs/` are not touched.
 |---|---|---|
 | "Can't reach the model server at http://localhost:11434/v1. Is Ollama running?" | Ollama isn't running | Open Ollama (Start menu or Applications) and wait for the llama icon |
 | "Model `qwen3.5:9b` isn't available … Run: ollama pull qwen3.5:9b" | The model isn't downloaded | Run the `ollama pull` command shown |
+| "The model ran out of room: its context window is 4096 tokens" | Ollama didn't pick up `OLLAMA_CONTEXT_LENGTH` (`ollama ps` shows `4096` under CONTEXT) | Quit Ollama from the system tray or menu bar and open it again, then check `ollama ps` while a run is going |
 | Each LLM step takes minutes | The model runs on the CPU (`ollama ps` says `CPU`) | Use `qwen3.5:4b`, or a GPU server or hosted provider ([MODELS.md](MODELS.md)) |
 | Many `invalid` results in screening or the answer trace | The model's JSON doesn't match the schema | Set `structured_output: json_mode` under `llm:` ([MODELS.md](MODELS.md)), or use a larger model |
 | `AuthenticationError` … "Check the API key" | A hosted provider rejected the key | If the message says the key is set in your environment, remove it there. Otherwise check the key in `.env`, or create a new one |

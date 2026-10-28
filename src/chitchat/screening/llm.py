@@ -7,6 +7,7 @@ Retries for 429 and 5xx come from the LangChain client itself.
 from __future__ import annotations
 
 import logging
+import re
 import threading
 from dataclasses import dataclass, field
 from typing import Any
@@ -107,6 +108,23 @@ def _usage(raw: Any) -> dict[str, int]:
     }
 
 
+def _small_context(e: Exception) -> int | None:
+    """The context size, when a reply was cut because a small context window filled up.
+
+    Ollama's default window is 4096 tokens. A cut at 8192 or fewer means every
+    long prompt will fail the same way, so the run should stop and say why.
+    """
+    if type(e).__name__ != "LengthFinishReasonError":
+        return None
+    usage = getattr(e, "completion", None)
+    usage = getattr(usage, "usage", None)
+    total = getattr(usage, "total_tokens", None)
+    if total is None:
+        match = re.search(r"total_tokens=(\d+)", str(e))
+        total = int(match.group(1)) if match else None
+    return total if total is not None and total <= 8192 else None
+
+
 def _refusal(raw: Any) -> str | None:
     if raw is None:
         return None
@@ -177,6 +195,13 @@ class StructuredCaller:
                 raise FatalLLMError(
                     f"The LLM provider refused the request ({name}). "
                     "Check the API key and the model name."
+                ) from None
+            window = _small_context(e)
+            if window:
+                raise FatalLLMError(
+                    f"The model ran out of room: its context window is {window} tokens. "
+                    "For Ollama, set OLLAMA_CONTEXT_LENGTH to 16384, then quit Ollama and "
+                    "open it again (see docs/MODELS.md)."
                 ) from None
             return CallResult("error", error=_short(f"{name}: {e}"))
 
