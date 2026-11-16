@@ -129,6 +129,7 @@ DEFAULT_PRESETS: dict[str, dict[str, Any]] = {
         "max_results": 25,
         "max_pages": 2,
         "download_pdfs": True,
+        "sources": ["openalex", "europepmc", "arxiv", "google_scholar"],
     },
 }
 
