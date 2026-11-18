@@ -1,6 +1,10 @@
 # A deep search on one 80 GB GPU (EPFL RCP), with Qwen3.6 27B and its full 262k context.
 # Start the model server in the same pod first (see docs/MODELS.md):
-#   vllm serve Qwen/Qwen3.6-27B-FP8 --max-model-len 262144 --reasoning-parser qwen3
+#   vllm serve Qwen/Qwen3.6-27B-FP8 --max-model-len 262144 --reasoning-parser qwen3 --max-num-seqs 64
+# (--max-num-seqs 64: the default 1024 doesn't fit next to the full context; CHITCHAT sends at most 8.)
+# On the LiGHT RCP image, also set before starting vLLM:
+#   export SETUPTOOLS_USE_DISTUTILS=local   # the image sets stdlib; Python 3.12 has none
+#   export VLLM_USE_FLASHINFER_SAMPLER=0    # the image's nvcc is too old to compile FlashInfer's sampler
 # Then:
 #   uv run chitchat search -c configs/pipeline.rcp.yaml "your question"
 # Paths are relative to this file's folder (configs/).
