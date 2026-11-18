@@ -28,7 +28,8 @@ All of these are open-weight models with permissive licences.
 | gpt-oss 20B | `gpt-oss:20b` | Apache 2.0 | about 14 GB | 16 GB+ of GPU or unified memory | Strong reasoning, slower |
 | Gemma 4 12B | `gemma4:12b` | see Google's model page | about 8 GB | Apple silicon, NVIDIA GPU | Check the licence on Google's model page before use |
 | Qwen3.5 27B | `Qwen/Qwen3.5-27B` on vLLM | Apache 2.0 | about 55 GB | One GPU server (48 to 80 GB) | For the best local quality |
-| gpt-oss 120B | `openai/gpt-oss-120b` on vLLM | Apache 2.0 | about 65 GB | One 80 GB GPU | Strongest open option here |
+| gpt-oss 120B | `openai/gpt-oss-120b` on vLLM | Apache 2.0 | about 65 GB | One 80 GB GPU | Strong reasoning, but only about 32k context on one 80 GB GPU |
+| Qwen3.6 27B | `Qwen/Qwen3.6-27B-FP8` on vLLM | Apache 2.0 | about 30 GB | One 80 GB GPU (H100) | The best choice for one big GPU: full 262k context. See [configs/pipeline.rcp.yaml](../configs/pipeline.rcp.yaml) |
 
 How to choose:
 
