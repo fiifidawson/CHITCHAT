@@ -9,6 +9,7 @@ from typing import Any
 from chitchat.config import PipelineConfig
 from chitchat.jsonl import write_json
 from chitchat.run_dir import RunDir
+from chitchat.stages.scholar import use_paced_scholar
 
 log = logging.getLogger(__name__)
 
@@ -130,6 +131,7 @@ def run_discover(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
     _warn_long_queries(_build_queries(disc), disc.sources)
     quiet_mupdf()
 
+    use_paced_scholar(list(disc.sources))
     pipeline = PaperDiscoveryPipeline(disc)
     papers = pipeline.run()
     stats = discovery_stats(pipeline)

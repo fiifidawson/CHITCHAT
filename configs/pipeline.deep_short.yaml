@@ -1,0 +1,60 @@
+# A short deep search: clarifying questions and full text, but few papers (at most 48).
+#   uv run chitchat search -c configs/pipeline.deep_short.yaml "your question"
+# Searches OpenAlex, Europe PMC, arXiv and Google Scholar. Every source keeps its rate limit:
+# arXiv 1 request per 3 s, OpenAlex and Europe PMC 1 per s, Google Scholar 1 page per 10-15 s.
+# If Scholar blocks the run, it is skipped and the other sources continue.
+# Paths are relative to this file's folder (configs/).
+
+run_name: deep_short
+runs_dir: ../runs
+
+discovery:
+  config: discovery/discovery.smoke30.yaml   # only for --predefined
+
+own_documents:
+  folder: ../my_docs/
+  fast: true
+
+privacy:
+  sanitize_config: sanitize.yaml
+  before_screening: true
+  rag_privacy_config: rag_privacy.yaml
+
+llm:
+  llm_name: qwen3.5:9b
+  base_url: http://localhost:11434/v1   # Ollama
+  temperature: 0
+
+# 2 categories x 6 results x 4 sources = at most 48 papers before duplicates are removed.
+search:
+  mode: deep
+  deep:
+    clarifying_questions: 2
+    min_categories: 2
+    max_categories: 2
+    max_concepts_per_category: 3
+    max_synonyms: 4
+    max_results: 6
+    max_pages: 1
+    sources: [openalex, europepmc, arxiv, google_scholar]
+
+screening:
+  criteria: criteria.example.yaml
+  min_year: 2020
+  min_chars: 500
+  max_chars: 24000                    # fits a 16k context
+  use_abstract_if_no_text: true
+  max_concurrency: 4
+
+index:
+  db_uri: auto                         # Windows: Milvus in Docker (127.0.0.1:19530). macOS/Linux: a milvus.db file in the run folder
+  db_name: review
+  collection: deep_short
+
+ask:
+  k: 6
+  reranker: null
+
+# The final stage answers your search question with a decision brief.
+answer:
+  max_rounds: 2

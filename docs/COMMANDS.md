@@ -24,7 +24,9 @@ While planning:
 - **The draft** shows one box per category: its concepts joined by `AND`, each with its synonyms after `or:`, and the query's length with the OpenAlex status on the bottom border.
 - **Your choice:** `a` accepts, `c` asks for changes in plain words, `q` quits and saves nothing.
 
-Searches go to OpenAlex, Europe PMC and arXiv. To change that, see [Choosing sources](PIPELINE.md#choosing-sources).
+Deep searches go to OpenAlex, Europe PMC, arXiv and Google Scholar; shallow ones skip Google Scholar. To change that, see [Choosing sources](PIPELINE.md#choosing-sources).
+
+For a short deep search (at most 48 papers): `uv run chitchat search -c configs/pipeline.deep_short.yaml "your question"`.
 
 ## Run stages
 

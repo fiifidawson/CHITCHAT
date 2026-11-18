@@ -76,14 +76,14 @@ Change any of these under `search.shallow` or `search.deep` in your pipeline con
 
 ### Choosing sources
 
-Every search goes to **OpenAlex, Europe PMC and arXiv** by default. The draft's summary line names the sources it will search. The "OpenAlex ok / too long" status appears only because OpenAlex is the one source with a length limit (1,500 characters). Europe PMC and arXiv have no such limit to check.
+Deep searches go to **OpenAlex, Europe PMC, arXiv and Google Scholar** by default; shallow searches skip Google Scholar. The draft's summary line names the sources it will search. The "OpenAlex ok / too long" status appears only because OpenAlex is the one source with a length limit (1,500 characters). Europe PMC and arXiv have no such limit to check.
 
 | Source | Covers | Notes |
 |---|---|---|
 | `openalex` | Most fields, all publishers | Rejects queries over 1,500 characters. Drafts are fitted to it automatically |
 | `europepmc` | Life sciences and health | |
 | `arxiv` | Computer science, physics, statistics preprints | Searches key terms, not the full boolean |
-| `google_scholar` | Everything | Off by default. Needs the extra `mmore[google_scholar]` (Selenium) and often hits captchas |
+| `google_scholar` | Everything | Deep mode only. One results page every 10 to 15 seconds, queries cut to 256 characters. Scholar often blocks scripts: the first block stops Scholar for the rest of the run and the other sources continue |
 
 Where to change them:
 
