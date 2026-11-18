@@ -195,6 +195,28 @@ def test_bad_api_key_stops_the_run() -> None:
         StructuredCaller(_Model(AuthenticationError("401 sk-proj-***abcd")), dict)([])
 
 
+def test_small_context_stops_the_run() -> None:
+    from chitchat.screening.llm import FatalLLMError
+
+    class LengthFinishReasonError(Exception):
+        pass
+
+    cut = LengthFinishReasonError(
+        "length limit was reached - CompletionUsage(completion_tokens=683, "
+        "prompt_tokens=3413, total_tokens=4096)"
+    )
+    with pytest.raises(FatalLLMError, match="4096 tokens.*OLLAMA_CONTEXT_LENGTH"):
+        StructuredCaller(_Model(cut), dict)([])
+
+
+def test_long_reply_in_a_large_context_is_one_failure() -> None:
+    class LengthFinishReasonError(Exception):
+        pass
+
+    cut = LengthFinishReasonError("CompletionUsage(total_tokens=32768)")
+    assert StructuredCaller(_Model(cut), dict)([]).status == "error"
+
+
 def test_temperature_retry_once() -> None:
     class Picky(_Model):
         def _invoke(self, messages):

@@ -17,14 +17,18 @@ privacy:
   before_screening: true              # sanitize paper text before the screening LLM sees it
   rag_privacy_config: configs/rag_privacy.yaml   # null = no privacy mode when answering
 
+# The one model every LLM step uses (search planning, screening, answer, ask, evaluation).
+# Local and open by default. Other choices: configs/models/ and docs/MODELS.md.
+llm:
+  llm_name: qwen3.5:9b
+  base_url: http://localhost:11434/v1   # Ollama
+  temperature: 0
+
 screening:
   criteria: configs/criteria.example.yaml
-  llm:                                # mmore LLMConfig
-    llm_name: gpt-4o-mini
-    temperature: 0
   min_year: 2020
   min_chars: 500                      # applies to the text actually sent
-  max_chars: 60000                    # head + tail budget per paper
+  max_chars: 24000                    # head + tail budget per paper; fits a 16k context
   use_abstract_if_no_text: true
   max_concurrency: 4
 
@@ -38,6 +42,11 @@ index:
   include_own_documents: true
 
 ask:
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }   # used only when privacy mode is off
   k: 6
   reranker: BAAI/bge-reranker-base    # null to skip the download
+
+# The final stage answers this with a decision brief (agents: Planner, Retriever, Writer, Critic).
+# `chitchat search` answers your own question instead; this one is for `chitchat run`.
+answer:
+  question: "How should humanitarian organisations collect data for LLMs ethically, and what are the trade-offs between the main approaches?"
+  max_rounds: 3

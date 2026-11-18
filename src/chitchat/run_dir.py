@@ -111,6 +111,31 @@ class RunDir:
     def answers(self) -> Path:
         return self.root / "answers.jsonl"
 
+    # The answer stage: a decision brief for the run's question.
+    @property
+    def answer(self) -> Path:
+        return self.root / "answer"
+
+    @property
+    def brief_json(self) -> Path:
+        return self.answer / "brief.json"
+
+    @property
+    def brief_md(self) -> Path:
+        return self.answer / "brief.md"
+
+    @property
+    def evidence(self) -> Path:
+        return self.answer / "evidence.json"
+
+    @property
+    def trace(self) -> Path:
+        return self.answer / "trace.jsonl"
+
+    @property
+    def eval(self) -> Path:
+        return self.root / "eval"
+
     # Stage markers.
     def _marker(self, stage: str) -> Path:
         return self.root / ".done" / stage

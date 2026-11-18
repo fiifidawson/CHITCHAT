@@ -26,7 +26,14 @@ def test_example_config_loads(project: Path) -> None:
     assert cfg.discovery.config.is_file()
     # `auto`: Docker on Windows, a Milvus Lite file in the run folder elsewhere.
     assert cfg.index.db_uri in ("http://127.0.0.1:19530", str(cfg.run_root / "milvus.db"))
-    assert cfg.screening.llm.to_mmore() == {"llm_name": "gpt-4o-mini", "temperature": 0}
+    # One local open model for every step.
+    assert cfg.screening.llm is None
+    assert cfg.screening_llm.to_mmore() == {
+        "llm_name": "qwen3.5:9b",
+        "base_url": "http://localhost:11434/v1",
+        "temperature": 0,
+    }
+    assert cfg.ask_llm == cfg.search_llm == cfg.answer_llm == cfg.judge_llm == cfg.main_llm
 
 
 @pytest.mark.parametrize(

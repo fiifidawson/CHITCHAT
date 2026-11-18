@@ -10,8 +10,7 @@ sanitization:
   consistency: true
 leakage_adversary:
   enabled: false                # when on: 5+ LLM probes per question
-answer:
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }   # required: privacy mode answers with this LLM
+# answer.llm: optional; by default privacy mode answers with the pipeline's `llm`.
 verifier:
   checks: []                    # [] = no extra LLM calls
   warn_threshold: 0.5

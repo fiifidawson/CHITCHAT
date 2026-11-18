@@ -5,7 +5,7 @@ This page explains what happens when you run each command: what it reads, what i
 ## The big picture
 
 ```
-synonyms + categories ──► queries ──► discover ──► sanitize ──► screen ──► export ──► index ──► ask
+synonyms + categories ──► queries ──► discover ──► sanitize ──► screen ──► export ──► index ──► answer ──► ask
                                                      ▲
                                 my_docs/ ──► ingest ─┘   (own documents skip screen and go to export/index)
 ```
@@ -32,6 +32,7 @@ Every `chitchat` command does these steps first, in this order:
    - **the sanitize config:** every privacy setting must be set, so no LLM is ever asked to choose one.
 
    Any problem stops the command with a message that names the field at fault (exit code 2).
+6. **Checks the model server**, before the first LLM call of a command: for a model with a `base_url` (Ollama, vLLM), it asks the server for its list of models. If the server doesn't answer, it stops with "Is Ollama running?"; if the model is missing, with the `ollama pull` command to run.
 
 ## `chitchat search`: planning the search
 
@@ -227,7 +228,7 @@ An LLM answers your criteria for each paper. Fixed rules then decide the label.
   - **you change a question, scale or extract field:** the hash changes, and every paper is screened again;
   - **you change only the rules:** the hash stays the same. Use `--redecide`.
 - **`--redecide`** recomputes the label of every `screened` paper from its stored answers, with the current rules. **No LLM calls.** It rewrites `screening.jsonl`.
-- **A different model** (`screening.llm.llm_name`) screens every paper again. Results from the old model stay in the file.
+- **A different model** (the top-level `llm`, or `screening.llm` if set) screens every paper again. Results from the old model stay in the file.
 
 ### 6. `export`
 
@@ -273,6 +274,41 @@ Each run folder from `chitchat search` gets its own collection, so runs never ov
 - **Fails clearly** when nothing is included ("Run screen first") or Milvus can't be reached ("Is Milvus running?").
 - **The first run downloads embedding models** (about 600 MB).
 
+### 8. `answer`
+
+Answers the run's question with a **decision brief**: what the options are, what the evidence says for and against each, and what to weigh. Four agents work in a loop, in plain Python.
+
+- **The question:**
+  1. from `search/plan.json`: the question as it was sent when planning (already masked), with your answers to the clarifying questions;
+  2. otherwise `answer.question` in the config (for `chitchat run` and `--predefined`), masked first;
+  3. otherwise the stage is skipped with a note.
+- **Reads:** `sources.json` (for the titles and labels) and the Milvus index from `index`.
+- **The agents:**
+
+  | Agent | LLM? | Does |
+  |---|---|---|
+  | **Planner** | yes | Names the decision, 2 to 4 options, the criteria (including the humanitarian principles) and 4 to 6 sub-questions to search for |
+  | **Retriever** | no | Searches the index for the question and each sub-question (`answer.k_per_query` passages each), drops repeats, and stops adding at `answer.max_evidence_chars` |
+  | **Writer** | yes | Writes the brief from the passages only. Every claim cites its tags and says whether the passages say it (`evidence`) or it is an inference (`hypothesis`) |
+  | **Critic** | yes | Scores the brief 0 to 2 on six points (coverage, groundedness, conflicts, uncertainty, humanitarian awareness, specificity), lists issues, and asks for up to 3 more searches |
+
+- **Checks by code, before the Critic:** every cited tag must be in the retrieved passages; every `evidence` claim needs a source; an option with no sourced benefit or risk can't claim more than `insufficient` evidence. A citation to a passage the Writer never saw always forces a rewrite.
+- **The loop:** plan → search → write → check and critique. If the Critic says `revise`, it searches for the Critic's follow-ups, and the Writer rewrites with the issues. It stops when:
+  - the Critic accepts and the checks pass;
+  - it reaches `answer.max_rounds` (default 3);
+  - a round brings no new passages and no better score.
+
+  The brief kept is the best one: valid citations first, then the highest score.
+- **The brief has:** a bottom line; one card per option with its benefits, risks and evidence strength (strong, moderate, weak, insufficient); a trade-off table (criteria × options); where the evidence disagrees, with the kind of disagreement (stronger vs weaker study designs, different settings, or small and unclear studies); "if this matters most, choose that"; gaps in the evidence; and a fixed caveat.
+- **Writes:**
+  - `answer/brief.json`: the brief, with the plan, the rounds, why it stopped, the Critic's scores, any checks still failing, and the model;
+  - `answer/brief.md`: the brief to read or share, with a sources list;
+  - `answer/evidence.json`: every passage retrieved, with the search that found it;
+  - `answer/trace.jsonl`: one line per step: agent, round, status, seconds, tokens and output.
+- **Prints** the brief in boxes, and a summary: rounds, why it stopped, passages, model.
+- **Privacy:** only masked text reaches the model. The question was masked when the search was planned, and the passages were sanitized before indexing.
+- **Runs every time you ask for it**, from scratch. About 7 LLM calls with 3 rounds.
+
 ## `chitchat ask`
 
 ```bash
@@ -285,9 +321,9 @@ uv run chitchat ask -c <config> --k 10 "question"
 1. **Finds** the `k` chunks closest to your question in Milvus (default 6, or `--k`).
 2. **Privacy mode** is on when `privacy.rag_privacy_config` is set and you didn't pass `--no-privacy`:
    - the chunks and your question are checked for personal data and masked again before the LLM sees them;
-   - it answers with the model in `configs/rag_privacy.yaml` (`answer.llm`);
+   - it answers with `answer.llm` from `configs/rag_privacy.yaml` if set, otherwise with the pipeline's model;
    - **`--review`** shows you the masked context and waits for your approval before anything is sent.
-3. **Without privacy mode**, it answers with `ask.llm` from the pipeline config.
+3. **Without privacy mode**, it answers with `ask.llm` if set, otherwise with the pipeline's `llm`.
 4. **Prints:**
    - the answer;
    - the sources it cited: tag, title, year, DOI or link;
@@ -300,6 +336,32 @@ Things to know:
 - **Your question can be masked.** Privacy mode can mistake a product or project name for a person. When your question was changed, `ask` shows the version it sent. Rephrase it ("the MoodSmith system") or use `--no-privacy`.
 - **Aborted answers.** If the leakage check is on in `rag_privacy.yaml` and it fails, there is no answer. You'll see "the privacy check stopped it".
 - **"The context does not answer the question"** usually means none of the indexed papers covers it. The sources list then shows what it was given.
+
+## `chitchat evaluate`
+
+```bash
+uv run chitchat evaluate -c <config> -q examples/questions/humanitarian.txt
+uv run chitchat evaluate -c <config> -q <file> --import deepresearch=answers/
+```
+
+Compares the decision brief with other ways of answering, on the run's index.
+
+1. **Reads the questions:** one per line; blank lines and lines starting with `#` are skipped. Each is masked like `ask` does.
+2. **For each question, answers it with:**
+   - **baseline:** one search (`evaluate.baseline_k` passages, default 10) and one Writer call with the same prompt. The comparison then shows what the loop adds;
+   - **chitchat:** the full `answer` loop;
+   - **each `--import name=folder`:** another system's answer, from `folder/1.md` (or `1.txt`) for the first question, `2.md` for the second, and so on. A missing file skips that pair.
+3. **Judges** chitchat against each other system, in pairs. The judge sees the question and two answers as A and B, in random order, with no system names. It scores each 1 to 5 on coverage, groundedness, specificity, trade-offs, humanitarian awareness and usefulness, and picks a winner.
+4. **Writes** to `runs/<folder>/eval/<run id>/`:
+   - `answers.jsonl`: every answer;
+   - `scores.jsonl`: every judgement, with the order it was shown in;
+   - `summary.md`: per system, the mean of each metric, the difference, and wins, ties and losses.
+
+Things to know:
+
+- **The judge model** is `evaluate.judge_llm`, or the main `llm`. A judge from another model family is fairer: models tend to prefer their own writing.
+- **`--seed`** sets the random A/B order, so a run can be repeated.
+- **Cost in time:** about 9 LLM calls per question with the baseline. Start with 2 or 3 questions.
 
 ## `chitchat status` and `chitchat report`
 
@@ -320,6 +382,8 @@ Things to know:
 | `configs/sanitize.yaml` | `sanitize`, `export`, `index` | Screening is not redone |
 | `index.include_labels` or the embedding model | `index` | |
 | `configs/rag_privacy.yaml` or `ask` settings | nothing | Applies to the next `ask` |
+| The model, or the `answer` settings | `answer` | The screening is reused only if the screening model is unchanged |
+| Anything up to `index` | `answer` too | The brief is written from the index |
 
 ## Known gaps
 
@@ -327,6 +391,8 @@ Things to know:
 - **Skipped papers stay skipped.** A `skipped` record counts as finished. If you lower `min_year`, lower `min_chars`, or add a PDF for a paper skipped as `no_text`, it is not screened again. To redo those papers, delete their lines from `screening.jsonl` and run `screen`. To redo everything, delete the whole file.
 - **Screening ignores new text.** A paper screened on its abstract keeps that result after you add its PDF. The fix is the same: delete its line.
 - **Sanitize changes don't reach screening.** After you change `sanitize.yaml`, the masked text changes, but screened papers are reused.
+- **The brief covers only this run.** It sees the indexed papers and documents, nothing else. A thin index gives a thin brief, and its gaps section says so.
+- **The Critic is the same model as the Writer.** It catches missing parts and weak citations, not every error. Read the cited passages before acting.
 - **OpenAlex drops long queries.** Queries over 1,500 characters return nothing from OpenAlex. `queries` and `discover` warn you. The full category set is over this limit, so a full run gets nothing from OpenAlex until the synonyms are shortened.
 
 ## The run folder
@@ -354,6 +420,8 @@ runs/<run_name>/
 ├── dataset.csv                 export
 ├── prisma.json, prisma.md      export
 ├── index/chunks.jsonl          index
+├── answer/                     answer: brief.json, brief.md, evidence.json, trace.jsonl
 ├── answers.jsonl               ask (appended)
+├── eval/<run id>/              evaluate: answers.jsonl, scores.jsonl, summary.md
 └── .done/                      stage markers, for status only
 ```

@@ -1,0 +1,9 @@
+# Hosted open models on Infomaniak (Switzerland). Its AI service states that prompts are not
+# used for training and are not kept. Check the current terms before sending real data.
+# Set the key in .env:  INFOMANIAK_API_KEY=...
+# Take the product id and the OpenAI-compatible URL from the Infomaniak manager (AI Tools).
+llm:
+  llm_name: <model id>            # an open model from your AI Tools model list, e.g. a Qwen or gpt-oss model
+  provider: infomaniak            # the key is read from INFOMANIAK_API_KEY
+  base_url: https://api.infomaniak.com/1/ai/<product_id>/openai
+  temperature: 0

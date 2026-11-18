@@ -193,3 +193,4 @@ runs/
 /my_docs/
 *.db
 volumes/
+reference/

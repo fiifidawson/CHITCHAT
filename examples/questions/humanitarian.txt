@@ -1,0 +1,9 @@
+# Questions for `chitchat evaluate`. One per line; lines starting with # are skipped.
+# Several ask for a trade-off, since the decision brief is built for those.
+Should a humanitarian organisation scrape social media posts from crisis areas to train a language model, and under what conditions?
+What are the trade-offs between collecting new consented data from affected communities and reusing existing public datasets for LLM training?
+How can consent be meaningful when collecting language data from refugees with low literacy?
+Should local-language data for LLMs be collected by international NGOs or by local partner organisations?
+What risks does LLM training data pose to impartiality and neutrality in conflict settings, and how can they be reduced?
+Is it better to anonymise or to aggregate beneficiary records before using them to fine-tune a model?
+What safeguards should come with a chatbot that collects information from affected people?

@@ -4,7 +4,7 @@ Every command runs from the repo root, on Windows (PowerShell) and macOS (Termin
 
 `-c <config>` picks the run. Without it, `pipeline.yaml` in the repo root is used. After `chitchat search`, use the config it wrote: `-c runs/<folder>/pipeline.yaml`.
 
-Related pages: [SETUP.md](SETUP.md) to install, [PIPELINE.md](PIPELINE.md) for what each stage does, [../examples/README.md](../examples/README.md) for worked examples.
+Related pages: [SETUP.md](SETUP.md) to install, [MODELS.md](MODELS.md) to choose a model, [PIPELINE.md](PIPELINE.md) for what each stage does, [../examples/README.md](../examples/README.md) for worked examples.
 
 ## Plan a search from your question
 
@@ -44,6 +44,7 @@ Searches go to OpenAlex, Europe PMC and arXiv. To change that, see [Choosing sou
 | `screen` | The LLM answers the criteria, fixed rules decide the label. Finished papers are reused |
 | `export` | Writes `dataset.csv`, `dataset.jsonl`, `sources.json` and the PRISMA report |
 | `index` | Puts the included papers and your documents into the search index |
+| `answer` | Answers the run's question with a decision brief (Planner, Retriever, Writer, Critic). Skipped if the run has no question |
 
 ## Ask and check
 
@@ -54,6 +55,18 @@ Searches go to OpenAlex, Europe PMC and arXiv. To change that, see [Choosing sou
 | `uv run chitchat ask -c <config> --review "question"` | Shows you the masked context and waits for your approval before sending |
 | `uv run chitchat ask -c <config> --k 15 "question"` | Uses 15 passages instead of the default 6 |
 | `uv run chitchat status -c <config>` | Which stages are done, how long they took, what they produced, and the last runs |
+
+The decision brief from the `answer` stage is in `runs/<folder>/answer/brief.md`. To write it again, for example after changing the model: `uv run chitchat run -c <config> --stages answer`.
+
+## Evaluate
+
+| Command | What it does |
+|---|---|
+| `uv run chitchat evaluate -c <config> -q examples/questions/humanitarian.txt` | For each question: a single-pass baseline and the full agent loop, compared blind by a judge model, 1 to 5 on six metrics |
+| `uv run chitchat evaluate -c <config> -q <file> --import deepresearch=answers/` | Also compares with another system's answers: `answers/1.md`, `2.md`, … one per question |
+| `uv run chitchat evaluate -c <config> -q <file> --seed 7` | Another random A/B order |
+
+Results go to `runs/<folder>/eval/<run id>/`: `answers.jsonl`, `scores.jsonl` and `summary.md`. Each question takes several LLM calls, so start with 2 or 3 questions.
 
 ## Test configs
 
@@ -92,7 +105,10 @@ uv run chitchat run -c configs/pipeline.smoke.yaml --stages export
 # 7. Build the search index (Windows: Milvus must be running).
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages index
 
-# 8. Ask, and check progress.
+# 8. Answer the config's question (`answer.question`) with a decision brief.
+uv run chitchat run -c configs/pipeline.smoke.yaml --stages answer
+
+# 9. Ask follow-up questions, and check progress.
 uv run chitchat ask -c configs/pipeline.smoke.yaml "What consent practices do the papers describe?"
 uv run chitchat status -c configs/pipeline.smoke.yaml
 ```
@@ -117,6 +133,17 @@ Put them in `my_docs/` in the repo root (it is ignored by git, so they stay priv
 
 Full Milvus setup: [SETUP.md](SETUP.md), Windows step 7.
 
+## The model (Ollama)
+
+| Command | What it does |
+|---|---|
+| `ollama pull qwen3.5:9b` | Downloads the default model |
+| `ollama list` | Lists the models you have |
+| `ollama ps` | Shows the loaded model, whether it runs on GPU or CPU, and its context length |
+| `curl http://localhost:11434/v1/models` (Windows: `curl.exe`) | Checks that Ollama is running |
+
+To change model, see [MODELS.md](MODELS.md).
+
 ## Timing, history and logs
 
 Every `run`, `report` and `search` prints each stage's start time and duration, and ends with a Done, Failed or Interrupted box. It is recorded in `runs/<folder>/history.jsonl`, and its output is saved in `runs/<folder>/logs/<run id>.log`.
@@ -126,7 +153,7 @@ Every `run`, `report` and `search` prints each stage's start time and duration, 
 | Command | What it does |
 |---|---|
 | `uv run pytest` | Fast tests. No network, models or API keys |
-| `uv run pytest -m slow` | A tiny real run, end to end (uses your API key and Milvus) |
+| `uv run pytest -m slow` | A tiny real run, end to end (uses your model and Milvus) |
 | `uv run ruff check .` | Lint |
 | `uv run ruff format .` | Format |
 | `uv run python examples/make_samples.py` | Rebuilds the Word, PDF and Excel sample documents |

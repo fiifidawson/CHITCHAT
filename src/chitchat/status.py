@@ -50,6 +50,11 @@ def stage_details(run: RunDir) -> dict[str, str]:
         details["export"] = f"{_count(run.dataset_jsonl) or 0} rows, {included} included"
     if (n := _count(run.chunks)) is not None:
         details["index"] = _plural(n, "chunk")
+    if run.brief_json.exists():
+        brief = read_json(run.brief_json)
+        details["answer"] = (
+            f"brief, {_plural(brief['rounds'], 'round')}, {brief['stopped_because']}"
+        )
     if (n := _count(run.answers)) is not None:
         details["ask"] = _plural(n, "answer")
     return details

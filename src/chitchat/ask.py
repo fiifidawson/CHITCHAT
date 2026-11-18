@@ -107,17 +107,24 @@ def format_result(
     }
 
 
-def _privacy_config(path: str, review: bool) -> Any:
-    """Load the privacy config and add the citation rules to the answer prompt."""
+def _privacy_config(path: str, review: bool, default_llm: dict[str, Any] | None = None) -> Any:
+    """Load the privacy config and add the citation rules to the answer prompt.
+
+    Privacy mode answers with `answer.llm` from the privacy config, or else with `default_llm`
+    (the pipeline's ask model), so one model setting covers everything.
+    """
     import yaml
     from mmore.privacy.config import PrivacyConfig
     from mmore.utils import load_config
 
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f) or {}
-    if not (data.get("answer") or {}).get("llm"):
-        raise StageError(f"{path}: privacy mode needs `answer.llm`; it answers with that LLM.")
-    answer = data["answer"]
+    answer = data.setdefault("answer", {}) or {}
+    data["answer"] = answer
+    if not answer.get("llm"):
+        if not default_llm:
+            raise StageError(f"{path}: privacy mode needs `answer.llm`; it answers with that LLM.")
+        answer["llm"] = default_llm
     answer["system_prompt"] = "\n\n".join(p for p in (answer.get("system_prompt"), CITE_RULES) if p)
     data["interactive"] = review
     return load_config(data, PrivacyConfig)
@@ -139,20 +146,11 @@ def ask(
     from mmore.rag.pipeline import RAGConfig, RAGPipeline
     from mmore.utils import load_config
 
-    from chitchat.stages.index import milvus_db_name
+    from chitchat.agents.retrieval import retriever_settings
 
     rag_config = load_config(
         {
-            "retriever": {
-                "db": {
-                    "uri": cfg.index.db_uri,
-                    "name": milvus_db_name(cfg.index.db_uri, cfg.index.db_name),
-                },
-                "collection_name": cfg.index.collection,
-                "k": k or cfg.ask.k,
-                "hybrid_search_weight": 0.5,
-                "reranker_model_name": cfg.ask.reranker,
-            },
+            "retriever": retriever_settings(cfg, k or cfg.ask.k),
             "llm": cfg.ask_llm.to_mmore(),
             "system_prompt": RAG_PROMPT,
         },
@@ -163,7 +161,8 @@ def ask(
     privacy_path = cfg.privacy.rag_privacy_config
     if privacy and privacy_path:
         graph, approver, _ = setup_privacy(
-            _privacy_config(str(privacy_path), review), interactive_ok=review
+            _privacy_config(str(privacy_path), review, cfg.ask_llm.to_mmore()),
+            interactive_ok=review,
         )
     elif privacy:
         log.info("No rag_privacy_config set. Answering without privacy mode.")

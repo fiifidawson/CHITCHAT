@@ -17,12 +17,18 @@ privacy:
   before_screening: true
   rag_privacy_config: ../../configs/rag_privacy.yaml
 
+# The one model every LLM step uses (search planning, screening, answer, ask, evaluation).
+# Local and open by default. Other choices: configs/models/ and docs/MODELS.md.
+llm:
+  llm_name: qwen3.5:9b
+  base_url: http://localhost:11434/v1   # Ollama
+  temperature: 0
+
 screening:
   criteria: ../../configs/criteria.example.yaml
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }
   min_year: 2018
   min_chars: 500
-  max_chars: 60000
+  max_chars: 24000                    # fits a 16k context
   use_abstract_if_no_text: true
   max_concurrency: 4
 
@@ -38,6 +44,5 @@ index:
   collection: thorough_example
 
 ask:
-  llm: { llm_name: gpt-4o-mini, temperature: 0 }
   k: 8
   reranker: null                       # skip the 1 GB reranker download
