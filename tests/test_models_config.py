@@ -70,7 +70,8 @@ def test_shipped_configs_use_an_open_local_model() -> None:
     for path in paths:
         text = path.read_text(encoding="utf-8")
         assert "gpt-4o" not in text, path
-        assert yaml.safe_load(text)["llm"]["base_url"] == OLLAMA, path
+        base_url = yaml.safe_load(text)["llm"]["base_url"]
+        assert base_url in (OLLAMA, "http://localhost:8000/v1"), path  # Ollama or vLLM
 
 
 # --- check_llm_reachable ------------------------------------------------------------------
