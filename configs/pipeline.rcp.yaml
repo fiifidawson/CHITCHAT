@@ -5,6 +5,8 @@
 # On the LiGHT RCP image, also set before starting vLLM:
 #   export SETUPTOOLS_USE_DISTUTILS=local   # the image sets stdlib; Python 3.12 has none
 #   export VLLM_USE_FLASHINFER_SAMPLER=0    # the image's nvcc is too old to compile FlashInfer's sampler
+# and, in the terminal that runs CHITCHAT (not the one running vLLM):
+#   unset LD_LIBRARY_PATH                   # the image's value loads its own torch and breaks CHITCHAT's
 # Then:
 #   uv run chitchat search -c configs/pipeline.rcp.yaml "your question"
 # Paths are relative to this file's folder (configs/).
