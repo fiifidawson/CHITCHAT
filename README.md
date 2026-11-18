@@ -25,6 +25,7 @@ It is a research project of the LiGHT lab at EPFL, with the ICRC.
 | [docs/SETUP.md](docs/SETUP.md) | Install everything, step by step, on Windows or macOS |
 | [examples/README.md](examples/README.md) | Try three end-to-end examples, from 3 minutes to 45 minutes |
 | [docs/MODELS.md](docs/MODELS.md) | Choose a model and how to serve it: Ollama, vLLM or a hosted provider |
+| [docs/RCP.md](docs/RCP.md) | Run a full review on EPFL RCP with one H100: setup, running in the background, results |
 | [docs/COMMANDS.md](docs/COMMANDS.md) | Look up a command |
 | [docs/PIPELINE.md](docs/PIPELINE.md) | Understand what each stage does, skips and reuses |
 | [docs/USE_CASES.md](docs/USE_CASES.md) | See what the pipeline is for, with fictional sample documents |
