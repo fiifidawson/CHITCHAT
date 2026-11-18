@@ -1,5 +1,5 @@
 # A deep search on one 80 GB GPU (EPFL RCP), with Qwen3.6 27B and its full 262k context.
-# Start the model server in the same pod first (see docs/MODELS.md):
+# Start the model server in the same pod first (step by step: docs/RCP.md):
 #   vllm serve Qwen/Qwen3.6-27B-FP8 --max-model-len 262144 --reasoning-parser qwen3 --max-num-seqs 64
 # (--max-num-seqs 64: the default 1024 doesn't fit next to the full context; CHITCHAT sends at most 8.)
 # On the LiGHT RCP image, also set before starting vLLM:
