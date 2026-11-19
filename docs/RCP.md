@@ -32,6 +32,7 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
 
    ```bash
    cat > /lightscratch/users/$USER/rcp-env.sh <<'EOF'
+   export USER=${USER:-$(whoami)}           # runai bash leaves USER empty
    # The same scratch is /lightscratch inside a job and /mnt/light/scratch on the jumphost.
    if [ -d /lightscratch/users/$USER ]; then export S=/lightscratch/users/$USER; else export S=/mnt/light/scratch/users/$USER; fi
    export PATH=$S/bin:$PATH
@@ -134,7 +135,8 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
 
 ## E. Coming back
 
-15. Reconnect: `tmux attach -t chitchat` on the jumphost, or `runai bash <job-name>`.
+15. Reconnect: `tmux attach -t chitchat` on the jumphost, or `runai bash <job-name>`. Check the job is alive with `runai list jobs` (`runai login` if it says unauthorized).
+    - ⚠ In a new `runai bash` shell, `$USER` can be empty. Run `export USER=$(whoami)` before `source /lightscratch/users/$USER/rcp-env.sh`.
 16. Follow the run: `tail -f /lightscratch/users/$USER/run.log`. Check it is still going: `ps aux | grep "[c]hitchat run"`.
     - ⚠ Avoid tmux inside the job. A session there once disappeared and stopped vLLM with it. `nohup` doesn't depend on any terminal. With tmux on the jumphost and inside the job, `Ctrl+b` reaches the outer one; press `Ctrl+b` twice for the inner one.
 
@@ -174,6 +176,7 @@ This leaves out `raw/` and `milvus.db`.
 
 | Error | Cause | Fix |
 |---|---|---|
+| `/lightscratch/users//rcp-env.sh: No such file` | `$USER` is empty in the `runai bash` shell | `export USER=$(whoami)`, then `source` again |
 | `uv: command not found` | uv isn't in the image | Step 6, then `source rcp-env.sh` |
 | `Failed to infer device type` | You are on the jumphost, which has no GPU | Run it inside a job (step 3) |
 | `No module named 'vllm._C'` | Not an error in vLLM 0.34 | Check with the PyTorch line in step 7 instead |
@@ -185,4 +188,5 @@ This leaves out `raw/` and `milvus.db`.
 | `VIRTUAL_ENV ... does not match` | The vLLM environment is active | `deactivate` |
 | `tmux attach` says `no sessions` | The tmux session in the job is gone | Use `nohup` (steps 10 and 14); check vLLM with `curl` |
 | `^B` printed on screen | You are not inside tmux | Start or attach tmux first, or use `nohup` |
+| `LengthFinishReasonError: ... length limit was reached` on many papers | At temperature 0, Qwen's thinking can repeat itself until it is cut off | In the run's `pipeline.yaml`, set `llm.temperature: 0.6` and `llm.max_new_tokens: 32768`, then run `chitchat run` again: papers already screened are kept |
 | `The model ran out of room` | The model's context is too small | Check `--max-model-len` in the `vllm serve` line |
