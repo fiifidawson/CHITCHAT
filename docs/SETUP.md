@@ -308,7 +308,7 @@ Your runs in `runs/` and your documents in `my_docs/` are not touched.
 | `uv sync`: "network timeout" or "RPC failed" | Slow or unstable network | Run again with `UV_HTTP_TIMEOUT=300` set |
 | "OpenAlex will return nothing for N categories" | Those queries are over OpenAlex's 1,500-character limit | Searches from `chitchat search` are fitted automatically. For the predefined search, shorten the synonyms |
 | "Privacy mode sent your question as … [PERSON_1]" | Masking is on, and a word in your question was taken for a name | Rephrase ("the MoodSmith system"), or use `--no-privacy` |
-| "Masking is off: papers, your documents and your questions reach the model as they are" | The default: `privacy.mask` is `false` | Nothing to fix. To mask personal data, set `privacy.mask: true` in the config |
+| "Masking is off" | The default: `privacy.mask` is `false` | Nothing to fix. To mask personal data, set `privacy.mask: true` in the config |
 | "The model's replies were cut off … 3 times" | The model keeps thinking and never answers | Turn thinking off on the model server, or raise `llm.max_new_tokens`. See [MODELS.md](MODELS.md#long-replies-and-thinking-models) |
 | Nothing happens for minutes during `ingest` | mmore is starting its document readers | Normal on the first run: wait 2 to 3 minutes |
 | No wheel for torch on a Mac | An Intel Mac, or macOS before 14 | Use an Apple silicon Mac with macOS 14+, or Windows |
