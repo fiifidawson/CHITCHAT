@@ -79,7 +79,9 @@ This downloads Python 3.11 and every library. It takes 10 to 30 minutes.
 
 **Check:** `uv run chitchat --help` lists the commands `run`, `search`, `ask`, `status`, `report` and `evaluate`.
 
-### 5. Download the language model for the privacy step
+### 5. Download the language model for masking
+
+Masking is off by default. This model is only used when you turn it on (`privacy.mask: true`), but it is small, so install it now.
 
 ```powershell
 uv run python -m spacy download en_core_web_lg
@@ -202,7 +204,9 @@ This downloads Python 3.11 and every library. It takes 10 to 30 minutes.
 
 **Check:** `uv run chitchat --help` lists the commands `run`, `search`, `ask`, `status`, `report` and `evaluate`.
 
-### 5. Download the language model for the privacy step
+### 5. Download the language model for masking
+
+Masking is off by default. This model is only used when you turn it on (`privacy.mask: true`), but it is small, so install it now.
 
 ```bash
 uv run python -m spacy download en_core_web_lg
@@ -268,7 +272,7 @@ uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sani
 uv run chitchat ask -c examples/own-documents/pipeline.yaml "What consent approach was agreed with the community in Kakuma?"
 ```
 
-You should see 7 documents read, about 80 items masked, a decision brief (also saved as `runs/own-documents-example/answer/brief.md`), and an answer citing `[D0004]`. Then try a real search:
+You should see 7 documents read, about 80 items masked (this example turns masking on with `privacy.mask: true`; it is off by default), a decision brief (also saved as `runs/own-documents-example/answer/brief.md`), and an answer citing `[D0004]`. Then try a real search:
 
 ```bash
 uv run chitchat search --mode shallow "Which methods reduce bias when collecting training data for language models in low-resource languages?"
@@ -303,7 +307,9 @@ Your runs in `runs/` and your documents in `my_docs/` are not touched.
 | "A parameter cannot be found that matches parameter name 'L'" | PowerShell's `curl` | Type `curl.exe` |
 | `uv sync`: "network timeout" or "RPC failed" | Slow or unstable network | Run again with `UV_HTTP_TIMEOUT=300` set |
 | "OpenAlex will return nothing for N categories" | Those queries are over OpenAlex's 1,500-character limit | Searches from `chitchat search` are fitted automatically. For the predefined search, shorten the synonyms |
-| "Privacy mode sent your question as … [PERSON_1]" | A word in your question was taken for a name | Rephrase ("the MoodSmith system"), or use `--no-privacy` |
+| "Privacy mode sent your question as … [PERSON_1]" | Masking is on, and a word in your question was taken for a name | Rephrase ("the MoodSmith system"), or use `--no-privacy` |
+| "Masking is off: papers, your documents and your questions reach the model as they are" | The default: `privacy.mask` is `false` | Nothing to fix. To mask personal data, set `privacy.mask: true` in the config |
+| "The model's replies were cut off … 3 times" | The model keeps thinking and never answers | Turn thinking off on the model server, or raise `llm.max_new_tokens`. See [MODELS.md](MODELS.md#long-replies-and-thinking-models) |
 | Nothing happens for minutes during `ingest` | mmore is starting its document readers | Normal on the first run: wait 2 to 3 minutes |
 | No wheel for torch on a Mac | An Intel Mac, or macOS before 14 | Use an Apple silicon Mac with macOS 14+, or Windows |
 

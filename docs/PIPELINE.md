@@ -12,7 +12,8 @@ synonyms + categories ──► queries ──► discover ──► sanitize �
 
 - **One config file drives a run.** It names the run (`run_name`) and points to the other configs.
 - **Each stage reads files and writes files** in `runs/<run_name>/`. You can rerun any stage on its own.
-- **Raw text stays in `runs/<run_name>/raw/`.** Every file outside `raw/` holds sanitized text only.
+- **Masking is off by default** (`privacy.mask: false`). Text reaches the model as it is, and every command says so at the start. With `privacy.mask: true`, every file outside `raw/` holds masked text only.
+- **Raw text stays in `runs/<run_name>/raw/`.** Do not share that folder.
 
 ## What happens before any stage runs
 
@@ -29,7 +30,7 @@ Every `chitchat` command does these steps first, in this order:
 5. **Checks all config files**, before any network or LLM call:
    - **the pipeline config:** required keys, unknown keys, file paths, labels and the run name;
    - **the criteria file:** ids, types, scales and rules;
-   - **the sanitize config:** every privacy setting must be set, so no LLM is ever asked to choose one.
+   - **the sanitize config** (only when `privacy.mask` is on): every privacy setting must be set, so no LLM is ever asked to choose one.
 
    Any problem stops the command with a message that names the field at fault (exit code 2).
 6. **Checks the model server**, before the first LLM call of a command: for a model with a `base_url` (Ollama, vLLM), it asks the server for its list of models. If the server doesn't answer, it stops with "Is Ollama running?"; if the model is missing, with the `ollama pull` command to run.
@@ -39,7 +40,7 @@ Every `chitchat` command does these steps first, in this order:
 `chitchat search "question"` builds the boolean search from your question instead of the predefined files. It then sets up a new run folder and runs the pipeline there.
 
 1. **Run folder.** A new folder named from the question and the date, e.g. `runs/humanitarian-organisations-obtain-informed-consent-2026-10-21/`. If it exists, `-2`, `-3`… is added. `--run-name` sets the name yourself.
-2. **Privacy check.** Your question, and later your answers and change requests, are checked for personal data on your machine with Presidio (the `rag_privacy.yaml` settings). Anything found is masked before it goes to the LLM, and you see the masked version.
+2. **Privacy check (only with `privacy.mask: true`).** Your question, and later your answers and change requests, are checked for personal data on your machine with Presidio (the `rag_privacy.yaml` settings). Anything found is masked before it goes to the LLM, and you see the masked version. With masking off (the default), a notice says they are sent as typed.
 3. **Clarifying questions (deep mode only).** The LLM asks about 4 questions: scope, population, setting, years, what to leave out. Each has suggested answers. Type a number, your own answer, or press Enter to skip.
 4. **Draft.** The LLM proposes concepts (each with synonyms) and categories (each combining 2 or more concepts with AND). If the draft breaks the rules, for example a category with only one concept, the LLM is asked to fix it, up to 2 times, before you see it.
 5. **Checks on the draft.** Terms are cleaned (no quotes or AND/OR inside), duplicates and unknown words are dropped, and the mode's limits are applied. If a query is over 1,500 characters, the last synonyms of its longest group are dropped until it fits, so OpenAlex can run it. Every change is listed under the draft.
@@ -58,8 +59,15 @@ Every `chitchat` command does these steps first, in this order:
    - Each concept keeps the same colour in every box, so you can see when two categories share one.
    - The bottom border shows the query's length and whether OpenAlex accepts it.
 7. **Your decision.** `a` accepts. `c` asks for a change in plain words: the LLM revises the whole search with the full conversation, and you see the new draft. Repeat as often as you like. `q` quits and saves nothing.
-8. **Saved files.** `search/synonyms.jsonl`, `search/categories.yaml` and `search/discovery.yaml` (in mmore's formats), `search/plan.json` (the whole conversation: question, answers, every draft and change request), and `pipeline.yaml` (your template settings, pointed at this folder, with its own Milvus collection).
-9. **Run.** It asks "Run the pipeline now?" and runs every stage. Later commands use `-c runs/<folder>/pipeline.yaml`.
+8. **Screening criteria.** The LLM drafts the questions each paper is screened on, from your question, your answers and the accepted search. You see them in a "Screening criteria" box, in four parts:
+   - **Must be true:** 1 to 3 yes/no questions. A paper that answers no is `EXCLUDE`.
+   - **Rules a paper out:** 0 to 2 yes/no questions, for what you ruled out. A paper that answers yes is `EXCLUDE`.
+   - **Makes a paper stronger:** 2 to 4 yes/no questions. Yes to all: `HIGH`. Yes to some: `MEDIUM`. None: `LOW`.
+   - **Pulled from each paper:** 2 to 4 short questions whose answers go into `dataset.csv`.
+
+   The LLM writes only the questions. The rules above are fixed by code, so every drafted file works the same way. `a` accepts, `c` asks for changes, `q` quits and saves nothing. `--yes` accepts the first draft.
+9. **Saved files.** `search/synonyms.jsonl`, `search/categories.yaml` and `search/discovery.yaml` (in mmore's formats), `search/criteria.yaml` (the screening criteria, in the same format as `configs/criteria.example.yaml`), `search/plan.json` (the whole conversation: question, answers, every draft and change request, for the search and the criteria), and `pipeline.yaml` (your template settings, pointed at this folder and at `search/criteria.yaml`, with its own Milvus collection).
+10. **Run.** It asks "Run the pipeline now?" and runs every stage. Later commands use `-c runs/<folder>/pipeline.yaml`.
 
 | | Shallow: quick scan | Deep: systematic search (default) |
 |---|---|---|
@@ -72,7 +80,7 @@ Every `chitchat` command does these steps first, in this order:
 
 Change any of these under `search.shallow` or `search.deep` in your pipeline config. Only the fields you set are changed. `search.mode` sets the default mode, and `search.llm` the model (default: the screening model).
 
-`--predefined` skips the planning and uses the search files named in the config (`discovery.config`). It still gets a new folder, timing and history.
+`--predefined` skips the planning and uses the search files named in the config (`discovery.config`) and the config's fixed criteria (`screening.criteria`). It still gets a new folder, timing and history.
 
 ### Choosing sources
 
@@ -98,20 +106,26 @@ Where to change them:
   ```
 
   Without OpenAlex in the list, queries are not trimmed and the OpenAlex status is not shown.
-- **For one run that's already planned:** edit `sources:` in `runs/<folder>/search/discovery.yaml`, then rerun from `discover`: `uv run chitchat run -c runs/<folder>/pipeline.yaml`.
+- **For one run that's already planned:** edit `sources:` in `runs/<folder>/search/discovery.yaml`, then rerun from `discover`: `uv run chitchat run -c runs/<folder>/pipeline.yaml --stages discover,sanitize,screen,export,index,answer`.
 - **For the predefined search:** edit `sources:` in `configs/discovery/discovery.yaml`.
 
 ## `chitchat run`
 
 ```bash
-uv run chitchat run -c <config>                       # every stage
+uv run chitchat run -c <config>                       # every stage not done yet
 uv run chitchat run -c <config> --stages screen,export
 uv run chitchat run -c <config> --redecide
 ```
 
+- **Carrying on:** without `--stages`, a run picks up where the last one stopped. After any stop (an error, Ctrl+C, a lost connection, a full disk), run the same command again.
+  - **Stages already done are skipped**, shown as `done earlier, skipped`.
+  - **`screen` always runs.** It only screens papers not screened yet, and retries the ones that failed.
+  - **The stages after `screen` are skipped** if they are done and screening found nothing new. Once a stage really runs, every stage after it runs too.
+  - When nothing was left to do, the Done box says how to redo a stage.
+- **`--stages`** runs exactly those stages, even if they are done. Use it to redo a stage after a change (see [What to rerun after a change](#what-to-rerun-after-a-change)).
 - **Order:** stages always run in pipeline order, whatever order you type them in.
 - **Errors:** if a stage fails, the run stops there. Later stages don't run, and earlier results are kept.
-- **Done markers:** after each successful stage, a marker is written to `runs/<run>/.done/<stage>`. `chitchat status` shows these. **Nothing is ever skipped because of a marker.** A stage runs every time you ask for it.
+- **Done markers:** after each successful stage, a marker is written to `runs/<run>/.done/<stage>`. `chitchat status` shows these, and a run without `--stages` skips the stages that have one.
 - **`--redecide`** ignores `--stages` and only relabels screened papers (see [screen](#5-screen)).
 
 ## Runs, history and logs
@@ -176,8 +190,9 @@ Reads your own documents: reports, notes, PDFs, Word files and more.
 
 ### 4. `sanitize`
 
-Masks personal data. **No LLM. Nothing leaves your machine.**
+Masks personal data, when `privacy.mask` is `true`. **No LLM. Nothing leaves your machine.**
 
+- **Masking off (the default):** the stage only copies `raw/papers.jsonl` and `raw/docs.jsonl` to `papers.sanitized.jsonl` and `docs.sanitized.jsonl`, unchanged, with a `paper_id` added. `privacy_report.json` says `"masking": "off"` and gives the counts. Nothing is loaded, so it takes seconds. The rest of this section is about masking on.
 - **Reads:** `raw/papers.jsonl` and, if it exists, `raw/docs.jsonl`. If there are no papers yet, it says so and does the documents only.
 - **Does:**
   - finds names, emails and similar with Presidio (spaCy), using the settings in `configs/sanitize.yaml`;
@@ -199,8 +214,8 @@ Masks personal data. **No LLM. Nothing leaves your machine.**
 An LLM answers your criteria for each paper. Fixed rules then decide the label.
 
 - **Reads:**
-  - `papers.sanitized.jsonl`. If `privacy.before_screening` is `false`, it reads the raw papers instead, with a warning.
-  - the criteria file;
+  - `papers.sanitized.jsonl` (masked, or passed on unchanged when masking is off). With masking on and `privacy.before_screening: false`, it reads the raw papers instead, with a warning.
+  - the criteria file: `search/criteria.yaml` for a run from `chitchat search`, otherwise `screening.criteria` in the config;
   - `screening.jsonl`, to reuse earlier results.
 - **For each paper, in this order:**
   1. **Already done?** A paper is reused, with no LLM call, when an earlier record has the same `paper_id`, the same criteria hash and the same model, **and** its status is `screened` or `skipped`.
@@ -224,6 +239,7 @@ An LLM answers your criteria for each paper. Fixed rules then decide the label.
   | `error` | The call failed (network, rate limit, …) | Retried |
 
 - **Stops the whole stage** on a bad API key or an unknown model, because every paper would fail. Finished papers are kept. The message says if an old key in your environment is overriding `.env`.
+- **Stops the whole stage after 3 replies cut off at the length limit.** A screening reply is short, so a cut-off means the model isn't stopping, usually because it keeps thinking. The message says to turn thinking off on the model server, or to raise `llm.max_new_tokens`. Finished papers are kept. See [MODELS.md](MODELS.md#long-replies-and-thinking-models).
 - **The criteria hash** covers the questions, the scales and the extract fields, but **not the rules**. So:
   - **you change a question, scale or extract field:** the hash changes, and every paper is screened again;
   - **you change only the rules:** the hash stays the same. Use `--redecide`.
@@ -241,7 +257,7 @@ Builds the dataset and the PRISMA report. **No network.**
   - `raw/discovery_stats.json`.
 - **Writes:**
   - `sources.json`: a short tag for every paper (`P0001`, …) and document (`D0001`, …), numbered in order of their ids.
-  - `dataset.jsonl`: each sanitized paper with its screening result. Papers without a record show `not_screened`.
+  - `dataset.jsonl`: each paper (masked if masking is on) with its screening result. Papers without a record show `not_screened`.
   - `dataset.csv`: one row per paper and one column per criterion and extract field. It opens cleanly in Excel.
   - `prisma.json` and `prisma.md`: the PRISMA flow, every number computed from the files.
 - **Checks** that the PRISMA boxes add up, and warns if they don't. That usually means `discover` was rerun without `sanitize`.
@@ -262,7 +278,7 @@ Where Milvus is depends on `index.db_uri`:
 
 Each run folder from `chitchat search` gets its own collection, so runs never overwrite each other's index.
 
-- **Reads:** `sources.json` (run `export` first), the sanitized papers and documents, and `screening.jsonl`.
+- **Reads:** `sources.json` (run `export` first), `papers.sanitized.jsonl` and `docs.sanitized.jsonl`, and `screening.jsonl`.
 - **Chooses:**
   - papers whose label is in `index.include_labels` (default HIGH, MEDIUM, LOW). Each uses its full text, or its abstract if there's no full text.
   - your documents too, if `include_own_documents` is on.
@@ -279,8 +295,8 @@ Each run folder from `chitchat search` gets its own collection, so runs never ov
 Answers the run's question with a **decision brief**: what the options are, what the evidence says for and against each, and what to weigh. Four agents work in a loop, in plain Python.
 
 - **The question:**
-  1. from `search/plan.json`: the question as it was sent when planning (already masked), with your answers to the clarifying questions;
-  2. otherwise `answer.question` in the config (for `chitchat run` and `--predefined`), masked first;
+  1. from `search/plan.json`: the question as it was sent when planning (masked if masking was on), with your answers to the clarifying questions;
+  2. otherwise `answer.question` in the config (for `chitchat run` and `--predefined`), masked first if masking is on;
   3. otherwise the stage is skipped with a note.
 - **Reads:** `sources.json` (for the titles and labels) and the Milvus index from `index`.
 - **The agents:**
@@ -306,20 +322,21 @@ Answers the run's question with a **decision brief**: what the options are, what
   - `answer/evidence.json`: every passage retrieved, with the search that found it;
   - `answer/trace.jsonl`: one line per step: agent, round, status, seconds, tokens and output.
 - **Prints** the brief in boxes, and a summary: rounds, why it stopped, passages, model.
-- **Privacy:** only masked text reaches the model. The question was masked when the search was planned, and the passages were sanitized before indexing.
-- **Runs every time you ask for it**, from scratch. About 7 LLM calls with 3 rounds.
+- **Privacy:** with masking on, only masked text reaches the model: the question was masked when the search was planned, and the passages were masked before indexing. With masking off, both are sent as they are.
+- **Runs from scratch** each time it runs. A run without `--stages` skips it once it is done; `--stages answer` writes it again. About 7 LLM calls with 3 rounds.
 
 ## `chitchat ask`
 
 ```bash
 uv run chitchat ask -c <config> "question"
+uv run chitchat ask -c <config> --privacy "question"
 uv run chitchat ask -c <config> --no-privacy "question"
 uv run chitchat ask -c <config> --review "question"
 uv run chitchat ask -c <config> --k 10 "question"
 ```
 
 1. **Finds** the `k` chunks closest to your question in Milvus (default 6, or `--k`).
-2. **Privacy mode** is on when `privacy.rag_privacy_config` is set and you didn't pass `--no-privacy`:
+2. **Privacy mode** follows `privacy.mask` (off by default). `--privacy` turns it on for one question, `--no-privacy` off. It needs `privacy.rag_privacy_config`. When it is off, a notice says so. When it is on:
    - the chunks and your question are checked for personal data and masked again before the LLM sees them;
    - it answers with `answer.llm` from `configs/rag_privacy.yaml` if set, otherwise with the pipeline's model;
    - **`--review`** shows you the masked context and waits for your approval before anything is sent.
@@ -346,7 +363,7 @@ uv run chitchat evaluate -c <config> -q <file> --import deepresearch=answers/
 
 Compares the decision brief with other ways of answering, on the run's index.
 
-1. **Reads the questions:** one per line; blank lines and lines starting with `#` are skipped. Each is masked like `ask` does.
+1. **Reads the questions:** one per line; blank lines and lines starting with `#` are skipped. With masking on, each is masked first.
 2. **For each question, answers it with:**
    - **baseline:** one search (`evaluate.baseline_k` passages, default 10) and one Writer call with the same prompt. The comparison then shows what the loop adds;
    - **chitchat:** the full `answer` loop;
@@ -370,16 +387,18 @@ Things to know:
 
 ## What to rerun after a change
 
+Run the stages listed with `--stages`, for example `uv run chitchat run -c <config> --stages screen,export,index,answer`. Without `--stages`, stages already done would be skipped.
+
 | You changed… | Run | Notes |
 |---|---|---|
 | Synonyms, categories or discovery settings | `queries`, `discover`, `sanitize`, `screen`, `export`, `index` | Papers already screened are reused |
 | Saved missing PDFs at their `save_as` paths | `discover`, `sanitize`, `screen`, `export`, `index` | See "Known gaps" |
-| A question, scale or extract field in the criteria | `screen`, `export`, `index` | Every paper is screened again |
-| Only the rules in the criteria | `run --redecide`, then `report`, then `index` | No LLM calls |
+| A question, scale or extract field in the criteria (`search/criteria.yaml` or `screening.criteria`) | `screen`, `export`, `index` | Every paper is screened again |
+| Only the rules (`decision`) in the criteria | `run --redecide`, then `report`, then `index` | No LLM calls |
 | The screening model | `screen`, `export`, `index` | Every paper is screened again |
 | `min_year`, `min_chars` or `use_abstract_if_no_text` | `screen`, `export`, `index` | See "Known gaps" |
 | Files in `my_docs/` | `ingest`, `sanitize`, `export`, `index` | Documents are never screened |
-| `configs/sanitize.yaml` | `sanitize`, `export`, `index` | Screening is not redone |
+| `privacy.mask` or `configs/sanitize.yaml` | `sanitize`, `export`, `index` | Screening is not redone |
 | `index.include_labels` or the embedding model | `index` | |
 | `configs/rag_privacy.yaml` or `ask` settings | nothing | Applies to the next `ask` |
 | The model, or the `answer` settings | `answer` | The screening is reused only if the screening model is unchanged |
@@ -387,10 +406,10 @@ Things to know:
 
 ## Known gaps
 
-- **Screening criteria don't follow the question.** `chitchat search` builds the search from your question, but screening still uses `configs/criteria.example.yaml`, which is written for humanitarian AI data ethics.
+- **Drafted criteria can be too narrow.** The LLM writes them from your question. A `must` question that asks for more than the question does excludes good papers. Read the box before you accept. `chitchat run` on a template and `--predefined` use `configs/criteria.example.yaml`, which is written for humanitarian AI data ethics.
 - **Skipped papers stay skipped.** A `skipped` record counts as finished. If you lower `min_year`, lower `min_chars`, or add a PDF for a paper skipped as `no_text`, it is not screened again. To redo those papers, delete their lines from `screening.jsonl` and run `screen`. To redo everything, delete the whole file.
 - **Screening ignores new text.** A paper screened on its abstract keeps that result after you add its PDF. The fix is the same: delete its line.
-- **Sanitize changes don't reach screening.** After you change `sanitize.yaml`, the masked text changes, but screened papers are reused.
+- **Masking changes don't reach screening.** After you turn `privacy.mask` on or off, or change `sanitize.yaml`, the text changes, but screened papers are reused.
 - **The brief covers only this run.** It sees the indexed papers and documents, nothing else. A thin index gives a thin brief, and its gaps section says so.
 - **The Critic is the same model as the Writer.** It catches missing parts and weak citations, not every error. Read the cited passages before acting.
 - **OpenAlex drops long queries.** Queries over 1,500 characters return nothing from OpenAlex. `queries` and `discover` warn you. The full category set is over this limit, so a full run gets nothing from OpenAlex until the synonyms are shortened.
@@ -400,7 +419,7 @@ Things to know:
 ```
 runs/<run_name>/
 ├── pipeline.yaml               search: this run's config (use it with -c)
-├── search/                     search: synonyms.jsonl, categories.yaml, discovery.yaml, plan.json
+├── search/                     search: synonyms.jsonl, categories.yaml, discovery.yaml, criteria.yaml, plan.json
 ├── history.jsonl               one line per run: stages, durations, outcome
 ├── logs/                       one log file per run
 ├── raw/                        raw text: never share this folder
@@ -411,7 +430,7 @@ runs/<run_name>/
 │   ├── docs.jsonl              ingest
 │   └── docs_process/           ingest (mmore working files)
 ├── queries.json                queries
-├── papers.sanitized.jsonl      sanitize
+├── papers.sanitized.jsonl      sanitize (masked, or unchanged with masking off)
 ├── docs.sanitized.jsonl        sanitize
 ├── privacy_report.json         sanitize
 ├── screening.jsonl             screen (appended; one line per paper per attempt)
@@ -423,5 +442,5 @@ runs/<run_name>/
 ├── answer/                     answer: brief.json, brief.md, evidence.json, trace.jsonl
 ├── answers.jsonl               ask (appended)
 ├── eval/<run id>/              evaluate: answers.jsonl, scores.jsonl, summary.md
-└── .done/                      stage markers, for status only
+└── .done/                      stage markers: status shows them, and run skips those stages
 ```

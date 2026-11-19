@@ -13,8 +13,9 @@ own_documents:
   fast: true                          # no OCR models
 
 privacy:
+  mask: false                         # true: mask personal data before any model sees text
   sanitize_config: configs/sanitize.yaml
-  before_screening: true              # sanitize paper text before the screening LLM sees it
+  before_screening: true              # with mask on: screen the masked text
   rag_privacy_config: configs/rag_privacy.yaml   # null = no privacy mode when answering
 
 # The one model every LLM step uses (search planning, screening, answer, ask, evaluation).
@@ -25,7 +26,7 @@ llm:
   temperature: 0
 
 screening:
-  criteria: configs/criteria.example.yaml
+  criteria: configs/criteria.example.yaml   # for `chitchat run` and --predefined; `search` drafts its own
   min_year: 2020
   min_chars: 500                      # applies to the text actually sent
   max_chars: 24000                    # head + tail budget per paper; fits a 16k context

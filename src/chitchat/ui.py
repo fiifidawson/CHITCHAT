@@ -98,6 +98,19 @@ def note(message: str) -> None:
     console.print(Text(message, style="dim"))
 
 
+MASKING_OFF = "Masking is off. To turn it on: privacy.mask: true in the config."
+
+
+def masking_notice(masking: bool) -> None:
+    """Say once, at the start of a command, that nothing will be masked."""
+    if not masking:
+        console.print(Text(f"ⓘ {MASKING_OFF}", style=ACCENT))
+
+
+def stage_skipped(name: str, position: int, total: int) -> None:
+    console.print(Text(f"✓ {name} · {position}/{total} · done earlier, skipped", style="dim"))
+
+
 def facts(rows: list[Fact]) -> Table:
     """Label, value and a dim detail per row, aligned."""
     table = Table.grid(padding=(0, 2))

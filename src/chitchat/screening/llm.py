@@ -108,6 +108,20 @@ def _usage(raw: Any) -> dict[str, int]:
     }
 
 
+# Replies cut off at the length limit before a run stops. Structured replies are short, so a
+# cut-off means the model isn't stopping (usually thinking that runs on), not a long answer.
+MAX_LENGTH_CUTS = 3
+
+
+def _completion_tokens(e: Exception) -> int | None:
+    usage = getattr(getattr(e, "completion", None), "usage", None)
+    tokens = getattr(usage, "completion_tokens", None)
+    if tokens is None:
+        match = re.search(r"completion_tokens=(\d+)", str(e))
+        tokens = int(match.group(1)) if match else None
+    return tokens
+
+
 def _small_context(e: Exception) -> int | None:
     """The context size, when a reply was cut because a small context window filled up.
 
@@ -144,6 +158,7 @@ class StructuredCaller:
         self._structured = self._wrap()
         self._lock = threading.Lock()
         self._dropped_temperature = False
+        self._length_cuts = 0
 
     def _wrap(self) -> Any:
         if self.method == "json_schema":  # the client's default; fakes in tests don't take `method`
@@ -164,6 +179,19 @@ class StructuredCaller:
             self._structured = self._wrap()
             self._dropped_temperature = True
             return True
+
+    def _count_length_cut(self, tokens: int | None) -> None:
+        with self._lock:
+            self._length_cuts += 1
+            cuts = self._length_cuts
+        if cuts < MAX_LENGTH_CUTS:
+            return
+        size = f" at {tokens:,} tokens" if tokens else ""
+        raise FatalLLMError(
+            f"The model's replies were cut off{size} {cuts} times: it keeps writing instead of "
+            "answering. This is usually a thinking model that doesn't stop. Turn thinking off "
+            "on the model server, or raise llm.max_new_tokens (see docs/MODELS.md)."
+        )
 
     def _with_schema(self, messages: list[Any]) -> list[Any]:
         """json_mode asks only for JSON, not for this schema, so put the schema in the prompt."""
@@ -203,6 +231,8 @@ class StructuredCaller:
                     "For Ollama, set OLLAMA_CONTEXT_LENGTH to 16384, then quit Ollama and "
                     "open it again (see docs/MODELS.md)."
                 ) from None
+            if name == "LengthFinishReasonError":
+                self._count_length_cut(_completion_tokens(e))
             return CallResult("error", error=_short(f"{name}: {e}"))
 
         raw = out.get("raw")

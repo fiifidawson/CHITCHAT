@@ -1,8 +1,8 @@
 """The answer loop: plan, retrieve, write, check and critique, then revise.
 
 Plain Python with an explicit state. Every LLM step returns a schema from `schemas.py`.
-Only masked text reaches the LLM: the question was masked when the search was planned,
-and the passages were sanitized before indexing.
+With privacy.mask on, only masked text reaches the LLM: the question was masked when the
+search was planned, and the passages come from the masked index.
 """
 
 from __future__ import annotations

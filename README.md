@@ -6,8 +6,8 @@ CHITCHAT is a literature-review pipeline built on [mmore](https://github.com/EPF
 
 1. turns your question into a boolean search, which you check and refine;
 2. finds papers in OpenAlex, Europe PMC and arXiv, and reads your own documents;
-3. masks personal data, on your machine, before any LLM sees it;
-4. screens each paper against your criteria, with evidence quotes;
+3. can mask personal data on your machine before any LLM sees it (off by default; one switch turns it on);
+4. drafts screening criteria from your question and answers, then screens each paper against them, with evidence quotes;
 5. writes a dataset and a PRISMA report;
 6. answers your question with a **decision brief**: the options, their benefits and risks, the trade-offs, where the evidence disagrees, and what is missing. Every claim cites its source, like `[P0012]` for a paper or `[D0003]` for one of your documents.
 
@@ -29,7 +29,7 @@ It is a research project of the LiGHT lab at EPFL, with the ICRC.
 | [docs/COMMANDS.md](docs/COMMANDS.md) | Look up a command |
 | [docs/PIPELINE.md](docs/PIPELINE.md) | Understand what each stage does, skips and reuses |
 | [docs/USE_CASES.md](docs/USE_CASES.md) | See what the pipeline is for, with fictional sample documents |
-| [docs/WEB_APP_BRIEF.md](docs/WEB_APP_BRIEF.md) | Plan a secure web version: the workflow, the data and the security rules |
+| [WEB_APP_BRIEF.md (humani-t)](https://github.com/fiifidawson/humani-t/blob/main/docs/WEB_APP_BRIEF.md) | Plan a secure web version: the workflow, the data and the security rules |
 | [docs/WEB_APP_REFERENCE.md](docs/WEB_APP_REFERENCE.md) | Build the web version: services, the agent loop, the decision-brief screens, the API |
 
 ## Quick start
@@ -55,7 +55,8 @@ uv run chitchat search "How do humanitarian organisations obtain informed consen
 
    A paper must match every concept in a category (`AND`), through the concept or any of its synonyms (`or:`).
 3. **Your decision.** Type `a` to accept, `c` to ask for changes in plain words (for example "add a category on community participation"), or `q` to quit. Ask for changes as often as you like.
-4. **The run.** It runs in a new folder in `runs/`, and ends with a decision brief that answers your question, in the terminal and in `answer/brief.md`. Then ask follow-up questions:
+4. **Screening criteria.** The model drafts the questions each paper is screened on, from your question and answers: what a paper must be about, what rules it out, what makes it stronger, and what to pull from it. Accept, change or quit the same way.
+5. **The run.** It runs in a new folder in `runs/`, and ends with a decision brief that answers your question, in the terminal and in `answer/brief.md`. Then ask follow-up questions:
 
 ```bash
 uv run chitchat ask -c runs/<folder>/pipeline.yaml "What consent practices do the papers describe?"
@@ -81,8 +82,8 @@ Choose with `--mode shallow` or `--mode deep`. The fixed search from the earlier
 | 1 | `queries` | Builds the boolean queries. Offline | `queries.json` |
 | 2 | `discover` | Searches OpenAlex, Europe PMC and arXiv, downloads PDFs | `raw/papers.jsonl` |
 | 3 | `ingest` | Reads your own documents (PDF, Word, Excel, email, web pages, text) | `raw/docs.jsonl` |
-| 4 | `sanitize` | Masks names, emails, phone numbers and more. No LLM | `papers.sanitized.jsonl`, `privacy_report.json` |
-| 5 | `screen` | An LLM answers your criteria. Fixed rules decide the label | `screening.jsonl` |
+| 4 | `sanitize` | With masking on, masks names, emails, phone numbers and more. No LLM. With it off (the default), passes the text on unchanged | `papers.sanitized.jsonl`, `privacy_report.json` |
+| 5 | `screen` | An LLM answers the criteria. Fixed rules decide the label | `screening.jsonl` |
 | 6 | `export` | Dataset and PRISMA report | `dataset.csv`, `prisma.md` |
 | 7 | `index` | Puts included papers and your documents into a search index | a Milvus collection |
 | 8 | `answer` | Four agents answer your question with a decision brief | `answer/brief.md` |
@@ -93,6 +94,8 @@ The `answer` stage is a loop of four agents: a **Planner** lists the options and
 
 Every run records its stages, durations and outcome in `history.jsonl`, and its full output in `logs/`. `chitchat status` shows both.
 
+If a run stops for any reason, run the same command again: `chitchat run -c runs/<folder>/pipeline.yaml`. Stages already done are skipped, and screening carries on with the papers not screened yet.
+
 ## Configuration
 
 | File | What it sets |
@@ -100,22 +103,23 @@ Every run records its stages, durations and outcome in `history.jsonl`, and its 
 | `runs/<folder>/pipeline.yaml` | One run: written by `chitchat search` from your template |
 | `pipeline.yaml` (your template) | The model, privacy, screening, index and answer settings. Copy it from `configs/pipeline.example.yaml` |
 | `configs/models/` | Model settings to copy into `llm:`: Ollama, vLLM, hosted providers |
-| `configs/criteria.example.yaml` | Screening questions and decision rules |
-| `configs/sanitize.yaml` | Which personal data is masked, for papers and for your documents |
-| `configs/rag_privacy.yaml` | Privacy checks when answering questions |
+| `runs/<folder>/search/criteria.yaml` | The screening questions and rules drafted for your question |
+| `configs/criteria.example.yaml` | A fixed checklist (humanitarian AI data ethics), used by `chitchat run` on a template and by `--predefined` |
+| `configs/sanitize.yaml` | Which personal data is masked, for papers and for your documents, when `privacy.mask` is on |
+| `configs/rag_privacy.yaml` | Privacy checks on your question and when answering questions, when `privacy.mask` is on |
 | `configs/discovery/` | The predefined search (`--predefined`): synonyms, categories, sources |
 
 ## Privacy
 
 - By default the LLM runs on your computer (Ollama), so nothing is sent out. A hosted provider is possible; [docs/MODELS.md](docs/MODELS.md) has the rules.
-- Your question, your answers and your change requests are checked for personal data on your machine before they reach an LLM.
-- Raw text stays in `runs/<folder>/raw/`. Do not share that folder. Everything else holds masked text only.
-- Your own documents are always masked, with a broader list than papers (papers keep places and dates, which are research content).
+- **Masking is off by default.** Papers, your documents, your question and your answers reach the model as they are, and every command says so. Papers from public repositories rarely need it.
+- **To mask personal data**, set `privacy.mask: true` in your config. Then your question, answers and change requests are checked on your machine before they reach an LLM, and papers and your documents are masked before screening and indexing. Your documents get a broader list than papers (papers keep places and dates, which are research content).
+- Raw text stays in `runs/<folder>/raw/`. Do not share that folder. With masking on, everything else holds masked text only.
 - Masking lowers risk but does not guarantee anonymity. See [docs/USE_CASES.md](docs/USE_CASES.md) for what it misses.
 
 ## Known limits
 
-- **Screening criteria** are written for humanitarian AI data ethics. A search on another topic still uses them: edit `configs/criteria.example.yaml` to change them.
+- **Screening criteria** from `chitchat search` are drafted by the model. Check them before you accept: a question that is too narrow excludes good papers. `--predefined` and `chitchat run` on a template use the fixed checklist in `configs/criteria.example.yaml`, which is written for humanitarian AI data ethics.
 - **PDFs:** publishers refuse many downloads. Missing ones are listed in `raw/papers_failed_pdfs.csv`, where you can add them by hand.
 - **OpenAlex** rejects queries over 1,500 characters. Searches from `chitchat search` are fitted automatically. The predefined search is too long for it.
 - **Speed:** one LLM call per paper to screen it, one more for papers that are not excluded, and about 7 for the decision brief. On Apple silicon or a GPU that is fine; on a CPU-only computer it is slow. See [docs/MODELS.md](docs/MODELS.md#how-fast-it-is).

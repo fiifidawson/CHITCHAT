@@ -10,12 +10,12 @@ Related pages: [SETUP.md](SETUP.md) to install, [MODELS.md](MODELS.md) to choose
 
 | Command | What it does |
 |---|---|
-| `uv run chitchat search "question"` | Deep search: clarifying questions, 3 to 6 categories, then you confirm and it runs |
+| `uv run chitchat search "question"` | Deep search: clarifying questions, 3 to 6 categories, screening criteria for your question, then you confirm and it runs |
 | `uv run chitchat search --mode shallow "question"` | Quick scan: no questions, 1 to 3 categories, abstracts only |
 | `uv run chitchat search --plan-only "question"` | Plans and saves the search, but doesn't run it |
-| `uv run chitchat search --yes "question"` | No questions: accepts the first draft and runs |
+| `uv run chitchat search --yes "question"` | No questions: accepts the first search and criteria drafts and runs |
 | `uv run chitchat search --run-name my-review "question"` | Names the run folder yourself |
-| `uv run chitchat search --predefined` | The fixed 8-category search in `configs/discovery/`, in a new run folder |
+| `uv run chitchat search --predefined` | The fixed 8-category search in `configs/discovery/`, with the fixed criteria in `configs/criteria.example.yaml`, in a new run folder |
 | `uv run chitchat search -c examples/thorough/pipeline.yaml "question"` | Uses another template for the settings |
 
 While planning:
@@ -23,17 +23,18 @@ While planning:
 - **Clarifying questions** (deep mode): type a number to pick a suggestion, your own answer, or press Enter to skip.
 - **The draft** shows one box per category: its concepts joined by `AND`, each with its synonyms after `or:`, and the query's length with the OpenAlex status on the bottom border.
 - **Your choice:** `a` accepts, `c` asks for changes in plain words, `q` quits and saves nothing.
+- **Screening criteria:** next, a box with the questions each paper will be screened on: what must be true, what rules a paper out, what makes it stronger, and what to pull from it. `a`, `c` and `q` work the same way. They are saved in `runs/<folder>/search/criteria.yaml`.
+- **Masking** is off by default, and the command says so before anything is sent. To mask personal data, set `privacy.mask: true` in the config.
 
 Deep searches go to OpenAlex, Europe PMC, arXiv and Google Scholar; shallow ones skip Google Scholar. To change that, see [Choosing sources](PIPELINE.md#choosing-sources).
 
-For a short deep search (at most 48 papers): `uv run chitchat search -c configs/pipeline.deep_short.yaml "your question"`.
 
 ## Run stages
 
 | Command | What it does |
 |---|---|
-| `uv run chitchat run -c <config>` | Runs every stage in order |
-| `uv run chitchat run -c <config> --stages screen,export` | Runs only the stages you list, in pipeline order |
+| `uv run chitchat run -c <config>` | Runs every stage in order, skipping stages already done. After any stop, the same command carries on |
+| `uv run chitchat run -c <config> --stages screen,export` | Runs only the stages you list, in pipeline order, even if they are done |
 | `uv run chitchat run -c <config> --redecide` | Relabels screened papers with the current rules. No LLM calls |
 | `uv run chitchat report -c <config>` | Rebuilds `dataset.csv`, `dataset.jsonl` and the PRISMA report |
 
@@ -42,8 +43,8 @@ For a short deep search (at most 48 papers): `uv run chitchat search -c configs/
 | `queries` | Shows the boolean queries: categories, their concepts, length, OpenAlex status. Offline |
 | `discover` | Searches OpenAlex, Europe PMC and arXiv, and downloads PDFs |
 | `ingest` | Reads your own documents from the configured folder. Skipped if there is none |
-| `sanitize` | Masks personal data. No LLM, nothing leaves your machine |
-| `screen` | The LLM answers the criteria, fixed rules decide the label. Finished papers are reused |
+| `sanitize` | With `privacy.mask: true`, masks personal data. No LLM, nothing leaves your machine. Off by default: passes the text on unchanged |
+| `screen` | The LLM answers the criteria, fixed rules decide the label. Finished papers are reused, failed ones retried |
 | `export` | Writes `dataset.csv`, `dataset.jsonl`, `sources.json` and the PRISMA report |
 | `index` | Puts the included papers and your documents into the search index |
 | `answer` | Answers the run's question with a decision brief (Planner, Retriever, Writer, Critic). Skipped if the run has no question |
@@ -53,8 +54,9 @@ For a short deep search (at most 48 papers): `uv run chitchat search -c configs/
 | Command | What it does |
 |---|---|
 | `uv run chitchat ask -c <config> "question"` | Answers from the index, citing `[P0001]` (papers) and `[D0001]` (your documents) |
-| `uv run chitchat ask -c <config> --no-privacy "question"` | Same, without the privacy check on the question |
-| `uv run chitchat ask -c <config> --review "question"` | Shows you the masked context and waits for your approval before sending |
+| `uv run chitchat ask -c <config> --privacy "question"` | Same, with privacy mode: the question and context are masked first. The default follows `privacy.mask` |
+| `uv run chitchat ask -c <config> --no-privacy "question"` | Same, without privacy mode, even when `privacy.mask` is on |
+| `uv run chitchat ask -c <config> --privacy --review "question"` | Shows you the masked context and waits for your approval before sending |
 | `uv run chitchat ask -c <config> --k 15 "question"` | Uses 15 passages instead of the default 6 |
 | `uv run chitchat status -c <config>` | Which stages are done, how long they took, what they produced, and the last runs |
 
@@ -77,9 +79,8 @@ These run in place, without a search. Outputs go to `runs/<name>/`.
 | Config | Papers | Use it to |
 |---|---|---|
 | `configs/pipeline.smoke.yaml` | up to 18 (2 categories) | Check the setup end to end, quickly |
-| `configs/pipeline.smoke20.yaml` | about 20 | A slightly bigger quick run |
-| `configs/pipeline.smoke30.yaml` | about 30 | A small test with more variety |
-| `configs/pipeline.smoke55.yaml` | about 55 (all 8 predefined categories, Europe PMC and arXiv) | Test the full predefined search |
+
+For the full predefined search, use `uv run chitchat search --predefined`.
 
 ## Stage by stage: the smoke test
 
@@ -95,10 +96,10 @@ uv run chitchat run -c configs/pipeline.smoke.yaml --stages discover
 # 3. Your own documents (optional). Put files in my_docs/ first.
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages ingest
 
-# 4. Mask personal data. No LLM.
+# 4. Mask personal data (only with privacy.mask: true; otherwise the text is passed on). No LLM.
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages sanitize
 
-# 5. Screen with the LLM. Only masked text is sent.
+# 5. Screen with the LLM, using configs/criteria.example.yaml.
 uv run chitchat run -c configs/pipeline.smoke.yaml --stages screen
 
 # 6. Dataset and PRISMA report. Open runs/smoke/dataset.csv in Excel.

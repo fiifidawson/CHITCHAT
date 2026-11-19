@@ -1,7 +1,7 @@
 """The Retriever: searches the run's index. No LLM.
 
 Chunks come back with their source tag ([P0007], [D0002]) in `metadata.file_path` and at the
-start of the text. They were sanitized before indexing.
+start of the text. They come from the sanitize stage (masked when masking is on).
 """
 
 from __future__ import annotations

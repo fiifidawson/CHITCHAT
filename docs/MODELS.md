@@ -59,6 +59,14 @@ Ollama's default context window is small (4,096 tokens). Longer prompts are cut 
 
 `ollama ps` shows the context in use. The shipped configs set `screening.max_chars: 24000` so each paper fits in 16k tokens. With a larger context (vLLM with `--max-model-len 32768`), you can raise it to 60000.
 
+## Long replies and thinking models
+
+Some models think before they answer, and some never stop thinking. To keep one reply from running for hours:
+
+- **Replies are capped.** When `llm.max_new_tokens` is unset and the model is on a server you run (a `base_url` and no `provider`), CHITCHAT asks for at most 16,384 tokens per reply, thinking included. Set `max_new_tokens` to change it. Hosted providers get no cap from CHITCHAT.
+- **The run stops after 3 cut-off replies.** A screening reply is short, so a reply cut at the length limit means the model isn't stopping. After 3, the run stops with a message. Papers already screened are kept, and the same `chitchat run` command carries on after you fix it.
+- **The usual fix is to turn thinking off** on the model server. For Qwen on vLLM, add `--default-chat-template-kwargs '{"enable_thinking": false}'` to `vllm serve`. Otherwise raise `llm.max_new_tokens`.
+
 ## Ways to serve a model
 
 | Option | Where it runs | Data | Cost | Use it for |
@@ -78,7 +86,7 @@ Then use [configs/models/vllm.yaml](../configs/models/vllm.yaml) with your serve
 
 ## Hosted providers: the rules
 
-Masked text only reaches a provider. Still, a hosted provider sees every prompt. Use one only if all of these hold:
+A hosted provider sees every prompt. Masking is off by default, so that includes paper text, your documents and your question as they are. Turn on `privacy.mask: true` before you send your own documents to one. Use a provider only if all of these hold:
 
 1. **Open-weight model.** The same model you could run yourself, so results can be reproduced.
 2. **No training on your prompts**, stated in the provider's terms.

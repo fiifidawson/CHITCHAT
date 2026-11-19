@@ -217,6 +217,20 @@ def test_long_reply_in_a_large_context_is_one_failure() -> None:
     assert StructuredCaller(_Model(cut), dict)([]).status == "error"
 
 
+def test_third_cut_off_reply_stops_the_run() -> None:
+    from chitchat.screening.llm import MAX_LENGTH_CUTS, FatalLLMError
+
+    class LengthFinishReasonError(Exception):
+        pass
+
+    cut = LengthFinishReasonError("CompletionUsage(completion_tokens=32768, total_tokens=90000)")
+    caller = StructuredCaller(_Model(cut), dict)
+    for _ in range(MAX_LENGTH_CUTS - 1):
+        assert caller([]).status == "error"  # one paper fails; the run goes on
+    with pytest.raises(FatalLLMError, match=r"cut off at 32,768 tokens 3 times.*thinking"):
+        caller([])
+
+
 def test_temperature_retry_once() -> None:
     class Picky(_Model):
         def _invoke(self, messages):
