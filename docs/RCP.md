@@ -93,7 +93,7 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
     ```bash
     source /lightscratch/users/$USER/rcp-env.sh && source $S/vllm-env/bin/activate
     cd $S
-    nohup vllm serve Qwen/Qwen3.6-27B-FP8 --max-model-len 262144 --reasoning-parser qwen3 --max-num-seqs 64 > $S/vllm.log 2>&1 &
+    nohup vllm serve Qwen/Qwen3.6-27B-FP8 --max-model-len 262144 --reasoning-parser qwen3 --max-num-seqs 64 --default-chat-template-kwargs '{"enable_thinking": false}' > $S/vllm.log 2>&1 &
     tail -f $S/vllm.log
     ```
 
@@ -188,5 +188,6 @@ This leaves out `raw/` and `milvus.db`.
 | `VIRTUAL_ENV ... does not match` | The vLLM environment is active | `deactivate` |
 | `tmux attach` says `no sessions` | The tmux session in the job is gone | Use `nohup` (steps 10 and 14); check vLLM with `curl` |
 | `^B` printed on screen | You are not inside tmux | Start or attach tmux first, or use `nohup` |
-| `LengthFinishReasonError: ... length limit was reached` on many papers | At temperature 0, Qwen's thinking can repeat itself until it is cut off | In the run's `pipeline.yaml`, set `llm.temperature: 0.6` and `llm.max_new_tokens: 32768`, then run `chitchat run` again: papers already screened are kept |
+| `LengthFinishReasonError: ... length limit was reached` on many papers | At temperature 0, Qwen's thinking can repeat itself until it is cut off | In the run's `pipeline.yaml`, set `llm.temperature: 0.6` and `llm.max_new_tokens: 32768`, then `chitchat run -c <that file> --stages screen,export,index,answer`: papers already screened are kept, and the search isn't redone |
+| `Nothing to index: no papers labelled HIGH, MEDIUM, LOW` | The screening criteria are for another topic: `criteria.example.yaml` excludes every paper not about LLM or NLP data | Use criteria written for your question. To keep the run, drop the rule that excludes them and run `chitchat run -c <run>/pipeline.yaml --redecide` (no LLM calls), then `--stages export,index,answer` |
 | `The model ran out of room` | The model's context is too small | Check `--max-model-len` in the `vllm serve` line |
