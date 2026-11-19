@@ -29,7 +29,8 @@ privacy:
 llm:
   llm_name: Qwen/Qwen3.6-27B-FP8        # must match the name given to `vllm serve`
   base_url: http://localhost:8000/v1    # vLLM in this pod
-  temperature: 0
+  temperature: 0.6                      # Qwen's setting for thinking; at 0 it can repeat itself until cut off
+  max_new_tokens: 32768                 # one reply, thinking included: a runaway fails in minutes, not hours
 
 # A short deep search: 2 categories x 6 results x 4 sources = at most 48 papers.
 # Delete this block for the full deep search (3 to 6 categories, 25 results, 2 pages).
