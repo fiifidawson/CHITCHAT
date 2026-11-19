@@ -1,17 +1,23 @@
+<div align="center">
+
 # CHITCHAT
 
+[![CI](https://github.com/fiifidawson/CHITCHAT/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/fiifidawson/CHITCHAT/actions/workflows/ci.yml) [![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](LICENSE) [![Python 3.11+](https://img.shields.io/badge/python-3.11%2B-blue.svg)](pyproject.toml) [![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv) [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff) [![Built on mmore](https://img.shields.io/badge/built%20on-mmore-f7cb46.svg)](https://github.com/EPFLiGHT/mmore) [![Open-weight models](https://img.shields.io/badge/models-open--weight-2ea44f.svg)](docs/MODELS.md) [![Status: research prototype](https://img.shields.io/badge/status-research%20prototype-orange.svg)](#known-limits)
+
 *ArCHitectures for Interpretable & Transparent Continuous Humanitarian Alignment in chatbot Technologies*
+
+</div>
 
 CHITCHAT is a literature-review pipeline built on [mmore](https://github.com/EPFLiGHT/mmore). You ask a research question. It:
 
 1. turns your question into a boolean search, which you check and refine;
-2. finds papers in OpenAlex, Europe PMC and arXiv, and reads your own documents;
+2. finds papers in OpenAlex, Europe PMC, arXiv and Google Scholar, and reads your own documents;
 3. can mask personal data on your machine before any LLM sees it (off by default; one switch turns it on);
 4. drafts screening criteria from your question and answers, then screens each paper against them, with evidence quotes;
 5. writes a dataset and a PRISMA report;
 6. answers your question with a **decision brief**: the options, their benefits and risks, the trade-offs, where the evidence disagrees, and what is missing. Every claim cites its source, like `[P0012]` for a paper or `[D0003]` for one of your documents.
 
-It runs on open-weight models served on your own computer (Ollama), so your data stays with you.
+It runs on open-weight models that you serve yourself: Ollama on your computer, or vLLM on a GPU server. Your data stays with you.
 
 It is a research project of the LiGHT lab at EPFL, with the ICRC.
 
@@ -80,7 +86,7 @@ Choose with `--mode shallow` or `--mode deep`. The fixed search from the earlier
 | # | Stage | What it does | Main output in `runs/<folder>/` |
 |---|---|---|---|
 | 1 | `queries` | Builds the boolean queries. Offline | `queries.json` |
-| 2 | `discover` | Searches OpenAlex, Europe PMC and arXiv, downloads PDFs | `raw/papers.jsonl` |
+| 2 | `discover` | Searches OpenAlex, Europe PMC, arXiv and (deep mode) Google Scholar, downloads PDFs | `raw/papers.jsonl` |
 | 3 | `ingest` | Reads your own documents (PDF, Word, Excel, email, web pages, text) | `raw/docs.jsonl` |
 | 4 | `sanitize` | With masking on, masks names, emails, phone numbers and more. No LLM. With it off (the default), passes the text on unchanged | `papers.sanitized.jsonl`, `privacy_report.json` |
 | 5 | `screen` | An LLM answers the criteria. Fixed rules decide the label | `screening.jsonl` |
@@ -133,6 +139,10 @@ uv run ruff format --check .
 uv run pytest            # no network, models or API keys
 uv run pytest -m slow    # a tiny real run, using your model and Milvus
 ```
+
+## Contributing
+
+Issues and pull requests are welcome. Branch from `main` as `type/short-name` (for example `feat/…`, `fix/…`, `docs/…`), and make sure the checks under [Development](#development) pass: CI runs the same ones on every pull request.
 
 ## Main authors
 
