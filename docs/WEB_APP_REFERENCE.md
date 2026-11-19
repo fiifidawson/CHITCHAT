@@ -1,6 +1,6 @@
 # CHITCHAT web app: technical reference
 
-This is the reference for building the web version of CHITCHAT. [WEB_APP_BRIEF.md](WEB_APP_BRIEF.md) gives the overview, the data and the security rules; this page gives the parts to build: services, jobs, the agent loop and its data, the decision-brief screens, the model policy, evaluation and the API.
+This is the reference for building the web version of CHITCHAT. The [web app brief](https://github.com/fiifidawson/humani-t/blob/main/docs/WEB_APP_BRIEF.md) gives the overview, the data and the security rules; this page gives the parts to build: services, jobs, the agent loop and its data, the decision-brief screens, the model policy, evaluation and the API.
 
 Each part names the module that does the same thing today, so the web app can reuse it or match its behaviour. Paths are under `src/chitchat/`.
 
@@ -18,9 +18,9 @@ Each part names the module that does the same thing today, so the web app can re
 | **Main store** | Masked text, plans, screening, briefs, history | API and workers | the rest of `runs/<run>/` |
 | **Queue** | Jobs and their events | Internal | runs in one process today |
 
-Rules that come from the pipeline (details in [WEB_APP_BRIEF.md](WEB_APP_BRIEF.md#security-rules-the-web-app-must-keep)):
+Rules that come from the pipeline (details in [the web app brief](https://github.com/fiifidawson/humani-t/blob/main/docs/WEB_APP_BRIEF.md#security-rules-the-web-app-must-keep)):
 
-- Raw text is read only by the privacy worker. Everything any LLM sees comes from the main store, so it is masked.
+- Raw text is read only by the privacy worker. Everything any LLM sees comes from the main store. Masking is a project switch, off by default (`privacy.mask`): when on, that text is masked; when off, every screen that sends text says so.
 - The model server and the vector store are never reachable from the internet.
 - Each project has its own vector collection and its own folder of objects. Every API call checks the project's members.
 
@@ -31,7 +31,9 @@ A project is one run folder today. Each job runs stages in this fixed order, and
 `queries → discover → ingest → sanitize → screen → export → index → answer`
 
 - **Stage contract:** each stage reads stored objects and writes stored objects. It can be rerun alone. A failure stops the job and keeps finished stages.
-- **Reuse:** screening reuses a paper's result when the paper, the criteria hash and the model are unchanged (`screening/store.py`). The answer stage always runs from scratch.
+- **Carrying on:** a job started again skips the stages already done (`.done/` markers), up to the first that runs. Screening always runs but only screens new or failed papers; if it screens none, the stages after it are skipped too (`cli.py::_run_stages`). Naming stages runs exactly those.
+- **Reuse:** screening reuses a paper's result when the paper, the criteria hash and the model are unchanged (`screening/store.py`).
+- **Runaway replies:** after 3 replies cut off at the length limit, the job stops with a plain message (`screening/llm.py`).
 - **History:** one record per job: id, command, start, end, outcome, error, and each stage's start, duration and outcome (`timing.py`, `history.jsonl`).
 
 Events to stream to the browser (Server-Sent Events), one JSON object each:
@@ -48,11 +50,12 @@ Events to stream to the browser (Server-Sent Events), one JSON object each:
 
 `search/session.py::plan_search` is the logic to expose as an API conversation.
 
-1. `POST /projects/{id}/plan` with the question and the mode. The server masks the question (Presidio, no LLM) and returns `question_sent`, so the user sees what was sent.
-2. Deep mode: the server returns about 4 clarifying questions, each with suggested answers (`ClarifyingQuestions` in `search/plan.py`). The user answers (each answer is masked too).
+1. `POST /projects/{id}/plan` with the question and the mode. With masking on, the server masks the question (Presidio, no LLM) and returns `question_sent`, so the user sees what was sent.
+2. Deep mode: the server returns about 4 clarifying questions, each with suggested answers (`ClarifyingQuestions` in `search/plan.py`). The user answers (masked too, when masking is on).
 3. The server returns a draft (`SearchPlan`: concepts with synonyms, categories combining 2 or more concepts), after fixing rule breaks itself (`plan_problems`, `normalize_plan`, `fit_to_limit`). Notes on every automatic change come with it.
 4. The user accepts, or sends a change request in plain words. The server revises the whole plan with the full conversation. Repeat.
-5. On accept, the server saves `plan.json` (question, `question_sent`, clarifying answers, every draft and change request, the accepted plan) and the discovery files, and starts the job.
+5. On accept, the server drafts the screening criteria from the question and the answers (`search/criteria_draft.py`: `must`, `exclude` and `stronger` yes/no questions, and fields to `extract`). Code turns them into fixed label rules. The user accepts or asks for changes, as for the search.
+6. On accept, the server saves `plan.json` (question, `question_sent`, clarifying answers, every draft and change request, the accepted plan and criteria), `search/criteria.yaml` and the discovery files, and starts the job.
 
 The answer stage later reads `question_sent` and the clarifying answers from `plan.json`, so the final brief answers the question the user started with.
 
@@ -142,7 +145,7 @@ One per step, stored in `answer/trace.jsonl` and streamed as `agent.step`:
 | `queries`, `new_passages`, `total_passages`, `dropped_by_cap` | retriever | |
 | `problems` | checks | |
 
-Passages (`answer/evidence.json`): `{tag, chunk_id, query, text}`. The text is masked: it comes from the index.
+Passages (`answer/evidence.json`): `{tag, chunk_id, query, text}`. The text comes from the index, so it is masked when masking is on.
 
 ## 5. Decision-brief screens
 
@@ -166,7 +169,7 @@ Accessibility: evidence strength and benefit or risk are shown with words or ico
 ## 6. Model policy
 
 - **Open-weight models only** in production, served by the organisation: Ollama for small deployments, vLLM on a GPU server for teams. Default `qwen3.5:9b`; larger options in [MODELS.md](MODELS.md).
-- **A hosted provider** only when it doesn't train on prompts, keeps none (zero retention), and is under a contract that suits the organisation. Masked text only.
+- **A hosted provider** only when it doesn't train on prompts, keeps none (zero retention), and is under a contract that suits the organisation. Turn masking on for it.
 - **One model per deployment**, set by an admin; not per user. The judge for evaluation may differ.
 - **Record the model** in every output: screening records, briefs, evaluation summaries.
 - **Check the model server** at job start (`screening/llm.py::check_llm_reachable`) and fail the job with a clear message if it is down or the model is missing.
@@ -193,7 +196,9 @@ A first set of endpoints. All require sign-in; `{id}` is a project the caller is
 | `POST /projects/{id}/plan` | Start planning: question, mode → masked question, clarifying questions or a draft | `plan_search` |
 | `POST /projects/{id}/plan/answers` | Clarifying answers → draft | `plan_search` |
 | `POST /projects/{id}/plan/changes` | A change request → new draft | `add_feedback` |
-| `POST /projects/{id}/plan/accept` | Save the plan and start the job | `save_plan`, `write_run_config` |
+| `POST /projects/{id}/plan/accept` | Accept the search → drafted criteria | `draft_criteria` |
+| `POST /projects/{id}/criteria/changes` | A change request → new criteria | `add_criteria_feedback` |
+| `POST /projects/{id}/criteria/accept` | Save the plan and criteria, start the job | `save_plan`, `write_criteria`, `write_run_config` |
 | `POST /projects/{id}/documents` | Upload own documents (checked, scanned, to the raw store) | `my_docs/` |
 | `POST /projects/{id}/jobs` | Run stages (`stages`, or `redecide`) | `chitchat run` |
 | `GET /projects/{id}/jobs/{job}/events` | Live events (SSE) | the terminal output |
@@ -215,9 +220,9 @@ Errors follow one shape: `{error: {code, message}}`, where `message` is plain la
 ## 9. What to keep in the first version
 
 - The fixed stage order, stage reuse and the job history.
-- Masking before any LLM, in an isolated worker.
+- Masking in an isolated worker, as a project switch that is off by default, with a notice wherever it is off.
 - The agent loop as it is: four roles, structured outputs, checks by code, at most 3 rounds.
 - The brief screen with source chips that open the passages.
 - One open model per deployment, checked at job start.
 
-Later: user-edited screening questions, several models per deployment, an evidence graph across briefs (DeepEvidence's idea), and evaluation with human raters next to the judge model.
+Later: hand-edited screening questions, several models per deployment, an evidence graph across briefs (DeepEvidence's idea), and evaluation with human raters next to the judge model.

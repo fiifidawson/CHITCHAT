@@ -1,5 +1,6 @@
 """Stage 3: mask personal data with mmore's privacy agents. No LLM is called.
 
+Masking is off unless `privacy.mask` is true; then this stage only copies the text on.
 The config is fully pinned (domain, engine, threshold, entity types),
 so mmore never asks an LLM and never prompts.
 """
@@ -214,7 +215,29 @@ def sanitize_docs(docs: list[dict[str, Any]], sanitizer: Sanitizer) -> list[dict
     return out
 
 
+def pass_through(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
+    """Masking is off: the next stages get the text unchanged. Nothing is loaded."""
+    from chitchat import ui
+
+    report: dict[str, Any] = {"masking": "off"}
+    if run.papers_raw.exists():
+        papers = [
+            {**p, "paper_id": paper_id(p), "privacy": None} for p in read_jsonl(run.papers_raw)
+        ]
+        write_jsonl(run.papers_sanitized, papers)
+        report[PAPERS] = len(papers)
+    if run.docs_raw.exists():
+        docs = [{**d, "privacy": None} for d in read_jsonl(run.docs_raw)]
+        write_jsonl(run.docs_sanitized, docs)
+        report[OWN_DOCUMENTS] = len(docs)
+    write_json(run.privacy_report, report)
+    ui.note("Masking is off: the text was passed on unchanged.")
+    return report
+
+
 def run_sanitize(cfg: PipelineConfig, run: RunDir) -> dict[str, Any]:
+    if not cfg.masking or cfg.privacy.sanitize_config is None:
+        return pass_through(cfg, run)
     configs = load_sanitize_configs(cfg.privacy.sanitize_config)
     report: dict[str, Any] = {}
 

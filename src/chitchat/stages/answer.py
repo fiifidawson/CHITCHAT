@@ -48,7 +48,7 @@ def run_question(cfg: PipelineConfig, run: RunDir) -> RunQuestion | None:
     if cfg.answer.question and cfg.answer.question.strip():
         from chitchat.search.session import question_masker
 
-        masked = question_masker(cfg.privacy.rag_privacy_config)(cfg.answer.question.strip())
+        masked = question_masker(cfg.question_privacy_config)(cfg.answer.question.strip())
         return RunQuestion(masked, [], "config")
     return None
 

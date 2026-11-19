@@ -13,6 +13,7 @@ own_documents:
   fast: true
 
 privacy:
+  mask: true                          # on here: this example shows what masking catches and misses
   sanitize_config: ../../configs/sanitize.yaml
   before_screening: true
   rag_privacy_config: ../../configs/rag_privacy.yaml

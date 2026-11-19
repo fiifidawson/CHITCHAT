@@ -86,9 +86,9 @@ def test_short_query_is_unchanged_but_for_and() -> None:
     assert scholar_query('("LLM" OR "GPT") AND ("consent")') == '("LLM" OR "GPT") ("consent")'
 
 
-def test_deep_short_config_adds_scholar() -> None:
+def test_rcp_config_runs_the_full_deep_search() -> None:
     repo = Path(__file__).resolve().parents[1]
-    cfg = load_pipeline_config(repo / "configs" / "pipeline.deep_short.yaml")
+    cfg = load_pipeline_config(repo / "configs" / "pipeline.rcp.yaml")
     deep = cfg.search.preset("deep")
     assert "google_scholar" in deep.sources
-    assert deep.max_categories * deep.max_results * len(deep.sources) == 48
+    assert (deep.max_categories, deep.max_results) == (6, 25)  # the defaults, not a short run

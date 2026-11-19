@@ -32,8 +32,11 @@ def stage_details(run: RunDir) -> dict[str, str]:
         details["ingest"] = _plural(n, "own document")
     if run.privacy_report.exists():
         report = read_json(run.privacy_report)
-        parts = [f"{k.replace('_', ' ')}: {v['spans']} spans masked" for k, v in report.items()]
-        details["sanitize"] = "; ".join(parts) or "nothing sanitized"
+        if report.get("masking") == "off":
+            details["sanitize"] = "masking off: text passed on unchanged"
+        else:
+            parts = [f"{k.replace('_', ' ')}: {v['spans']} spans masked" for k, v in report.items()]
+            details["sanitize"] = "; ".join(parts) or "nothing sanitized"
     records = ScreeningStore(run.screening).latest()
     if records:
         statuses = Counter(r["status"] for r in records.values())

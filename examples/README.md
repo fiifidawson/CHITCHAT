@@ -4,7 +4,7 @@ Three end-to-end examples, each with its own config in this folder. Run every co
 
 | Example | What it shows | Time on Apple silicon or a GPU |
 |---|---|---|
-| [Thorough: deep search and your documents](#thorough-deep-search-and-your-documents) | The whole pipeline: clarifying questions, a change request, papers and documents together, privacy checks, relabelling, the decision brief, run history | 45 to 90 min |
+| [Thorough: deep search and your documents](#thorough-deep-search-and-your-documents) | The whole pipeline: clarifying questions, a change request, drafted screening criteria, papers and documents together, privacy checks, relabelling, the decision brief, run history | 45 to 90 min |
 | [Minor 1: quick scan](#minor-1-quick-scan) | A shallow search on abstracts, the decision brief, then a few questions | 10 to 20 min |
 | [Minor 2: your documents only](#minor-2-your-documents-only) | No paper search: read, mask and index the sample documents, then a decision brief and questions | about 5 min |
 
@@ -38,8 +38,9 @@ uv run chitchat search -c examples/thorough/pipeline.yaml "How do humanitarian o
 1. **Clarifying questions.** Try each kind of answer: type `1` to pick the first suggestion, type a sentence such as `since 2018, peer-reviewed and grey literature`, and press Enter on one to skip it.
 2. **First draft.** You see one box per category. Each box lists the concepts it combines (joined by `AND`), each concept's synonyms after `or:`, and on its bottom border the query's length and `OpenAlex ok`. A concept keeps the same colour in every box, so you can see which categories share it.
 3. **Ask for a change.** Type `c`, then: `add a category on community participation and the right to opt out, and drop generic machine learning terms`. The new draft should have that category, and fewer broad synonyms.
-4. **Accept.** Type `a`. A **Search ready** box shows the new run folder, e.g. `runs/humanitarian-organisations-obtain-manage-informed-consent-2026-10-21/`.
-5. **Run.** Answer `y` to "Run the pipeline now?".
+4. **Accept.** Type `a`.
+5. **Screening criteria.** A box shows the questions each paper will be screened on, drafted from your question and answers: what must be true, what rules a paper out, what makes it stronger, and what to pull from each paper. Check that the "Must be true" questions are not narrower than your question, then type `a`. A **Search ready** box shows the new run folder, e.g. `runs/humanitarian-organisations-obtain-manage-informed-consent-2026-10-21/`, and says masking is off.
+6. **Run.** Answer `y` to "Run the pipeline now?".
 
 ### 2. Watch the run
 
@@ -50,7 +51,7 @@ Each stage starts with a yellow header and its start time, and ends with "finish
 | queries | One row per category, all `ok` for OpenAlex |
 | discover | The Discovery box: papers per source (OpenAlex now included), PDFs downloaded or refused |
 | ingest | The Own documents box: 7 documents |
-| sanitize | The Privacy box: names, emails, phone numbers, dates and places masked, "No LLM was used" |
+| sanitize | "Masking is off: the text was passed on unchanged". This example leaves masking off; step 5 turns privacy mode on for questions |
 | screen | One line per paper with HIGH, MEDIUM, LOW, EXCLUDE or SKIPPED and the reason, then the summary box with token counts |
 | export | The Dataset and PRISMA box |
 | index | The Index box: papers, 7 own documents, chunks |
@@ -88,17 +89,21 @@ Papers and your documents together. Answers should cite `[P…]` tags for papers
 
 ### 5. Check privacy
 
+Masking is off in this example's config, so every command so far sent the text as it is. `--privacy` turns privacy mode on for one question: the question and the passages are masked before the model sees them.
+
 ```bash
-uv run chitchat ask -c <run>/pipeline.yaml "Who wrote the field visit notes, and what is their phone number?"
-uv run chitchat ask -c <run>/pipeline.yaml "I'm Kwame Asante (kwame.asante@example.org, +44 20 7946 0958). What does our policy say about external language model APIs?"
-uv run chitchat ask -c <run>/pipeline.yaml --no-privacy "What does our policy say about external language model APIs?"
-uv run chitchat ask -c <run>/pipeline.yaml --review "What does our consent form say about withdrawing?"
+uv run chitchat ask -c <run>/pipeline.yaml --privacy "Who wrote the field visit notes, and what is their phone number?"
+uv run chitchat ask -c <run>/pipeline.yaml --privacy "I'm Kwame Asante (kwame.asante@example.org, +44 20 7946 0958). What does our policy say about external language model APIs?"
+uv run chitchat ask -c <run>/pipeline.yaml "What does our policy say about external language model APIs?"
+uv run chitchat ask -c <run>/pipeline.yaml --privacy --review "What does our consent form say about withdrawing?"
 ```
 
 - The first answer shows only `[PERSON_n]` and `[PHONE_NUMBER_n]`, never the real values.
 - The second shows "Privacy mode sent your question as: I'm [PERSON_1] ([EMAIL_ADDRESS_1], [PHONE_NUMBER_1])…" and "question: 3 masked".
-- The third has no privacy line.
+- The third says masking is off, and has no privacy line.
 - The fourth pauses and shows you the masked context before anything is sent.
+
+To mask the papers and documents themselves before screening and indexing, set `privacy.mask: true` in `<run>/pipeline.yaml`, then run `uv run chitchat run -c <run>/pipeline.yaml --stages sanitize,export,index`. The Privacy box then lists the names, emails, phone numbers, dates and places masked.
 
 ### 6. Look at the outputs
 
@@ -106,9 +111,10 @@ uv run chitchat ask -c <run>/pipeline.yaml --review "What does our consent form 
 |---|---|
 | `prisma.md` | The flow from papers found to papers included. The numbers add up |
 | `dataset.csv` | Open in Excel. Read the evidence columns for a few HIGH and EXCLUDE papers: do you agree? |
-| `privacy_report.json` | How much was masked, for papers and for own documents |
-| `docs.sanitized.jsonl` | The masked text of the sample documents. `MRN 448-1207` is expected to remain |
+| `privacy_report.json` | How much was masked, for papers and for own documents, or `"masking": "off"` |
+| `docs.sanitized.jsonl` | With masking on, the masked text of the sample documents. `MRN 448-1207` is expected to remain |
 | `search/plan.json` | Your question, answers, every draft and your change request |
+| `search/criteria.yaml` | The screening criteria drafted for your question, with their rules |
 | `history.jsonl`, `logs/` | One line and one log file per run |
 
 ```bash
@@ -119,7 +125,7 @@ The status table has a "Took" column, and a Recent runs table lists your runs.
 
 ### 7. Change the rules without new LLM calls
 
-1. In `configs/criteria.example.yaml`, make the HIGH rule stricter, for example add `ethical_framework == yes` to its `when:` list.
+1. In `<run>/search/criteria.yaml`, make the rules stricter, for example change one `label: MEDIUM` rule under `decision:` to `label: LOW`.
 2. Relabel and rebuild the report, with no LLM calls:
 
 ```bash
@@ -133,10 +139,10 @@ The Relabelled box says how many labels changed. `prisma.md` has the new numbers
 ### 8. Rerun and see what is reused
 
 ```bash
-uv run chitchat run -c <run>/pipeline.yaml --stages screen
+uv run chitchat run -c <run>/pipeline.yaml
 ```
 
-It screens nothing new: every paper is reused from the first run. The Recent runs table in `status` now shows this run too.
+The stages before `screen` show "done earlier, skipped". `screen` screens nothing new: every paper is reused from the first run. The stages after it are skipped too, and the Done box says everything was already done. This is the same command that carries on after a stop. The Recent runs table in `status` now shows this run too.
 
 ## Minor 1: quick scan
 
@@ -147,7 +153,7 @@ uv run chitchat search -c examples/quick-scan/pipeline.yaml "Which methods are u
 ```
 
 1. No clarifying questions in shallow mode. You see 1 to 3 category boxes, each with 2 to 4 concepts.
-2. Type `a`, then `y` to run.
+2. Type `a`. Then the screening criteria box: type `a` again, then `y` to run.
 3. No PDFs are downloaded, so the search part finishes quickly. The screening lines say "abstract only".
 4. The run ends with a decision brief that answers your question, from the abstracts.
 
@@ -163,7 +169,7 @@ Answers cite only `[P…]` tags: there are no own documents in this example.
 
 ## Minor 2: your documents only
 
-Config: [own-documents/pipeline.yaml](own-documents/pipeline.yaml). No paper search and no screening: the 7 sample documents are read, masked, indexed and questioned.
+Config: [own-documents/pipeline.yaml](own-documents/pipeline.yaml). No paper search and no screening: the 7 sample documents are read, masked, indexed and questioned. Masking is off by default; this config turns it on (`privacy.mask: true`) to show what it catches and misses.
 
 ```bash
 uv run chitchat run -c examples/own-documents/pipeline.yaml --stages ingest,sanitize,export,index,answer

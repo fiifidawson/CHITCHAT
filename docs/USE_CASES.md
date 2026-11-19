@@ -55,7 +55,8 @@ Look for:
 - 4 clarifying questions first. Try answering `1` (picks a suggestion), a sentence of your own, and Enter (skips).
 - 3 to 6 category boxes. Each lists its concepts joined by `AND`, with each concept's synonyms after `or:`.
 - Then type `c` and ask for a change, for example "drop generic machine learning terms and add refugee camps". The new draft should reflect it.
-- `search/plan.json` in the run folder records every turn.
+- After the search, a "Screening criteria" box drafted from your question and answers. Check the "Must be true" questions: they decide which papers are excluded.
+- `search/plan.json` in the run folder records every turn, and `search/criteria.yaml` holds the criteria.
 
 ## 3. Your own documents next to the papers
 
@@ -86,6 +87,8 @@ Questions that need the samples:
 
 You need to show that personal data does not leave your machine.
 
+Masking is off by default. Turn it on first: set `privacy.mask: true` in `runs/<your-run>/pipeline.yaml` (the `examples/own-documents` config already has it on). Then:
+
 ```bash
 uv run chitchat run -c runs/<your-run>/pipeline.yaml --stages ingest,sanitize
 ```
@@ -113,23 +116,25 @@ These are good cases to show that masking lowers risk but is not perfect.
 
 ## 5. Asking with and without privacy mode
 
+Privacy mode follows `privacy.mask`, which is off by default. `--privacy` turns it on for one question, `--no-privacy` off.
+
 ```bash
-uv run chitchat ask -c runs/<your-run>/pipeline.yaml "I'm Kwame Asante (kwame.asante@example.org). What do our documents say about opt-out by SMS?"
+uv run chitchat ask -c runs/<your-run>/pipeline.yaml --privacy "I'm Kwame Asante (kwame.asante@example.org). What do our documents say about opt-out by SMS?"
 uv run chitchat ask -c runs/<your-run>/pipeline.yaml --no-privacy "I'm Kwame Asante (kwame.asante@example.org). What do our documents say about opt-out by SMS?"
-uv run chitchat ask -c runs/<your-run>/pipeline.yaml --review "What do our documents say about opt-out by SMS?"
+uv run chitchat ask -c runs/<your-run>/pipeline.yaml --privacy --review "What do our documents say about opt-out by SMS?"
 ```
 
 Look for:
 
 - With privacy: a note that your question was sent as `I'm [PERSON_1] ([EMAIL_ADDRESS_1])…`, and "question: 2 masked" in the privacy line.
-- With `--no-privacy`: no note and no privacy line.
+- With `--no-privacy`: a notice that masking is off, and no privacy line.
 - With `--review`: a pause to approve the masked context before anything is sent.
 
 ## 6. Changing the screening rules without new LLM calls
 
 You think the labels are too generous and want stricter rules.
 
-1. Edit only the `decision:` rules in `configs/criteria.example.yaml`.
+1. Edit only the `decision:` rules in the run's criteria: `runs/<your-run>/search/criteria.yaml` for a run from `chitchat search`, or `configs/criteria.example.yaml` for `--predefined`.
 2. Relabel and rebuild the report, with no LLM calls:
 
 ```bash

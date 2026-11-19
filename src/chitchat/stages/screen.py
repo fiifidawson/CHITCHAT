@@ -166,12 +166,14 @@ def run_screen(cfg: PipelineConfig, run: RunDir, redecide_only: bool = False) ->
         )
         return Counter()
 
-    sanitized = cfg.privacy.before_screening
-    source = run.papers_sanitized if sanitized else run.papers_raw
+    # With masking off, the sanitize stage passes the text through unchanged.
+    raw = cfg.masking and not cfg.privacy.before_screening
+    sanitized = cfg.masking and not raw
+    source = run.papers_raw if raw else run.papers_sanitized
     if not source.exists():
-        step = "sanitize" if sanitized else "discover"
+        step = "discover" if raw else "sanitize"
         raise StageError(f"Missing {source}. Run the {step} stage first.")
-    if not sanitized:
+    if raw:
         log.warning("privacy.before_screening is off: raw paper text goes to the LLM.")
 
     papers = list(read_jsonl(source))

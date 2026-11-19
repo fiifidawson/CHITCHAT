@@ -1,6 +1,7 @@
 """Paths inside runs/<run>/ and stage markers.
 
-Raw text lives only in raw/. Everything else holds sanitized text.
+Raw text lives only in raw/. Everything else holds the text after the sanitize stage: masked when
+privacy.mask is on, unchanged when it is off.
 """
 
 from __future__ import annotations
@@ -27,6 +28,11 @@ class RunDir:
     @property
     def plan(self) -> Path:
         return self.search / "plan.json"
+
+    @property
+    def criteria(self) -> Path:
+        """The screening criteria drafted for this run's question."""
+        return self.search / "criteria.yaml"
 
     @property
     def history(self) -> Path:

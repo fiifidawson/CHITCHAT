@@ -41,13 +41,22 @@ class LLMSettings(_Model):
     provider: str | None = None
     base_url: str | None = None
     temperature: float = 0
+    # The longest reply, thinking included. Unset: LOCAL_MAX_NEW_TOKENS for a model server you
+    # run (base_url, no provider), so a model that never stops fails in minutes, not hours.
     max_new_tokens: int | None = None
     # How structured answers are requested. Try json_mode or function_calling if a server
     # rejects json_schema. Not passed to mmore.
     structured_output: StructuredOutput = "json_schema"
 
     def to_mmore(self) -> dict[str, Any]:
-        return self.model_dump(exclude_none=True, exclude={"structured_output"})
+        data = self.model_dump(exclude_none=True, exclude={"structured_output"})
+        if self.max_new_tokens is None and self.base_url and not self.provider:
+            data["max_new_tokens"] = LOCAL_MAX_NEW_TOKENS
+        return data
+
+
+# A screening reply is a few thousand tokens at most, even with some thinking.
+LOCAL_MAX_NEW_TOKENS = 16_384
 
 
 class DiscoverySettings(_Model):
@@ -57,20 +66,22 @@ class DiscoverySettings(_Model):
 class OwnDocumentsSettings(_Model):
     folder: Path | None = None  # the ingest stage is skipped if unset or missing
     fast: bool = True
-    sanitize: bool = True
-
-    @field_validator("sanitize")
-    @classmethod
-    def _always_sanitize(cls, value: bool) -> bool:
-        if not value:
-            raise ValueError("own documents are always sanitized; remove `sanitize: false`")
-        return value
 
 
 class PrivacySettings(_Model):
-    sanitize_config: Path
-    before_screening: bool = True
-    rag_privacy_config: Path | None = None
+    """Masking personal data before a model sees it. Off by default."""
+
+    # On: papers, your documents, your question and your answers are masked first.
+    mask: bool = False
+    sanitize_config: Path | None = None  # what to mask; needed when `mask` is on
+    before_screening: bool = True  # with `mask` on: screen the masked text, not the raw text
+    rag_privacy_config: Path | None = None  # with `mask` on: privacy mode for `chitchat ask`
+
+    @model_validator(mode="after")
+    def _mask_needs_a_config(self) -> PrivacySettings:
+        if self.mask and self.sanitize_config is None:
+            raise ValueError("`mask: true` needs `sanitize_config` (see configs/sanitize.yaml)")
+        return self
 
 
 class ScreeningSettings(_Model):
@@ -186,7 +197,7 @@ class PipelineConfig(_Model):
     runs_dir: Path = Path("runs")
     discovery: DiscoverySettings
     own_documents: OwnDocumentsSettings = OwnDocumentsSettings()
-    privacy: PrivacySettings
+    privacy: PrivacySettings = PrivacySettings()
     # The one model every LLM step uses, unless a section sets its own `llm`.
     llm: LLMSettings | None = None
     screening: ScreeningSettings
@@ -205,6 +216,15 @@ class PipelineConfig(_Model):
     @property
     def run_root(self) -> Path:
         return self.runs_dir / self.run_name
+
+    @property
+    def masking(self) -> bool:
+        return self.privacy.mask
+
+    @property
+    def question_privacy_config(self) -> Path | None:
+        """The local check that masks questions and answers, or None when masking is off."""
+        return self.privacy.rag_privacy_config if self.privacy.mask else None
 
     @property
     def main_llm(self) -> LLMSettings:
@@ -265,7 +285,8 @@ def load_pipeline_config(path: str | Path) -> PipelineConfig:
     base = path.parent.resolve()
     cfg.runs_dir = _resolve(base, cfg.runs_dir)
     cfg.discovery.config = _resolve(base, cfg.discovery.config)
-    cfg.privacy.sanitize_config = _resolve(base, cfg.privacy.sanitize_config)
+    if cfg.privacy.sanitize_config:
+        cfg.privacy.sanitize_config = _resolve(base, cfg.privacy.sanitize_config)
     if cfg.privacy.rag_privacy_config:
         cfg.privacy.rag_privacy_config = _resolve(base, cfg.privacy.rag_privacy_config)
     cfg.screening.criteria = _resolve(base, cfg.screening.criteria)
@@ -286,9 +307,10 @@ def load_pipeline_config(path: str | Path) -> PipelineConfig:
 def _check_files_exist(path: Path, cfg: PipelineConfig) -> None:
     files = {
         "discovery.config": cfg.discovery.config,
-        "privacy.sanitize_config": cfg.privacy.sanitize_config,
         "screening.criteria": cfg.screening.criteria,
     }
+    if cfg.privacy.sanitize_config:
+        files["privacy.sanitize_config"] = cfg.privacy.sanitize_config
     if cfg.privacy.rag_privacy_config:
         files["privacy.rag_privacy_config"] = cfg.privacy.rag_privacy_config
     missing = [f"  {key}: {p}" for key, p in files.items() if not p.is_file()]

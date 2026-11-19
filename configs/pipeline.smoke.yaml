@@ -13,6 +13,7 @@ own_documents:
   fast: true
 
 privacy:
+  mask: false                         # true: mask personal data before any model sees text
   sanitize_config: sanitize.yaml
   before_screening: true
   rag_privacy_config: rag_privacy.yaml
@@ -25,7 +26,7 @@ llm:
   temperature: 0
 
 screening:
-  criteria: criteria.example.yaml
+  criteria: criteria.example.yaml   # for `chitchat run` and --predefined; `search` drafts its own
   min_year: 2020
   min_chars: 500
   max_chars: 24000                    # fits a 16k context

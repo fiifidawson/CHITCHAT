@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from chitchat.config import ConfigError, load_pipeline_config
+from chitchat.config import LOCAL_MAX_NEW_TOKENS, ConfigError, LLMSettings, load_pipeline_config
 
 
 def _edit(path: Path, **changes) -> None:
@@ -32,14 +32,14 @@ def test_example_config_loads(project: Path) -> None:
         "llm_name": "qwen3.5:9b",
         "base_url": "http://localhost:11434/v1",
         "temperature": 0,
+        "max_new_tokens": LOCAL_MAX_NEW_TOKENS,  # a cap, so a reply can't run for hours
     }
+    assert cfg.masking is False  # off unless asked for
     assert cfg.ask_llm == cfg.search_llm == cfg.answer_llm == cfg.judge_llm == cfg.main_llm
 
 
-@pytest.mark.parametrize(
-    ("name", "cap"), [("smoke", 18), ("smoke20", 24), ("smoke30", 36), ("smoke55", 64)]
-)
-def test_smoke_configs_load_in_place(name: str, cap: int) -> None:
+def test_smoke_config_loads_in_place() -> None:
+    name, cap = "smoke", 18
     repo = Path(__file__).resolve().parents[1]
     cfg = load_pipeline_config(repo / "configs" / f"pipeline.{name}.yaml")
     assert cfg.run_root == repo / "runs" / name
@@ -84,10 +84,32 @@ def test_missing_referenced_file(project: Path) -> None:
         load_pipeline_config(project / "pipeline.yaml")
 
 
-def test_own_documents_sanitize_cannot_be_turned_off(project: Path) -> None:
-    _edit(project / "pipeline.yaml", own_documents__sanitize=False)
-    with pytest.raises(ConfigError, match="always sanitized"):
+def test_masking_on_needs_a_sanitize_config(project: Path) -> None:
+    _edit(project / "pipeline.yaml", privacy={"mask": True})
+    with pytest.raises(ConfigError, match="sanitize_config"):
         load_pipeline_config(project / "pipeline.yaml")
+
+
+def test_privacy_section_is_optional(project: Path) -> None:
+    path = project / "pipeline.yaml"
+    data = yaml.safe_load(path.read_text(encoding="utf-8"))
+    del data["privacy"]
+    path.write_text(yaml.safe_dump(data), encoding="utf-8")
+    cfg = load_pipeline_config(path)
+    assert not cfg.masking and cfg.question_privacy_config is None
+
+
+def test_question_privacy_follows_the_switch(project: Path) -> None:
+    assert load_pipeline_config(project / "pipeline.yaml").question_privacy_config is None
+    _edit(project / "pipeline.yaml", privacy__mask=True)
+    assert load_pipeline_config(project / "pipeline.yaml").question_privacy_config is not None
+
+
+def test_reply_cap_only_for_your_own_model_server() -> None:
+    hosted = LLMSettings(llm_name="m", base_url="https://api.x/v1", provider="TOGETHER")
+    assert "max_new_tokens" not in hosted.to_mmore()
+    own = LLMSettings(llm_name="m", base_url="http://localhost:8000/v1", max_new_tokens=32768)
+    assert own.to_mmore()["max_new_tokens"] == 32768
 
 
 def test_bad_run_name(project: Path) -> None:

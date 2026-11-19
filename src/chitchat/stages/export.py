@@ -1,6 +1,6 @@
 """Stage 5: dataset.jsonl, dataset.csv, sources.json and the PRISMA report.
 
-Only sanitized text is written. Raw text never leaves raw/.
+Only text from the sanitize stage is written (masked when privacy.mask is on)..
 """
 
 from __future__ import annotations

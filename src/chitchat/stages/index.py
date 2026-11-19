@@ -1,6 +1,7 @@
 """Stage 7: chunk the included papers and own documents, and index them in Milvus.
 
-Only sanitized text is indexed. Each chunk starts with its source tag, e.g. `[P0007] `,
+Text from the sanitize stage is indexed (masked when privacy.mask is on).
+Each chunk starts with its source tag, e.g. `[P0007] `,
 because mmore RAG passes only the chunk text and file_path to the answer LLM.
 """
 

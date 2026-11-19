@@ -1,54 +1,40 @@
-# A deep search on one 80 GB GPU (EPFL RCP), with Qwen3.6 27B and its full 262k context.
-# Start the model server in the same pod first (step by step: docs/RCP.md):
+# A full deep search on one 80 GB GPU (EPFL RCP), with Qwen3.6 27B and its full 262k context.
+# Step by step: docs/RCP.md. In short, start the model server in the same pod:
 #   vllm serve Qwen/Qwen3.6-27B-FP8 --max-model-len 262144 --reasoning-parser qwen3 --max-num-seqs 64 --default-chat-template-kwargs '{"enable_thinking": false}'
 # (--max-num-seqs 64: the default 1024 doesn't fit next to the full context; CHITCHAT sends at most 8.)
 # (thinking off: with it on, Qwen often thought past 32k tokens on one paper and screening failed.)
-# On the LiGHT RCP image, also set before starting vLLM:
-#   export SETUPTOOLS_USE_DISTUTILS=local   # the image sets stdlib; Python 3.12 has none
-#   export VLLM_USE_FLASHINFER_SAMPLER=0    # the image's nvcc is too old to compile FlashInfer's sampler
-# and, in the terminal that runs CHITCHAT (not the one running vLLM):
-#   unset LD_LIBRARY_PATH                   # the image's value loads its own torch and breaks CHITCHAT's
-# Then:
-#   uv run chitchat search -c configs/pipeline.rcp.yaml "your question"
+# Then, in the terminal that runs CHITCHAT:
+#   uv run chitchat search -c configs/pipeline.rcp.yaml --plan-only "your question"
+#   nohup uv run chitchat run -c runs/<folder>/pipeline.yaml > run.log 2>&1 &
+# The same `chitchat run` line carries on after any stop.
 # Paths are relative to this file's folder (configs/).
 
 run_name: rcp
 runs_dir: ../runs
 
 discovery:
-  config: discovery/discovery.smoke30.yaml   # only for --predefined
+  config: discovery/discovery.yaml    # only for --predefined
 
 own_documents:
   folder: ../my_docs/
   fast: true
 
 privacy:
+  mask: false                         # true: mask personal data before the model sees any text
   sanitize_config: sanitize.yaml
-  before_screening: true
   rag_privacy_config: rag_privacy.yaml
 
 llm:
   llm_name: Qwen/Qwen3.6-27B-FP8        # must match the name given to `vllm serve`
   base_url: http://localhost:8000/v1    # vLLM in this pod
-  temperature: 0.6                      # Qwen's setting for thinking; at 0 it can repeat itself until cut off
-  max_new_tokens: 32768                 # one reply, thinking included: a runaway fails in minutes, not hours
+  temperature: 0.6                      # Qwen's recommended sampling; 0 can make it repeat itself
+  max_new_tokens: 32768                 # the longest reply; a runaway fails in minutes, not hours
 
-# A short deep search: 2 categories x 6 results x 4 sources = at most 48 papers.
-# Delete this block for the full deep search (3 to 6 categories, 25 results, 2 pages).
 search:
-  mode: deep
-  deep:
-    clarifying_questions: 2
-    min_categories: 2
-    max_categories: 2
-    max_concepts_per_category: 3
-    max_synonyms: 4
-    max_results: 6
-    max_pages: 1
-    sources: [openalex, europepmc, arxiv, google_scholar]
+  mode: deep                            # 3 to 6 categories, 25 results per source, 2 pages
 
 screening:
-  criteria: criteria.example.yaml
+  criteria: criteria.example.yaml       # only for --predefined: `search` drafts criteria for your question
   min_year: 2020
   min_chars: 500
   max_chars: 200000                   # about 50k tokens: most papers are sent whole

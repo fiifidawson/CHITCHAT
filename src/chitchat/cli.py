@@ -48,10 +48,10 @@ def _sanitize(cfg: PipelineConfig, run: RunDir) -> None:
     run_sanitize(cfg, run)
 
 
-def _screen(cfg: PipelineConfig, run: RunDir) -> None:
+def _screen(cfg: PipelineConfig, run: RunDir) -> Any:
     from chitchat.stages.screen import run_screen
 
-    run_screen(cfg, run)
+    return run_screen(cfg, run)
 
 
 def _export(cfg: PipelineConfig, run: RunDir) -> None:
@@ -107,7 +107,8 @@ def _load(config: Path) -> PipelineConfig:
     try:
         cfg = load_pipeline_config(config)
         load_criteria(cfg.screening.criteria)
-        load_sanitize_configs(cfg.privacy.sanitize_config)
+        if cfg.masking and cfg.privacy.sanitize_config:
+            load_sanitize_configs(cfg.privacy.sanitize_config)
     except (ConfigError, CriteriaError) as e:
         raise _fail(str(e)) from None
     return cfg
@@ -129,14 +130,17 @@ def _parse_stages(value: str | None) -> list[str]:
 def run(
     config: ConfigOption = Path("pipeline.yaml"),
     stages: Annotated[
-        str | None, typer.Option(help="Comma-separated stages to run. Default: all.")
+        str | None,
+        typer.Option(
+            help="Comma-separated stages to run, even if done. Default: carry on where it stopped."
+        ),
     ] = None,
     redecide: Annotated[
         bool, typer.Option(help="Recompute labels from stored answers. No LLM calls.")
     ] = False,
 ) -> None:
-    """Run pipeline stages."""
-    _run_stages(config, _parse_stages(stages), redecide=redecide)
+    """Run the pipeline. Stages already done are skipped; screening carries on where it stopped."""
+    _run_stages(config, _parse_stages(stages), redecide=redecide, resume=stages is None)
 
 
 @app.command()
@@ -149,11 +153,15 @@ def report(config: ConfigOption = Path("pipeline.yaml")) -> None:
 def ask(
     question: Annotated[str, typer.Argument(help="Your question.")],
     config: ConfigOption = Path("pipeline.yaml"),
-    no_privacy: Annotated[
-        bool, typer.Option("--no-privacy", help="Skip mmore privacy mode.")
-    ] = False,
+    privacy: Annotated[
+        bool | None,
+        typer.Option(
+            "--privacy/--no-privacy",
+            help="Mask personal data in the question and context. Default: privacy.mask.",
+        ),
+    ] = None,
     review: Annotated[
-        bool, typer.Option("--review", help="Check the sanitized context yourself before sending.")
+        bool, typer.Option("--review", help="Check the masked context yourself before sending.")
     ] = False,
     k: Annotated[int | None, typer.Option(help="How many chunks to retrieve.")] = None,
 ) -> None:
@@ -163,8 +171,10 @@ def ask(
     from chitchat.stages import StageError
 
     cfg = _load(config)
+    private = cfg.masking if privacy is None else privacy
+    ui.masking_notice(private)
     try:
-        result = run_ask(cfg, RunDir(cfg.run_root), question, not no_privacy, review, k)
+        result = run_ask(cfg, RunDir(cfg.run_root), question, private, review, k)
     except StageError as e:
         raise _fail(str(e)) from None
     ui.out.print(ui.answer_view(result))
@@ -217,11 +227,14 @@ def search(
     from rich.text import Text
 
     from chitchat import ui
+    from chitchat.screening.criteria import CriteriaError
     from chitchat.screening.llm import FatalLLMError, build_chat_model
+    from chitchat.search.criteria_draft import criteria_file, draft_criteria, write_criteria
     from chitchat.search.drafting import Drafter
     from chitchat.search.plan import PlanError
     from chitchat.search.session import (
         ConsoleIO,
+        clarifications,
         new_run_folder,
         plan_search,
         question_masker,
@@ -253,31 +266,49 @@ def search(
             align="left",
         )
         ui.note(f"Question: {question}")
+        ui.masking_notice(cfg.masking)
+        drafted = None
         try:
             chat_model, provider = build_chat_model(cfg.search_llm)
-            if cfg.privacy.rag_privacy_config:
+            if cfg.question_privacy_config:
                 ui.note("Checking your question for personal data (local, no LLM)…")
+            drafter = Drafter(chat_model, cfg.search_llm.structured_output)
+            mask = question_masker(cfg.question_privacy_config)
             result = plan_search(
-                question,
-                mode,
-                preset,
-                Drafter(chat_model, cfg.search_llm.structured_output),
-                ConsoleIO(),
-                mask=question_masker(cfg.privacy.rag_privacy_config),
-                auto_accept=yes,
+                question, mode, preset, drafter, ConsoleIO(), mask=mask, auto_accept=yes
             )
+            if result is not None:
+                # Screening judges papers against this question, not a fixed checklist.
+                drafted = draft_criteria(
+                    result.log["question_sent"],
+                    clarifications(result.log),
+                    result.plan,
+                    drafter,
+                    ConsoleIO(),
+                    mask=mask,
+                    auto_accept=yes,
+                )
         except FatalLLMError as e:
             from chitchat.stages.screen import _key_hint
 
             raise _fail(f"{e}{_key_hint(provider)}") from None
         except (ConfigError, PlanError, StageError) as e:
             raise _fail(str(e)) from None
-        if result is None:
+        if result is None or drafted is None:
             ui.note("Search not saved. Nothing was run.")
             raise typer.Exit(0)
+        criteria_draft, criteria_log = drafted
+        result.log["criteria"] = criteria_log
         run = RunDir(run_root)
         discovery = save_plan(run, result, preset)
-        run_config = write_run_config(config, cfg, run_root, discovery, mode)
+        try:
+            criteria = write_criteria(
+                run.criteria,
+                criteria_file(criteria_draft, run_root.name, result.log["question_sent"]),
+            )
+        except CriteriaError as e:
+            raise _fail(f"The drafted screening criteria can't be used: {e}") from None
+        run_config = write_run_config(config, cfg, run_root, discovery, mode, criteria)
 
     ui.console.print()
     ui.print_box(
@@ -286,8 +317,14 @@ def search(
             ("Mode", "", "predefined" if predefined else mode),
             ("Run folder", "", ui.shorten_path(run_root)),
             ("Config", "", ui.shorten_path(run_config)),
+            (
+                "Criteria",
+                "",
+                "fixed, from the config" if predefined else "drafted for this question",
+            ),
+            ("Masking", "", "on" if cfg.masking else "off (privacy.mask)"),
         ],
-        footer=f"Run it later: chitchat run -c {ui.shorten_path(run_config)}",
+        footer=f"Run it, or carry on after a stop: chitchat run -c {ui.shorten_path(run_config)}",
     )
     if plan_only:
         return
@@ -337,7 +374,7 @@ def evaluate(
         if not run_dir.sources.exists():
             raise StageError(f"Missing {run_dir.sources}. Run export and index first.")
         sources = read_json(run_dir.sources)
-        mask = question_masker(cfg.privacy.rag_privacy_config)
+        mask = question_masker(cfg.question_privacy_config)
         asked = [mask(q) for q in parse_questions(questions)]
         imported = dict(parse_import(spec) for spec in imports or [])
 
@@ -398,7 +435,13 @@ def _run_stages(
     redecide: bool = False,
     command: str = "run",
     mode: str | None = None,
+    resume: bool = False,
 ) -> None:
+    """Run `names` in order. With `resume`, skip stages done earlier, up to the first that runs.
+
+    Screening always runs when resuming: it only screens papers not screened yet. If it screens
+    none, the stages after it may still be skipped.
+    """
     from chitchat import ui
     from chitchat.screening.criteria import CriteriaError
     from chitchat.stages import StageError
@@ -410,17 +453,31 @@ def _run_stages(
     run_dir.root.mkdir(parents=True, exist_ok=True)
     names = ["redecide"] if redecide else names
     footer = f"See what each stage produced: chitchat status -c {ui.shorten_path(config)}"
+    if command != "search":  # `search` said it before sending the question
+        ui.masking_notice(cfg.masking)
     with RunRecorder(run_dir, command, ui.shorten_path(config), mode) as rec:
         try:
+            changed = not resume  # has anything been redone that later stages depend on?
             for position, name in enumerate(names, 1):
+                if not changed and name != "screen" and run_dir.is_done(name):
+                    ui.stage_skipped(name, position, len(names))
+                    continue
                 ui.stage_header(name, position, len(names))
                 with rec.stage(name) as entry:
                     if name == "redecide":
                         run_screen(cfg, run_dir, redecide_only=True)
                     else:
-                        STAGES[name](cfg, run_dir)
+                        result = STAGES[name](cfg, run_dir)
                         run_dir.mark_done(name)
+                        # Screening that screened nothing new leaves later stages as they were.
+                        if name != "screen" or sum((result or {}).values()):
+                            changed = True
                 ui.stage_finished(name, entry["seconds"])
+            if not changed:
+                footer = (
+                    "Everything was already done. To redo a stage: "
+                    f"chitchat run -c {ui.shorten_path(config)} --stages <stage>"
+                )
         except (ConfigError, CriteriaError, StageError) as e:
             rec.fail(str(e))
             rec.seconds = sum(s["seconds"] for s in rec.stages)

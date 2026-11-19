@@ -80,15 +80,9 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
    - ⚠ `torch._C has no attribute TensorBase` means `LD_LIBRARY_PATH` is still set. The image's value loads the image's own PyTorch. Reinstalling doesn't help; unsetting it does. Don't unset it where vLLM runs.
    - ⚠ `VIRTUAL_ENV ... does not match the project environment` means the vLLM environment is still active. Run `deactivate`. It is harmless, but the two should stay apart.
    - CHITCHAT's PyTorch is the CPU build on purpose. It only computes embeddings in the index stage, and leaves the GPU to vLLM.
-9. Make a config for the full deep search, once. [configs/pipeline.rcp.yaml](../configs/pipeline.rcp.yaml) keeps the search short (at most 48 papers); this copy drops that limit.
-
-   ```bash
-   uv run python -c "import yaml; d=yaml.safe_load(open('configs/pipeline.rcp.yaml')); d['search']={'mode':'deep'}; yaml.safe_dump(d, open('configs/pipeline.rcp_full.yaml','w'), sort_keys=False)"
-   ```
-
 ## C. Each time: start the model server
 
-10. Start vLLM in the background, then watch its log:
+9. Start vLLM in the background, then watch its log:
 
     ```bash
     source /lightscratch/users/$USER/rcp-env.sh && source $S/vllm-env/bin/activate
@@ -99,11 +93,11 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
 
     The first start downloads about 30 GB into `$S/hf`. Later starts reuse it.
 
-11. Wait for `Application startup complete`, then press `Ctrl+c`. That stops the log, not the server. Check it: `curl -s localhost:8000/v1/models` lists `Qwen/Qwen3.6-27B-FP8`.
+10. Wait for `Application startup complete`, then press `Ctrl+c`. That stops the log, not the server. Check it: `curl -s localhost:8000/v1/models` lists `Qwen/Qwen3.6-27B-FP8`.
 
 ## D. Each time: plan and run
 
-12. Get the CHITCHAT terminal ready:
+11. Get the CHITCHAT terminal ready:
 
     ```bash
     deactivate 2>/dev/null
@@ -112,15 +106,17 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
     cd $S/chitchat
     ```
 
-13. Plan the search. It asks clarifying questions, then shows a draft: `a` accepts, `c` asks for changes, `q` quits. Stay with it: it takes a few minutes, and a dropped connection ends it.
+12. Plan the search. It asks clarifying questions, then shows a draft of the search, then a draft of the screening criteria for your question. For each: `a` accepts, `c` asks for changes, `q` quits. Stay with it: it takes a few minutes, and a dropped connection ends it.
 
     ```bash
-    uv run chitchat search -c configs/pipeline.rcp_full.yaml --plan-only "your question"
+    uv run chitchat search -c configs/pipeline.rcp.yaml --plan-only "your question"
     ```
 
-    It ends with `Run it later: chitchat run -c runs/<folder>/pipeline.yaml`.
+    It ends with `Run it, or carry on after a stop: chitchat run -c runs/<folder>/pipeline.yaml`.
 
-14. Start the run in the background, with that path:
+    [configs/pipeline.rcp.yaml](../configs/pipeline.rcp.yaml) runs the full deep search (3 to 6 categories, 25 results per source, 2 pages). Masking is off (`privacy.mask: false`), and the command says so before anything is sent.
+
+13. Start the run in the background, with that path:
 
     ```bash
     nohup uv run chitchat run -c runs/<folder>/pipeline.yaml > $S/run.log 2>&1 &
@@ -132,12 +128,13 @@ Below, `$S` means that folder. Keep everything on it: the folder you land in ins
     - ⚠ Keep `uv run` in front of `chitchat`.
     - ⚠ If the shell prints `[2]` or higher, another background job exists. `ps aux | grep -E "[v]llm serve|[c]hitchat run"` should show one of each. Stop a second `chitchat run` with `kill <PID>`.
     - A Google Scholar warning is expected: Scholar blocks scripts. The other sources carry on.
+    - If the run stops for any reason (an error, a killed process, a stopped job), run the same `nohup uv run chitchat run -c runs/<folder>/pipeline.yaml ...` line again. Stages already done are skipped, and screening carries on with the papers not screened yet.
 
 ## E. Coming back
 
-15. Reconnect: `tmux attach -t chitchat` on the jumphost, or `runai bash <job-name>`. Check the job is alive with `runai list jobs` (`runai login` if it says unauthorized).
+14. Reconnect: `tmux attach -t chitchat` on the jumphost, or `runai bash <job-name>`. Check the job is alive with `runai list jobs` (`runai login` if it says unauthorized).
     - ⚠ In a new `runai bash` shell, `$USER` can be empty. Run `export USER=$(whoami)` before `source /lightscratch/users/$USER/rcp-env.sh`.
-16. Follow the run: `tail -f /lightscratch/users/$USER/run.log`. Check it is still going: `ps aux | grep "[c]hitchat run"`.
+15. Follow the run: `tail -f /lightscratch/users/$USER/run.log`. Check it is still going: `ps aux | grep "[c]hitchat run"`.
     - ⚠ Avoid tmux inside the job. A session there once disappeared and stopped vLLM with it. `nohup` doesn't depend on any terminal. With tmux on the jumphost and inside the job, `Ctrl+b` reaches the outer one; press `Ctrl+b` twice for the inner one.
 
 ## F. The results
@@ -153,8 +150,8 @@ Everything is in the run folder, `$S/chitchat/runs/<folder>/`:
 | `dataset.csv` | One row per paper, with its screening label and the extracted answers |
 | `screening.jsonl` | Every screening decision, with the quotes behind it |
 | `sources.json` | The `P0001`, `D0001` tags cited in the brief, with titles and DOIs |
-| `search/` | The search plan you accepted |
-| `privacy_report.json` | What was masked before the model saw it |
+| `search/` | The search plan and the screening criteria (`criteria.yaml`) you accepted |
+| `privacy_report.json` | What was masked before the model saw it, or `"masking": "off"` |
 | `raw/pdfs/`, `milvus.db` | Downloaded PDFs and the search index: large, rarely needed on your laptop |
 
 The run is finished when `ls answer/brief.md` finds the file and `run.log` ends with the answer stage.
@@ -169,8 +166,8 @@ This leaves out `raw/` and `milvus.db`.
 
 ## G. Clean up
 
-17. Stop the server in the job: `pkill -f "vllm serve"`.
-18. End the job on the jumphost: `runai delete job <job-name>`. A job with a GPU holds that GPU until you do.
+16. Stop the server in the job: `pkill -f "vllm serve"`.
+17. End the job on the jumphost: `runai delete job <job-name>`. A job with a GPU holds that GPU until you do.
 
 ## Errors and fixes
 
@@ -186,8 +183,8 @@ This leaves out `raw/` and `milvus.db`.
 | Out of GPU memory when vLLM starts | The context is too large | `--max-model-len 131072`. Don't go lower: the model card says thinking suffers |
 | `torch._C has no attribute TensorBase` | The image's `LD_LIBRARY_PATH` loads its own PyTorch | `unset LD_LIBRARY_PATH` in the CHITCHAT terminal |
 | `VIRTUAL_ENV ... does not match` | The vLLM environment is active | `deactivate` |
-| `tmux attach` says `no sessions` | The tmux session in the job is gone | Use `nohup` (steps 10 and 14); check vLLM with `curl` |
+| `tmux attach` says `no sessions` | The tmux session in the job is gone | Use `nohup` (steps 9 and 13); check vLLM with `curl` |
 | `^B` printed on screen | You are not inside tmux | Start or attach tmux first, or use `nohup` |
-| `LengthFinishReasonError: ... length limit was reached` on many papers | At temperature 0, Qwen's thinking can repeat itself until it is cut off | In the run's `pipeline.yaml`, set `llm.temperature: 0.6` and `llm.max_new_tokens: 32768`, then `chitchat run -c <that file> --stages screen,export,index,answer`: papers already screened are kept, and the search isn't redone |
-| `Nothing to index: no papers labelled HIGH, MEDIUM, LOW` | The screening criteria are for another topic: `criteria.example.yaml` excludes every paper not about LLM or NLP data | Use criteria written for your question. To keep the run, drop the rule that excludes them and run `chitchat run -c <run>/pipeline.yaml --redecide` (no LLM calls), then `--stages export,index,answer` |
+| `The model's replies were cut off ... 3 times` (the run stops) | Qwen's thinking runs on until the reply is cut off | Start vLLM with thinking off (the `--default-chat-template-kwargs` part of step 9), or raise `llm.max_new_tokens` in the run's `pipeline.yaml`. Then run the same `chitchat run -c runs/<folder>/pipeline.yaml` again: papers already screened are kept |
+| `Nothing to index: no papers labelled HIGH, MEDIUM, LOW` | Every paper was excluded. `chitchat search` drafts criteria for your question; this happened when the fixed `criteria.example.yaml` (about LLM data) screened another topic, or with a `must` question that is too narrow | Edit the `decision` rules in `runs/<folder>/search/criteria.yaml`, run `chitchat run -c runs/<folder>/pipeline.yaml --redecide` (no LLM calls), then the same command without `--redecide` |
 | `The model ran out of room` | The model's context is too small | Check `--max-model-len` in the `vllm serve` line |

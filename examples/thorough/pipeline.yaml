@@ -13,6 +13,7 @@ own_documents:
   fast: true
 
 privacy:
+  mask: false                         # true: mask personal data before any model sees text
   sanitize_config: ../../configs/sanitize.yaml
   before_screening: true
   rag_privacy_config: ../../configs/rag_privacy.yaml

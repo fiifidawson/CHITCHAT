@@ -10,6 +10,7 @@ from typing import Any
 
 from chitchat.config import SearchPreset
 from chitchat.screening.llm import StructuredCaller
+from chitchat.search.criteria_draft import CriteriaDraft
 from chitchat.search.plan import ClarifyingQuestions, SearchPlan
 from chitchat.stages import StageError
 
@@ -105,11 +106,24 @@ def add_repair(messages: list[Any], draft: SearchPlan, problems: list[str]) -> l
 
 
 class Drafter:
-    """Asks the LLM for clarifying questions and search plans."""
+    """Asks the LLM for clarifying questions, search plans and screening criteria."""
 
     def __init__(self, chat_model: Any, method: str = "json_schema") -> None:
         self._clarify = StructuredCaller(chat_model, ClarifyingQuestions, method)
         self._plan = StructuredCaller(chat_model, SearchPlan, method)
+        self._criteria = StructuredCaller(chat_model, CriteriaDraft, method)
+
+    def criteria(self, messages: list[Any]) -> CriteriaDraft:
+        result = self._criteria(messages)
+        if result.status != "ok":
+            raise StageError(
+                f"Couldn't draft the screening criteria ({result.status}): {result.error}"
+            )
+        parsed = result.parsed
+        assert isinstance(parsed, CriteriaDraft)
+        if not parsed.must:
+            raise StageError("The drafted screening criteria have no `must` question. Try again.")
+        return parsed
 
     def clarify(self, question: str, n: int) -> ClarifyingQuestions:
         from langchain_core.messages import HumanMessage, SystemMessage

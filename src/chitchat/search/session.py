@@ -80,21 +80,25 @@ def write_run_config(
     run_root: Path,
     discovery_config: Path,
     mode: str | None,
+    criteria: Path | None = None,
 ) -> Path:
     """Write `<run>/pipeline.yaml`: the template's settings, pointed at this run.
 
     Paths are relative to the run folder, and the run gets its own Milvus collection.
+    `criteria` (drafted for this run) replaces the template's screening criteria.
     """
     data: dict[str, Any] = yaml.safe_load(template_path.read_text(encoding="utf-8")) or {}
     data["run_name"] = run_root.name
     data["runs_dir"] = _relative(run_root.parent, run_root)
     data["discovery"] = {"config": _relative(discovery_config, run_root)}
     privacy = data.setdefault("privacy", {})
-    privacy["sanitize_config"] = _relative(cfg.privacy.sanitize_config, run_root)
+    privacy["mask"] = cfg.privacy.mask  # written out, so the switch is easy to find
+    if cfg.privacy.sanitize_config:
+        privacy["sanitize_config"] = _relative(cfg.privacy.sanitize_config, run_root)
     if cfg.privacy.rag_privacy_config:
         privacy["rag_privacy_config"] = _relative(cfg.privacy.rag_privacy_config, run_root)
     screening = data.setdefault("screening", {})
-    screening["criteria"] = _relative(cfg.screening.criteria, run_root)
+    screening["criteria"] = _relative(criteria or cfg.screening.criteria, run_root)
     if cfg.own_documents.folder:
         data.setdefault("own_documents", {})["folder"] = _relative(
             cfg.own_documents.folder, run_root
@@ -281,6 +285,10 @@ def save_plan(run: RunDir, result: PlanResult, preset: SearchPreset) -> Path:
     discovery = write_plan_files(run.search, result.plan, preset)
     write_json(run.plan, {**result.log, "saved": datetime.now().isoformat(timespec="seconds")})
     return discovery
+
+
+def clarifications(log: dict[str, Any]) -> list[tuple[str, str]]:
+    return [(c["question"], c.get("answer") or "") for c in log.get("clarifying") or []]
 
 
 def question_masker(rag_privacy_config: Path | None) -> Callable[[str], str]:
